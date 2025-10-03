@@ -1,0 +1,12 @@
+# React node modules
+frontend/node_modules/
+frontend/.env
+
+# Spring Boot build files
+backend/target/
+backend/.classpath
+backend/.project
+
+# OS junk
+.DS_Store
+Thumbs.db
