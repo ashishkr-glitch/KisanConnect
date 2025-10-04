@@ -5,18 +5,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "farmers")
-public class Farmer {
-
+@Table(name = "buyers")
+public class Buyer {
     @Id
-    private String uid;
+    private  String uid;
 
-    private String name;
-    private String mobile;
-    private String state;
-    private String district;
+    private  String name;
+    private  String mobile;
+    private  String state;
+    private  String district;
 
-    // Getters and Setters
     public String getUid() {
         return uid;
     }
@@ -59,7 +57,7 @@ public class Farmer {
 
     @Override
     public String toString() {
-        return "Farmer{" +
+        return "Buyer{" +
                 "uid='" + uid + '\'' +
                 ", name='" + name + '\'' +
                 ", mobile='" + mobile + '\'' +

@@ -1,9 +1,9 @@
 package com.newKisan.repository;
 
-import com.newKisan.entity.Farmer;
+import com.newKisan.entity.Buyer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FarmerRepository extends JpaRepository<Farmer, String> {
+public interface BuyerRepository extends JpaRepository<Buyer, String> {
 }

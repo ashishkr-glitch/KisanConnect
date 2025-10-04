@@ -4,19 +4,25 @@ import jakarta.persistence.*;
 
 
 @Entity
+@Table(name = "crops")
 public class Crop {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String cropName;
-    private String season;
-    private Double expectedYield;
+//    private String cropName;
+//    private String season;
+//    private Double expectedYield;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "farmer_id")
+//    private Farmer farmer;
 
-    @ManyToOne
-    @JoinColumn(name = "farmer_id")
-    private Farmer farmer;
+    private String farmerId;
+    private String cropType;
+    private int quantity;
+    private String harvestDate;
 
     // Getters and Setters
 
@@ -29,46 +35,46 @@ public class Crop {
         this.id = id;
     }
 
-    public String getCropName() {
-        return cropName;
+    public String getFarmerId() {
+        return farmerId;
     }
 
-    public void setCropName(String cropName) {
-        this.cropName = cropName;
+    public void setFarmerId(String farmerId) {
+        this.farmerId = farmerId;
     }
 
-    public String getSeason() {
-        return season;
+    public String getCropType() {
+        return cropType;
     }
 
-    public void setSeason(String season) {
-        this.season = season;
+    public void setCropType(String cropType) {
+        this.cropType = cropType;
     }
 
-    public Double getExpectedYield() {
-        return expectedYield;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setExpectedYield(Double expectedYield) {
-        this.expectedYield = expectedYield;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public Farmer getFarmer() {
-        return farmer;
+    public String getHarvestDate() {
+        return harvestDate;
     }
 
-    public void setFarmer(Farmer farmer) {
-        this.farmer = farmer;
+    public void setHarvestDate(String harvestDate) {
+        this.harvestDate = harvestDate;
     }
 
     @Override
     public String toString() {
         return "Crop{" +
                 "id=" + id +
-                ", cropName='" + cropName + '\'' +
-                ", season='" + season + '\'' +
-                ", expectedYield=" + expectedYield +
-                ", farmer=" + farmer +
+                ", farmerId='" + farmerId + '\'' +
+                ", cropType='" + cropType + '\'' +
+                ", quantity=" + quantity +
+                ", harvestDate='" + harvestDate + '\'' +
                 '}';
     }
 }

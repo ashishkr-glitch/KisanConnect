@@ -16,11 +16,6 @@ public class User {
     private String state;
     private String district;
 
-    private String landSize;
-    private String cropTypes;
-    private String buyerType;
-    private String interest;
-
     // Getters and setters
 
     public String getUid() {
@@ -79,37 +74,6 @@ public class User {
         this.district = district;
     }
 
-    public String getLandSize() {
-        return landSize;
-    }
-
-    public void setLandSize(String landSize) {
-        this.landSize = landSize;
-    }
-
-    public String getCropTypes() {
-        return cropTypes;
-    }
-
-    public void setCropTypes(String cropTypes) {
-        this.cropTypes = cropTypes;
-    }
-
-    public String getBuyerType() {
-        return buyerType;
-    }
-
-    public void setBuyerType(String buyerType) {
-        this.buyerType = buyerType;
-    }
-
-    public String getInterest() {
-        return interest;
-    }
-
-    public void setInterest(String interest) {
-        this.interest = interest;
-    }
 
     @Override
     public String toString() {
@@ -121,10 +85,6 @@ public class User {
                 ", role='" + role + '\'' +
                 ", state='" + state + '\'' +
                 ", district='" + district + '\'' +
-                ", landSize='" + landSize + '\'' +
-                ", cropTypes='" + cropTypes + '\'' +
-                ", buyerType='" + buyerType + '\'' +
-                ", interest='" + interest + '\'' +
                 '}';
     }
 }

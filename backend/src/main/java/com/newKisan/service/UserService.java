@@ -5,18 +5,23 @@ import com.newKisan.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepo;
 
-    public User saveUser(User user){
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    public User createUser(User user) {
         return userRepo.save(user);
     }
 
-    public User getUserById(String uid) {
-        return userRepo.findById(uid).orElse(null);
+    public void deleteUser(String uid) {
+        userRepo.deleteById(uid);
     }
-
 }

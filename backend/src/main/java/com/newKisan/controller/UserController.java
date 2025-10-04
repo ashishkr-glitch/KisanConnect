@@ -3,27 +3,30 @@ package com.newKisan.controller;
 import com.newKisan.entity.User;
 import com.newKisan.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{uid}")
-    public ResponseEntity<User> getUser(@PathVariable String uid) {
-        User user = userService.getUserById(uid);
-        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        return ResponseEntity.ok(userService.saveUser(user));
+    public User createUser(@RequestBody User user) {
+        return userService.createUser(user);
+    }
+
+    @DeleteMapping("/{uid}")
+    public void deleteUser(@PathVariable String uid) {
+        userService.deleteUser(uid);
     }
 }
