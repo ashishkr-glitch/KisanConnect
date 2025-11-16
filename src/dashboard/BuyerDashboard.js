@@ -1,16 +1,21 @@
-// src/dashboard/BuyerDashboard.js
 import React from "react";
 import Sidebar from "./Sidebar";
-import CropMarket from "../components/CropMarket"; // ✅ You’ll create this later
+import CropMarket from "../components/CropMarket";
 
+// ✅ Buyer Dashboard Component
 function BuyerDashboard() {
   return (
-    <div style={{ display: "flex" }}>
+    <div className="buyer-dashboard">
       <Sidebar />
-      <div style={{ flex: 1, padding: "40px" }}>
+      <main className="buyer-main">
         <h2>Buyer Dashboard</h2>
-        <CropMarket />
-      </div>
+
+        {/* ✅ Crop Market View */}
+        <section>
+          <h3>Available Crops</h3>
+          <CropMarket />
+        </section>
+      </main>
     </div>
   );
 }

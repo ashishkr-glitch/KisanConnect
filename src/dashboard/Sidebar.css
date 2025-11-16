@@ -1,0 +1,118 @@
+.sidebar {
+  width: 250px;
+  background-color: var(--bg-color);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 0 0 250px;
+  height: 100%;
+  max-height: 100%;
+  transition: flex-basis 300ms ease, width 300ms ease, padding 300ms ease, box-shadow 300ms ease;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+  margin-top: 0;
+  font-size: 18px;
+  color: var(--text-color);
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.sidebar nav a {
+  text-decoration: none;
+  color: #34495e;
+  font-weight: 500;
+}
+
+.sidebar nav a:hover {
+  color: #3498db;
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.sidebar-footer button {
+  padding: 10px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 200ms ease;
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: var(--text-color);
+  border-radius: 6px;
+  margin-bottom: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar a.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Collapsed sidebar styles */
+.sidebar.collapsed {
+  width: 70px;
+  padding: 12px 8px;
+}
+
+.sidebar.collapsed h2,
+.sidebar.collapsed .brand {
+  display: none;
+}
+
+.sidebar .label {
+  display: inline-block;
+  transition: opacity 200ms ease;
+}
+
+.sidebar.collapsed .label {
+  display: none;
+}
+
+.sidebar.collapsed a {
+  padding: 10px 8px;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Animated hide: collapse width to zero so main content expands */
+.sidebar.hidden {
+  flex: 0 0 0;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.sidebar.hidden .brand,
+.sidebar.hidden .label,
+.sidebar.hidden nav,
+.sidebar.hidden .sidebar-footer {
+  opacity: 0;
+  pointer-events: none;
+}

@@ -1,0 +1,25 @@
+.unauthorized-page {
+  text-align: center;
+  margin-top: 100px;
+  font-family: "Inter", sans-serif;
+}
+
+.unauthorized-page h2 {
+  font-size: 28px;
+  color: #e74c3c;
+  margin-bottom: 12px;
+}
+
+.unauthorized-page p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.unauthorized-page button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

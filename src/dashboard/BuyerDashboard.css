@@ -1,0 +1,25 @@
+.buyer-dashboard {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+.buyer-main {
+  flex: 1;
+  padding: 40px;
+  background-color: #f9f9f9;
+}
+
+.buyer-main h2 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.buyer-main section {
+  margin-bottom: 40px;
+}
+
+.buyer-main h3 {
+  margin-bottom: 12px;
+  color: #34495e;
+}

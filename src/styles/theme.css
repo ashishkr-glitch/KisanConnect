@@ -1,0 +1,235 @@
+/* ✅ Default Light Theme */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --primary-color: #2ecc71;
+  --secondary-color: #f5f5f5;
+  --accent-color: #27ae60;
+  --danger-color: #e74c3c;
+  --header-bg: #ffffff;
+  --sidebar-bg: #fafafa;
+  --modal-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --hover-bg: #f0f0f0;
+}
+
+/* ✅ Light Theme - Modern, Clean, Professional */
+body.light {
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --primary-color: #2ecc71;
+  --secondary-color: #f5f5f5;
+  --accent-color: #27ae60;
+  --danger-color: #e74c3c;
+  --header-bg: #ffffff;
+  --sidebar-bg: #fafafa;
+  --modal-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --hover-bg: #f0f0f0;
+  --button-text: #ffffff;
+}
+
+/* ✅ Dark Theme - Black, Brown, Warm Tones */
+body.dark {
+  --bg-color: #0b0c0d;
+  --text-color: #e6eef2;
+  --primary-color: #8b6f47;
+  --secondary-color: #151617;
+  --accent-color: #a0826d;
+  --danger-color: #d84a38;
+  --header-bg: #0f1112;
+  --sidebar-bg: #0d0e0f;
+  --modal-bg: #0f1112;
+  --border-color: #232425;
+  --hover-bg: #17191a;
+  --button-text: #ffffff;
+}
+
+/* ✅ Apply Variables to All Elements */
+* {
+  color: var(--text-color);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ✅ Header */
+.header {
+  background-color: var(--header-bg);
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Sidebar */
+.sidebar {
+  background-color: var(--sidebar-bg);
+  width: 240px;
+  min-height: 100vh;
+  padding: 20px;
+  border-right: 1px solid var(--border-color);
+}
+
+.sidebar nav a {
+  color: var(--text-color);
+  display: block;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  transition: all 0.3s ease;
+}
+
+.sidebar nav a:hover {
+  background-color: var(--hover-bg);
+  color: var(--primary-color);
+}
+
+.sidebar nav a.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* ✅ Modal */
+.modal-box {
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+/* ✅ All Buttons */
+button {
+  background-color: var(--primary-color);
+  color: var(--button-text);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+button:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+button.accent {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+button.danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+/* ✅ Tables */
+table {
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table thead {
+  background-color: var(--secondary-color);
+  border-bottom: 2px solid var(--border-color);
+}
+
+table thead th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+table tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+table tbody tr:hover {
+  background-color: var(--hover-bg);
+}
+
+/* ✅ Input Fields */
+input, textarea, select {
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+}
+
+body.dark input:focus,
+body.dark textarea:focus,
+body.dark select:focus {
+  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.2);
+}
+
+/* ✅ Links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+/* ✅ Cards and Containers */
+.card, section, .crop-list, .farmer-list, .buyer-list, .dashboard {
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* ✅ Stats Cards */
+.stat-card {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Text Variants */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+/* ✅ Form Labels */
+label {
+  color: var(--text-color);
+  font-weight: 500;
+}

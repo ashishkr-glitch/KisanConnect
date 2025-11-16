@@ -1,48 +1,86 @@
-// src/dashboard/Sidebar.js
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import React, { useEffect, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+import useRole from "../hooks/useRole";
+import "./Sidebar.css";
+import { FaTachometerAlt, FaUsers, FaLeaf, FaChartPie, FaShoppingCart, FaList, FaPlus, FaHome } from "react-icons/fa";
 
-function Sidebar() {
+function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, containerRef: outerRef = null }) {
+  const { role } = useRole();
+  const location = useLocation();
   const navigate = useNavigate();
+  const internalRef = useRef(null);
+  const containerRef = outerRef || internalRef;
 
   const handleLogout = async () => {
+    const auth = getAuth();
     try {
       await signOut(auth);
-      alert("Logout successful!");
-      navigate("/"); // ✅ Redirect to login
-    } catch (error) {
-      alert("Logout failed: " + error.message);
+    } catch (e) {
+      console.error("Error during signOut:", e);
     }
+    try {
+      localStorage.removeItem("sidebarOpen");
+    } catch (e) {}
+    navigate("/");
   };
 
+  const isActive = (path) => location.pathname === path;
+
   return (
-    <div style={{
-      width: "220px",
-      background: "#2c3e50",
-      color: "white",
-      height: "100vh",
-      padding: "20px"
-    }}>
-      <h3>KisanConnect</h3>
+  <div id="kc_sidebar" className={`sidebar ${isOpen ? "" : "hidden"}`} ref={containerRef} role="navigation" aria-label="Main navigation" aria-hidden={!isOpen}>
+      <h2 className="brand">KisanConnect</h2>
+
       <nav>
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          <li><Link to="/dashboard" style={{ color: "white", textDecoration: "none" }}>Farmers</Link></li>
-        </ul>
+        {role === "admin" && (
+          <>
+            <Link className={isActive("/dashboard") ? "active" : ""} to="/dashboard"><FaTachometerAlt /> <span className="label">Dashboard</span></Link>
+            <Link className={isActive("/dashboard/farmers") ? "active" : ""} to="/dashboard/farmers"><FaUsers /> <span className="label">Farmers</span></Link>
+            <Link className={isActive("/dashboard/buyers") ? "active" : ""} to="/dashboard/buyers"><FaShoppingCart /> <span className="label">Buyers</span></Link>
+            <Link className={isActive("/dashboard/crops") ? "active" : ""} to="/dashboard/crops"><FaLeaf /> <span className="label">All Crops</span></Link>
+            <Link className={isActive("/dashboard/analytics") ? "active" : ""} to="/dashboard/analytics"><FaChartPie /> <span className="label">Analytics</span></Link>
+          </>
+        )}
+
+        {role === "farmer" && (
+          <>
+            <Link className={isActive("/dashboard") ? "active" : ""} to="/dashboard"><FaHome /> <span className="label">My Dashboard</span></Link>
+            <Link className={isActive("/dashboard/my-crops") ? "active" : ""} to="/dashboard/my-crops"><FaList /> <span className="label">My Crops</span></Link>
+            <Link className={isActive("/dashboard/add-crop") ? "active" : ""} to="/dashboard/add-crop"><FaPlus /> <span className="label">Add Crop</span></Link>
+          </>
+        )}
+
+        {role === "buyer" && (
+          <>
+            <Link className={isActive("/dashboard") ? "active" : ""} to="/dashboard"><FaLeaf /> <span className="label">Market</span></Link>
+            <Link className={isActive("/dashboard/my-orders") ? "active" : ""} to="/dashboard/my-orders"><FaList /> <span className="label">My Orders</span></Link>
+          </>
+        )}
       </nav>
-      <button onClick={handleLogout} style={{
-        marginTop: "20px",
-        padding: "10px",
-        background: "#e74c3c",
-        color: "white",
-        border: "none",
-        cursor: "pointer"
-      }}>
-        Logout
-      </button>
+
+      <div className="sidebar-footer">
+        <button onClick={handleLogout}>Logout</button>
+      </div>
     </div>
   );
 }
+
+// focus management: when sidebar opens, focus first link; when closes, return focus to toggle button
+function useSidebarFocus(containerRef, isOpen, toggleButtonRef) {
+  useEffect(() => {
+    if (isOpen) {
+      try {
+        const el = containerRef.current?.querySelector('a');
+        if (el) el.focus();
+      } catch (e) {}
+    } else {
+      try {
+        if (toggleButtonRef && toggleButtonRef.current) toggleButtonRef.current.focus();
+      } catch (e) {}
+    }
+  }, [isOpen, containerRef, toggleButtonRef]);
+}
+
+export { useSidebarFocus };
 
 export default Sidebar;

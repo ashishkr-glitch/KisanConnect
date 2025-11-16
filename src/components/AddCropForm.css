@@ -1,0 +1,28 @@
+.add-crop-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.add-crop-form input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.add-crop-form button {
+  padding: 12px;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.add-crop-form button:hover {
+  background-color: #219150;
+}

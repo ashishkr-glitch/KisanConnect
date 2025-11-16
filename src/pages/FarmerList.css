@@ -1,0 +1,54 @@
+.farmer-list {
+  max-width: 800px;
+  margin: 24px auto;
+  padding: 16px;
+  background: var(--modal-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  font-family: "Inter", sans-serif;
+  color: var(--text-color);
+}
+
+.farmer-list h2 {
+  text-align: center;
+  margin-bottom: 12px;
+  color: var(--text-color);
+}
+
+.farmer-list table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--modal-bg);
+}
+
+.farmer-list th,
+.farmer-list td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  font-size: 13px;
+}
+
+.farmer-list th {
+  background-color: var(--secondary-color);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.farmer-list tr:hover {
+  background-color: var(--hover-bg);
+}
+
+.farmer-list button {
+  padding: 8px 12px;
+  background-color: var(--danger-color);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.farmer-list button:hover {
+  opacity: 0.95;
+}

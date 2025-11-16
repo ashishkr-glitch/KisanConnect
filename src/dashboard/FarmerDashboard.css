@@ -1,0 +1,26 @@
+.farmer-dashboard {
+  display: flex;
+  height: 88vh;
+  width: 75vw;
+  font-family: "Inter", sans-serif;
+}
+
+.farmer-main {
+  flex: 1;
+  padding: 40px;
+  background-color: #f9f9f9;
+}
+
+.farmer-main h2 {
+  margin-bottom: 20px;
+  color: #2d7ccb;
+}
+
+.farmer-main section {
+  margin-bottom: 40px;
+}
+
+.farmer-main h3 {
+  margin-bottom: 12px;
+  color: #34495e;
+}

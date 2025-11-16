@@ -1,0 +1,39 @@
+/* Shared crop list styles for admin view */
+.crop-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+}
+
+.crop-list th,
+.crop-list td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  font-size: 13px;
+}
+
+.crop-list th {
+  background-color: var(--secondary-color);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.crop-list tr:hover {
+  background-color: var(--hover-bg);
+}
+
+.crop-list .btn-danger {
+  padding: 8px 12px;
+  background-color: var(--danger-color);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.crop-list .btn-danger:hover {
+  opacity: 0.95;
+}

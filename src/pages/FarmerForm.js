@@ -1,6 +1,7 @@
-// src/components/FarmerForm.js
 import React, { useState } from "react";
 import axios from "axios";
+import useToast from "../hooks/useToast";
+import useRole from "../hooks/useRole";
 import "./FarmerForm.css";
 
 function FarmerForm() {
@@ -11,6 +12,9 @@ function FarmerForm() {
     harvestDate: "",
   });
 
+  const { showToast } = useToast();
+  const { role, loading } = useRole();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -18,8 +22,8 @@ function FarmerForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/farmers", formData);
-      alert("Farmer added successfully!");
+      await axios.post("http://localhost:8081/farmers", formData);
+      showToast("Farmer added successfully!", "success");
       setFormData({
         name: "",
         location: "",
@@ -27,9 +31,13 @@ function FarmerForm() {
         harvestDate: "",
       });
     } catch (error) {
-      alert("Error adding farmer. Please try again.");
+      console.error("Error adding farmer:", error);
+      showToast("Error adding farmer. Please try again.", "error");
     }
   };
+
+  if (loading) return <p>Checking access...</p>;
+  if (role !== "farmer") return <p>Unauthorized access</p>;
 
   return (
     <div className="farmer-form-container">
@@ -63,7 +71,7 @@ function FarmerForm() {
           onChange={handleChange}
           required
         />
-        <button type="submit"> Submit Farmer</button>
+        <button type="submit">Submit Farmer</button>
       </form>
     </div>
   );

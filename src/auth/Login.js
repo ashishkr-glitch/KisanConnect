@@ -1,32 +1,30 @@
+// src/auth/Login.js
 import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
 import { useNavigate, Link } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore"; // ✅ Firestore import
-import { db } from "../firebase"; // ✅ Firestore instance
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import "./Login.css"; // ✅ Styling file
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // ✅ Firebase Auth login
-      const userCred = await signInWithEmailAndPassword(auth, email, password);
-      const uid = userCred.user.uid;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
 
-      // ✅ Fetch role from Firestore
       const userDoc = await getDoc(doc(db, "users", uid));
-      if (userDoc.exists()) {
-        const role = userDoc.data().role;
+      const userData = userDoc.data();
+      const role = userData.role;
 
-        // ✅ Redirect based on role
-        navigate(`/dashboard/${role}`);
-      } else {
-        alert("User role not found. Contact admin.");
-      }
+      localStorage.setItem("uid", uid);
+      localStorage.setItem("role", role);
+
+      navigate("/dashboard");
     } catch (error) {
       alert("Login failed: " + error.message);
     }
@@ -36,23 +34,11 @@ function Login() {
     <div className="login-container">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Login</button>
       </form>
-      <p>New user? <Link to="/signup">Signup here</Link></p>
+      <p>Not registered? <Link to="/signup">Signup here</Link></p>
     </div>
   );
 }

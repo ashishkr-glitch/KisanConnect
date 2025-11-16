@@ -1,0 +1,65 @@
+.crop-market table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background: var(--modal-bg);
+}
+
+.crop-market th,
+.crop-market td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  font-size: 13px;
+}
+
+.crop-market th {
+  background-color: var(--secondary-color);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.crop-market tr:hover {
+  background-color: var(--hover-bg);
+}
+
+.crop-market input {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.crop-market button {
+  padding: 6px 10px;
+  background-color: var(--primary-color);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.crop-market button:hover {
+  opacity: 0.95;
+}
+
+@media (max-width: 768px) {
+  .crop-market table,
+  .crop-market th,
+  .crop-market td {
+    font-size: 13px;
+  }
+
+  .crop-market input {
+    font-size: 13px;
+  }
+
+  .crop-market button {
+    font-size: 13px;
+  }
+}
+.crop-market {
+  padding: 24px;
+}
