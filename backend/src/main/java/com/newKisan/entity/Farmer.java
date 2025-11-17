@@ -11,7 +11,8 @@ public class Farmer {
     @Id
     private String uid;
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private String mobile;
     private String state;
     private String district;
@@ -25,12 +26,20 @@ public class Farmer {
         this.uid = uid;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getMobile() {
@@ -61,7 +70,8 @@ public class Farmer {
     public String toString() {
         return "Farmer{" +
                 "uid='" + uid + '\'' +
-                ", name='" + name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", state='" + state + '\'' +
                 ", district='" + district + '\'' +

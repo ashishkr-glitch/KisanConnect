@@ -1,14 +1,18 @@
 // src/main/java/com/newKisan/entity/User.java
 package com.newKisan.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     private String uid;
 
+    @Column(name = "full_name")
     private String fullName;
     private String email;
     private String mobile;
