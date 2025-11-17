@@ -11,7 +11,8 @@ function Signup() {
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     mobile: "",
     email: "",
     state: "",
@@ -55,7 +56,8 @@ function Signup() {
 
         const payload = {
           uid,
-          name: formData.fullName,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           district: formData.district,
           mobile: formData.mobile,
           state: formData.state
@@ -92,7 +94,8 @@ function Signup() {
 
       {role && (
         <form onSubmit={handleSignup}>
-          <input name="fullName" placeholder="Full Name" onChange={handleChange} required />
+          <input name="firstName" placeholder="First Name" onChange={handleChange} required />
+          <input name="lastName" placeholder="Last Name" onChange={handleChange} required />
           <input name="mobile" placeholder="Mobile Number" onChange={handleChange} required />
           <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
           <input name="state" placeholder="State" onChange={handleChange} required />
@@ -120,6 +123,7 @@ function Signup() {
         </form>
       )}
 
+      <button className="back-button" onClick={() => navigate("/")}>← Back to Login</button>
       <p>Already registered? <Link to="/">Login here</Link></p>
     </div>
   );

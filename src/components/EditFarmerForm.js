@@ -48,9 +48,16 @@ function EditFarmerForm({ farmerId, onClose, onUpdate }) {
     <form onSubmit={handleUpdate} className="edit-farmer-form">
       <input
         type="text"
-        value={farmer.name}
-        onChange={(e) => setFarmer({ ...farmer, name: e.target.value })}
-        placeholder="Name"
+        value={farmer.firstName || ""}
+        onChange={(e) => setFarmer({ ...farmer, firstName: e.target.value })}
+        placeholder="First Name"
+        required
+      />
+      <input
+        type="text"
+        value={farmer.lastName || ""}
+        onChange={(e) => setFarmer({ ...farmer, lastName: e.target.value })}
+        placeholder="Last Name"
         required
       />
       <input

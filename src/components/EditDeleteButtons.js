@@ -1,23 +1,34 @@
 import React from "react";
 import axios from "axios";
 
-function EditDeleteButtons({ farmerId, onEdit, onDeleteSuccess }) {
+function EditDeleteButtons({ id, entity = "farmer", onEdit, onDeleteSuccess }) {
   const handleDelete = async () => {
-    if (!farmerId) {
-      alert("No farmer selected for deletion.");
+    if (!id) {
+      alert("No item selected for deletion.");
       return;
     }
 
-    const confirmDelete = window.confirm("Are you sure you want to delete this farmer?");
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete this ${entity}?`
+    );
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:8081/farmers/${farmerId}`);
-      await axios.delete(`http://localhost:8081/api/users/${farmerId}`);
-      alert("Farmer deleted successfully!");
+      if (entity === "farmer") {
+        await axios.delete(`http://localhost:8081/farmers/${id}`);
+      } else if (entity === "buyer") {
+        await axios.delete(`http://localhost:8081/buyers/${id}`);
+      } else {
+        // fallback to farmer endpoint
+        await axios.delete(`http://localhost:8081/farmers/${id}`);
+      }
+
+      // always attempt to delete user record as well
+      await axios.delete(`http://localhost:8081/api/users/${id}`);
+      alert(`${entity.charAt(0).toUpperCase() + entity.slice(1)} deleted successfully!`);
       if (onDeleteSuccess) onDeleteSuccess(); // ✅ Refresh list via parent
     } catch (error) {
-      alert("Error deleting farmer: " + error.message);
+      alert(`Error deleting ${entity}: ` + (error.response?.data || error.message));
     }
   };
 

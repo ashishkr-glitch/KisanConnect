@@ -51,14 +51,15 @@ function BuyerList() {
         <tbody>
           {buyers.map((buyer) => (
             <tr key={buyer.uid}>
-              <td>{buyer.name}</td>
+              <td>{buyer.firstName && buyer.lastName ? `${buyer.firstName} ${buyer.lastName}` : buyer.firstName || buyer.lastName || buyer.name || "N/A"}</td>
               <td>{buyer.mobile}</td>
               <td>{buyer.district}</td>
               <td>{buyer.state}</td>
               {role === "admin" && (
                 <td>
                   <EditDeleteButtons
-                    farmerId={buyer.uid}
+                    id={buyer.uid}
+                    entity="buyer"
                     onEdit={() => console.log("Edit buyer", buyer.uid)}
                     onDeleteSuccess={fetchBuyers}
                   />

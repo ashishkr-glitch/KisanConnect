@@ -6,6 +6,8 @@ import BuyerDashboard from "./dashboard/BuyerDashboard";
 import FarmerDashboard from "./dashboard/FarmerDashboard";
 import FarmerList from "./pages/FarmerList";
 import BuyerList from "./pages/BuyerList";
+import MyOrders from "./pages/MyOrders";
+import FarmerOrders from "./pages/FarmerOrders";
 import CropList from "./components/CropList";
 import CropAnalytics from "./dashboard/CropAnalytics";
 import Login from "./auth/Login";
@@ -71,6 +73,8 @@ function App() {
           path="my-crops"
           element={role === "farmer" ? <CropListByFarmer /> : <Navigate to="/unauthorized" />}
         />
+        <Route path="orders" element={role === "farmer" ? <FarmerOrders /> : <Navigate to="/unauthorized" />} />
+        <Route path="my-orders" element={role === "buyer" ? <MyOrders /> : <Navigate to="/unauthorized" />} />
 
         {/* Admin nested routes matching Sidebar links */}
         <Route path="farmers" element={role === "admin" ? <FarmerList /> : <Navigate to="/unauthorized" />} />

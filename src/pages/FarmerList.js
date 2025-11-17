@@ -42,11 +42,11 @@ function FarmerList() {
     fetchFarmers();
   }, []);
 
-  if (roleLoading || loadingFarmers) return <p>Loading farmers...</p>;
+  if (loadingFarmers) return <p>Loading farmers...</p>;
 
   return (
     <div className="farmer-list">
-      <h2>Farmer List</h2>
+      {role === "admin" && <h2>Farmer List</h2>}
       <table>
         <thead>
           <tr>
@@ -60,7 +60,7 @@ function FarmerList() {
         <tbody>
           {farmers.map((farmer) => (
             <tr key={farmer.uid}>
-              <td>{farmer.name}</td>
+              <td>{farmer.firstName && farmer.lastName ? `${farmer.firstName} ${farmer.lastName}` : farmer.firstName || farmer.lastName || farmer.name || "N/A"}</td>
               <td>{farmer.mobile}</td>
               <td>{farmer.district}</td>
               <td>{farmer.state}</td>

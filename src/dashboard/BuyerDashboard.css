@@ -6,13 +6,12 @@
 
 .buyer-main {
   flex: 1;
-  padding: 40px;
+  padding: 24px 32px;
   background-color: #f9f9f9;
 }
 
-.buyer-main h2 {
-  margin-bottom: 20px;
-  color: #2c3e50;
+.buyer-main .buyer-tab-buttons {
+  margin-top: 6px;
 }
 
 .buyer-main section {
@@ -22,4 +21,47 @@
 .buyer-main h3 {
   margin-bottom: 12px;
   color: #34495e;
+}
+
+/* ✅ Tab Navigation Styles */
+.buyer-tab-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #ddd;
+}
+
+.buyer-tab-buttons button {
+  padding: 12px 20px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #34495e;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.buyer-tab-buttons button:hover {
+  color: #2c3e50;
+}
+
+.buyer-tab-buttons button.active {
+  color: #27ae60;
+  border-bottom-color: #27ae60;
+}
+
+/* ✅ Tab Content Styles */
+.buyer-tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

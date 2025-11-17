@@ -42,21 +42,65 @@ function CropMarket() {
     }
 
     try {
-      await axios.put(`http://localhost:8081/crops/${crop.id}`, {
-        ...crop,
-        quantity: crop.quantity - amount,
-      });
-      showToast("Purchase successful!", "success");
+      // get current user details from firebase
+      const auth = getAuth();
+      const user = auth.currentUser;
+      let buyerUid = null;
+      let buyerName = null;
+      if (user) {
+        buyerUid = user.uid;
+        const docRef = doc(db, "users", buyerUid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          buyerName = data.fullName || (data.firstName && data.lastName ? `${data.firstName} ${data.lastName}` : data.name) || null;
+        }
+      }
+
+      // get farmer name
+      let farmerName = null;
+      if (crop.farmerId) {
+        try {
+          const farmerDocRef = doc(db, "users", crop.farmerId);
+          const farmerDocSnap = await getDoc(farmerDocRef);
+          if (farmerDocSnap.exists()) {
+            const farmerData = farmerDocSnap.data();
+            farmerName = farmerData.fullName || (farmerData.firstName && farmerData.lastName ? `${farmerData.firstName} ${farmerData.lastName}` : farmerData.name) || null;
+          }
+        } catch (err) {
+          console.error("Error fetching farmer name:", err);
+        }
+      }
+
+      // create order first
+      const orderPayload = {
+        buyerUid,
+        buyerName,
+        farmerId: crop.farmerId,
+        farmerName: farmerName,
+        cropId: crop.id,
+        cropType: crop.cropType,
+        cropName: crop.cropName || crop.cropType,
+        quantity: amount,
+        status: "PENDING"
+      };
+
+      await axios.post("http://localhost:8081/orders", orderPayload);
+
+      // server validates and decrements crop quantity atomically
+      showToast("Purchase successful! Order created.", "success");
       fetchCrops();
     } catch (err) {
       console.error("Error purchasing crop:", err);
-      showToast("Error purchasing crop", "error");
+      const msg = err?.response?.data || err.message || "Error purchasing crop";
+      showToast(msg, "error");
     }
   };
 
   useEffect(() => {
     fetchUserRole();
     fetchCrops();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

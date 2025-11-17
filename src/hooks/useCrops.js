@@ -8,38 +8,39 @@ function useCrops() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchCrops = async () => {
-      setLoading(true);
-      setError("");
+  const fetchCrops = async () => {
+    setLoading(true);
+    setError("");
 
-      const auth = getAuth();
-      const user = auth.currentUser;
-      const role = localStorage.getItem("role");
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const role = localStorage.getItem("role");
 
-      try {
-        let res;
+    try {
+      let res;
 
-        if (role === "farmer") {
-          res = await axios.get(`http://localhost:8081/crops/farmer/${user.uid}`);
-        } else if (role === "buyer") {
-          res = await axios.get("http://localhost:8081/crops");
-        } else if (role === "admin") {
-          res = await axios.get("http://localhost:8081/crops");
-        }
-
-        setCrops(res.data);
-      } catch (err) {
-        setError("Error fetching crops: " + err.message);
+      if (role === "farmer") {
+        res = await axios.get(`http://localhost:8081/crops/farmer/${user.uid}`);
+      } else if (role === "buyer") {
+        res = await axios.get("http://localhost:8081/crops");
+      } else if (role === "admin") {
+        res = await axios.get("http://localhost:8081/crops");
       }
 
-      setLoading(false);
-    };
+      setCrops(res.data || []);
+    } catch (err) {
+      setError("Error fetching crops: " + err.message);
+    }
 
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchCrops();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { crops, loading, error };
+  return { crops, loading, error, reload: fetchCrops };
 }
 
 export default useCrops;

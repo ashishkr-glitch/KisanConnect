@@ -5,7 +5,7 @@ import useRole from "../hooks/useRole";
 import "./Sidebar.css";
 import { FaTachometerAlt, FaUsers, FaLeaf, FaChartPie, FaShoppingCart, FaList, FaPlus, FaHome } from "react-icons/fa";
 
-function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, containerRef: outerRef = null }) {
+function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, containerRef: outerRef = null, showBrand = true }) {
   const { role } = useRole();
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,9 +27,9 @@ function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, contain
 
   const isActive = (path) => location.pathname === path;
 
-  return (
-  <div id="kc_sidebar" className={`sidebar ${isOpen ? "" : "hidden"}`} ref={containerRef} role="navigation" aria-label="Main navigation" aria-hidden={!isOpen}>
-      <h2 className="brand">KisanConnect</h2>
+    return (
+    <div id="kc_sidebar" className={`sidebar ${isOpen ? "" : "hidden"}`} ref={containerRef} role="navigation" aria-label="Main navigation" aria-hidden={!isOpen}>
+      {showBrand && <h2 className="brand">KisanConnect</h2>}
 
       <nav>
         {role === "admin" && (
@@ -47,6 +47,7 @@ function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, contain
             <Link className={isActive("/dashboard") ? "active" : ""} to="/dashboard"><FaHome /> <span className="label">My Dashboard</span></Link>
             <Link className={isActive("/dashboard/my-crops") ? "active" : ""} to="/dashboard/my-crops"><FaList /> <span className="label">My Crops</span></Link>
             <Link className={isActive("/dashboard/add-crop") ? "active" : ""} to="/dashboard/add-crop"><FaPlus /> <span className="label">Add Crop</span></Link>
+            <Link className={isActive("/dashboard/orders") ? "active" : ""} to="/dashboard/orders"><FaShoppingCart /> <span className="label">Orders</span></Link>
           </>
         )}
 

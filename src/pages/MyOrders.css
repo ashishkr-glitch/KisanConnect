@@ -1,0 +1,38 @@
+.my-orders .panel{
+  background: #fff;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.my-orders h3{
+  margin: 0 0 12px 0;
+}
+
+.my-orders .empty{
+  padding: 18px 0;
+}
+
+.my-orders .empty button{
+  padding: 8px 12px;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.orders-table{
+  width: 100%;
+  border-collapse: collapse;
+}
+.orders-table th, .orders-table td{
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.note{
+  color: #666;
+  margin-bottom: 12px;
+}
