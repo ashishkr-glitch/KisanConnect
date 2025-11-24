@@ -63,6 +63,12 @@
 			<version>9.1.1</version>
 		</dependency>
 
+		<!-- Spring Security for password encoding/hashing -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
 <!--		<dependency>-->
 <!--			<groupId>org.hibernate.orm</groupId>-->
