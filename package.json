@@ -1,0 +1,25 @@
+{
+  "name": "kisan-connect",
+  "version": "1.0.0",
+  "description": "KisanConnect - Full Stack Agricultural Platform (React + Spring Boot)",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "frontend": "cd frontend && npm start",
+    "backend": "cd backend && mvn spring-boot:run",
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && mvn clean install",
+    "stop": "echo 'Press Ctrl+C to stop both services'"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "agriculture",
+    "farmers",
+    "kisan",
+    "react",
+    "spring-boot",
+    "java"
+  ],
+  "author": "Your Name",
+  "license": "ISC"
+}

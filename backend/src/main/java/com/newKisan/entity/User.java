@@ -1,16 +1,21 @@
 // src/main/java/com/newKisan/entity/User.java
 package com.newKisan.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     private String uid;
 
+    @Column(name = "full_name")
     private String fullName;
     private String email;
+    private String password; // Store hashed password for offline authentication
     private String mobile;
     private String role;
     private String state;
@@ -40,6 +45,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getMobile() {
