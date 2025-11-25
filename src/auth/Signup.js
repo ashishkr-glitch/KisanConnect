@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
-import axios from "axios";
+import api from "../api";
 import "./Signup.css";
 
 function Signup() {
@@ -37,48 +34,32 @@ function Signup() {
     setLoading(true);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      const uid = userCredential.user.uid;
-
-      if (!uid) {
-        alert("Signup failed: UID not generated");
-        setLoading(false);
-        return;
-      }
-
-      const userData = { ...formData, uid, role };
-      delete userData.confirmPassword;
-
-      await setDoc(doc(db, "users", uid), userData);
-
-      try {
-        await axios.post("http://localhost:8081/api/users", userData);
-
-        const payload = {
-          uid,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          district: formData.district,
-          mobile: formData.mobile,
-          state: formData.state
-        };
-
-        if (role === "farmer") {
-          await axios.post("http://localhost:8081/farmers", payload);
-        } else if (role === "buyer") {
-          await axios.post("http://localhost:8081/buyers", payload);
-        }
-
+      // Only use backend API for signup
+      const resp = await api.post(`/users`, {
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        password: formData.password, // Backend will hash this
+        district: formData.district,
+        mobile: formData.mobile,
+        state: formData.state,
+        role: role
+      });
+      if (resp.data && resp.data.uid) {
+        const uid = resp.data.uid;
+        const fullName = resp.data.fullName || resp.data.full_name || (formData.firstName + (formData.lastName ? " " + formData.lastName : ""));
+        localStorage.setItem("uid", uid);
+        localStorage.setItem("role", role ? role.toLowerCase() : "");
+        localStorage.setItem("full_name", fullName || "");
+        if (resp.data.email) localStorage.setItem("email", resp.data.email);
         alert("Signup successful! Please login.");
         navigate("/login");
-      } catch (backendError) {
-        console.error("Backend error:", backendError);
-        alert("Signup failed: Backend error");
+      } else {
+        alert("Signup failed: Backend did not return UID");
       }
     } catch (error) {
       alert("Signup failed: " + error.message);
     }
-
     setLoading(false);
   };
 

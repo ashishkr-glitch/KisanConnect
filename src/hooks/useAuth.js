@@ -1,36 +1,19 @@
 import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-// ✅ Enhanced hook to get Firebase Auth user
+// Hook that exposes locally-stored auth info (uid, email, displayName)
 function useAuth() {
-  const [user, setUser] = useState(null);
-  const [checking, setChecking] = useState(true);
-
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser({
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName || "",
-        });
-      } else {
-        setUser(null);
-      }
-      setChecking(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const uid = localStorage.getItem("uid") || "";
+  const email = localStorage.getItem("email") || "";
+  const displayName = localStorage.getItem("full_name") || "";
+  const isLoggedIn = !!uid;
 
   return {
-    user,
-    uid: user?.uid || "",
-    email: user?.email || "",
-    displayName: user?.displayName || "",
-    isLoggedIn: !!user,
-    checking,
+    user: isLoggedIn ? { uid, email, displayName } : null,
+    uid,
+    email,
+    displayName,
+    isLoggedIn,
+    checking: false,
   };
 }
 

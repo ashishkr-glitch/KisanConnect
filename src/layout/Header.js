@@ -4,7 +4,13 @@ import "./Header.css";
 
 // ✅ Header with user info + patriotic greeting
 function Header() {
-  const profile = useUserProfile();
+  // Get user details from localStorage
+  const profile = {
+    name: localStorage.getItem("full_name") || "-",
+    role: localStorage.getItem("role") || "-",
+    district: localStorage.getItem("district") || "-",
+    state: localStorage.getItem("state") || "-"
+  };
 
   return (
     <header className="dashboard-header">
@@ -14,15 +20,11 @@ function Header() {
       </div>
 
       <div className="right">
-        {profile ? (
-          <div className="user-info">
-            <strong>{profile.name}</strong> ({profile.role})
-            <br />
-            {profile.district}, {profile.state}
-          </div>
-        ) : (
-          <p>Loading user...</p>
-        )}
+        <div className="user-info">
+          <strong>{profile.name}</strong> ({profile.role})
+          <br />
+          {profile.district}, {profile.state}
+        </div>
       </div>
     </header>
   );

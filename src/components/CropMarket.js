@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import api from "../api";
+import useAuth from "../hooks/useAuth";
 import useToast from "../hooks/useToast"; // ✅ Toast hook
 import "./CropMarket.css";
 
@@ -11,10 +9,11 @@ function CropMarket() {
   const [purchaseAmount, setPurchaseAmount] = useState({});
   const [role, setRole] = useState("");
   const { showToast } = useToast();
+  const auth = useAuth();
 
   const fetchCrops = async () => {
     try {
-      const res = await axios.get("http://localhost:8081/crops");
+      const res = await api.get(`/auth/crops`);
       setCrops(res.data);
     } catch (err) {
       console.error("Error fetching crops:", err);
@@ -23,14 +22,17 @@ function CropMarket() {
   };
 
   const fetchUserRole = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setRole(docSnap.data().role);
-      }
+    const lsRole = localStorage.getItem("role");
+    if (lsRole) {
+      setRole(lsRole);
+      return;
+    }
+    const uid = auth?.uid || localStorage.getItem("uid");
+    if (uid) {
+      try {
+        const resp = await api.get(`/users/${uid}`);
+        if (resp?.data?.role) setRole(resp.data.role);
+      } catch (e) {}
     }
   };
 
@@ -42,29 +44,28 @@ function CropMarket() {
     }
 
     try {
-      // get current user details from firebase
-      const auth = getAuth();
-      const user = auth.currentUser;
-      let buyerUid = null;
+      // determine buyer identity from local storage/backend
+      let buyerUid = auth?.uid || localStorage.getItem("uid");
       let buyerName = null;
-      if (user) {
-        buyerUid = user.uid;
-        const docRef = doc(db, "users", buyerUid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          buyerName = data.fullName || (data.firstName && data.lastName ? `${data.firstName} ${data.lastName}` : data.name) || null;
+      if (buyerUid) {
+        try {
+          const resp = await api.get(`/api/users/${buyerUid}`);
+          if (resp?.data) {
+            const data = resp.data;
+            buyerName = data.fullName || (data.firstName && data.lastName ? `${data.firstName} ${data.lastName}` : data.name) || null;
+          }
+        } catch (e) {
+          console.error("Error fetching buyer profile:", e);
         }
       }
 
-      // get farmer name
+      // get farmer name from backend if available
       let farmerName = null;
       if (crop.farmerId) {
         try {
-          const farmerDocRef = doc(db, "users", crop.farmerId);
-          const farmerDocSnap = await getDoc(farmerDocRef);
-          if (farmerDocSnap.exists()) {
-            const farmerData = farmerDocSnap.data();
+          const farmerResp = await api.get(`/api/users/${crop.farmerId}`);
+          if (farmerResp?.data) {
+            const farmerData = farmerResp.data;
             farmerName = farmerData.fullName || (farmerData.firstName && farmerData.lastName ? `${farmerData.firstName} ${farmerData.lastName}` : farmerData.name) || null;
           }
         } catch (err) {
@@ -85,7 +86,7 @@ function CropMarket() {
         status: "PENDING"
       };
 
-      await axios.post("http://localhost:8081/orders", orderPayload);
+        await api.post(`/api/orders`, orderPayload);
 
       // server validates and decrements crop quantity atomically
       showToast("Purchase successful! Order created.", "success");

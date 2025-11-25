@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 // ✅ Custom hook to fetch all farmers (admin only)
 function useFarmers() {
@@ -12,7 +12,7 @@ function useFarmers() {
     setError("");
 
     try {
-      const res = await axios.get("http://localhost:8081/farmers");
+      const res = await api.get(`/farmers`);
       setFarmers(res.data);
     } catch (err) {
       setError("Error fetching farmers: " + err.message);

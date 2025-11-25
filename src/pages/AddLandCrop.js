@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api";
 import useRole from "../hooks/useRole";
 import useAuth from "../hooks/useAuth";
 import useToast from "../hooks/useToast";
@@ -26,7 +26,7 @@ function AddLandCrop() {
 
     try {
       const payload = { ...formData, farmerId: uid };
-      await axios.post("http://localhost:8081/land-crop", payload);
+      await api.post(`/land-crop`, payload);
       showToast("Land and crop details submitted successfully!", "success");
       setFormData({ landSize: "", location: "", cropType: "", harvestDate: "" });
     } catch (error) {

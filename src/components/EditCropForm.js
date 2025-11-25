@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import Loader from "./Loader";
 import "./EditCropForm.css";
 import Toast from "./Toast";
@@ -13,7 +13,7 @@ function EditCropForm({ cropId, onClose, onUpdate }) {
   const fetchCrop = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:8081/crops/${cropId}`);
+      const res = await api.get(`/crops/${cropId}`);
       setCrop(res.data);
     } catch (err) {
       console.error("Error fetching crop:", err);
@@ -25,7 +25,7 @@ function EditCropForm({ cropId, onClose, onUpdate }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8081/crops/${cropId}`, crop);
+      await api.put(`/crops/${cropId}`, crop);
       setToast("Crop updated successfully!");
       if (onUpdate) onUpdate();
       setTimeout(() => {

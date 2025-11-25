@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import api from "../api";
+import useAuth from "../hooks/useAuth";
 import EditDeleteButtons from "../components/EditDeleteButtons";
 
 function BuyerList() {
   const [buyers, setBuyers] = useState([]);
   const [role, setRole] = useState("");
-
+  // call hook at top level to satisfy rules-of-hooks
+  const { uid: authUid } = useAuth();
   const fetchBuyers = async () => {
     try {
-      const res = await axios.get("http://localhost:8081/buyers");
+      const res = await api.get(`/buyers`);
       setBuyers(res.data);
     } catch (err) {
       console.error("Error fetching buyers:", err);
@@ -19,14 +18,19 @@ function BuyerList() {
   };
 
   const fetchUserRole = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setRole(docSnap.data().role);
-      }
+    // Prefer role from localStorage
+    const lsRole = localStorage.getItem("role");
+    if (lsRole) {
+      setRole(lsRole);
+      return;
+    }
+    // fallback: try to find by uid via backend
+    const uid = authUid || localStorage.getItem("uid");
+    if (uid) {
+      try {
+        const resp = await api.get(`/users/${uid}`);
+        if (resp?.data?.role) setRole(resp.data.role);
+      } catch (e) {}
     }
   };
 
@@ -45,6 +49,7 @@ function BuyerList() {
             <th>Mobile</th>
             <th>District</th>
             <th>State</th>
+            <th>UID</th>
             {role === "admin" && <th>Actions</th>}
           </tr>
         </thead>
@@ -55,6 +60,7 @@ function BuyerList() {
               <td>{buyer.mobile}</td>
               <td>{buyer.district}</td>
               <td>{buyer.state}</td>
+              <td>{(buyer.uid || "").toString().substring(0,5).toUpperCase()}</td>
               {role === "admin" && (
                 <td>
                   <EditDeleteButtons

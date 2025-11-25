@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 // ✅ Custom hook to fetch all buyers (admin only)
 function useBuyers() {
@@ -12,7 +12,7 @@ function useBuyers() {
     setError("");
 
     try {
-      const res = await axios.get("http://localhost:8081/buyers");
+      const res = await api.get(`/buyers`);
       setBuyers(res.data);
     } catch (err) {
       setError("Error fetching buyers: " + err.message);

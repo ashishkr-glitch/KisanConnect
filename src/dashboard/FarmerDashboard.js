@@ -1,64 +1,42 @@
 
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import useUserProfile from "../hooks/useUserProfile";
+import api from "../api";
 import useToast from "../hooks/useToast";
 import "./FarmerDashboard.css";
 import ConfirmDialog from "../components/ConfirmDialog";
 import useCrops from "../hooks/useCrops";
-import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import useAuth from "../hooks/useAuth";
 
 
 function FarmerDashboard() {
   const { crops, loading, error, reload } = useCrops();
   const totalQuantity = crops.reduce((sum, crop) => sum + Number(crop.quantity || 0), 0);
-  const [farmerName, setFarmerName] = useState("");
+  const { profile } = useUserProfile();
+  const farmerName = profile?.fullName || localStorage.getItem("full_name") || "Farmer";
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [processing, setProcessing] = useState({});
   const [confirm, setConfirm] = useState({ open: false, orderId: null, action: null });
   const [orderTab, setOrderTab] = useState("pending"); // "pending" or "active"
   const { showToast } = useToast();
-
-  useEffect(() => {
-    const fetchFarmerName = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          const fullName = data.firstName && data.lastName
-            ? `${data.firstName} ${data.lastName}`
-            : data.firstName || data.lastName || data.fullName || data.name || "Farmer";
-          setFarmerName(fullName);
-        }
-      }
-    };
-    fetchFarmerName();
-  }, []);
-
-  const getWelcomeName = () => {
-    if (farmerName) {
-      return farmerName.split(' ')[0];
-    }
-    return "Farmer";
-  };
+  const API_URL = process.env.REACT_APP_API_URL;
+  console.log("API_URL in FarmerDashboard:", API_URL);
+  const auth = useAuth();
 
   useEffect(() => {
     const fetchOrders = async () => {
       setOrdersLoading(true);
       try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (!user) {
+        const user = auth?.user;
+        const uid = user ? user.uid : localStorage.getItem("uid");
+        if (!uid) {
           setOrders([]);
           return;
         }
-        const res = await axios.get(`http://localhost:8081/orders/farmer/${user.uid}`);
+        // use relative path to go through proxy in development
+        const res = await api.get(`/orders/farmer/${uid}`);
         setOrders(res.data || []);
       } catch (err) {
         console.error("Error loading farmer orders", err);
@@ -77,27 +55,18 @@ function FarmerDashboard() {
   const doAction = async (orderId, action) => {
     setProcessing((p) => ({ ...p, [orderId]: true }));
     try {
-      const auth = getAuth();
-      const user = auth.currentUser;
-
-      // Get Firebase ID token (or fallback to uid string if not available)
-      let token = null;
-      try {
-        if (user) token = await user.getIdToken(true);
-      } catch (e) {
-        token = user ? user.uid : null;
-      }
-
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const user = auth?.user;
+      const uid = user ? user.uid : localStorage.getItem("uid");
+      const headers = uid ? { Authorization: `Bearer ${uid}` } : {};
 
       if (action === "accept") {
-        await axios.put(`http://localhost:8081/orders/${orderId}/accept`, { farmerId: user ? user.uid : null }, { headers });
+      await api.put(`/orders/${orderId}/accept`, { farmerId: user ? user.uid : null }, { headers });
         showToast("Order accepted", "success");
         // optimistic update: mark order accepted
         setOrders((arr) => arr.map(o => o.id === orderId ? { ...o, status: 'ACCEPTED' } : o));
         if (reload) reload();
       } else {
-        await axios.put(`http://localhost:8081/orders/${orderId}/reject`, { farmerId: user ? user.uid : null }, { headers });
+        await api.put(`/orders/${orderId}/reject`, { farmerId: user ? user.uid : null }, { headers });
         showToast("Order rejected", "success");
         setOrders((arr) => arr.map(o => o.id === orderId ? { ...o, status: 'REJECTED' } : o));
       }
@@ -123,7 +92,7 @@ function FarmerDashboard() {
 
   return (
     <div className="farmer-dashboard" style={{padding: '12px 12px',display: 'block', margin: '0', width: '100%'}}>
-      <h2 style={{marginBottom: 16, fontWeight: 700, fontSize: 20, color: '#388e3c', margin: '0  auto 5%'}}>Welcome, {getWelcomeName()}!</h2>
+      <h2 style={{marginBottom: 16, fontWeight: 700, fontSize: 20, color: '#388e3c', margin: '0  auto 5%'}}>Welcome, {farmerName}!</h2>
 
       {/* Quick Stats - Vertical Layout */}
       <div style={{display: 'flex', gap: 56, marginBottom: 20, width:'60%', maxWidth: '100%', justifySelf: 'center', margin: '0 0 7%'}}>

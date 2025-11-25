@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import Loader from "./Loader";
 import "./EditFarmerForm.css";
 import Toast from "./Toast";
@@ -13,7 +13,7 @@ function EditFarmerForm({ farmerId, onClose, onUpdate }) {
   const fetchFarmer = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:8081/farmers/${farmerId}`);
+      const res = await api.get(`/farmers/${farmerId}`);
       setFarmer(res.data);
     } catch (err) {
       console.error("Error fetching farmer:", err);
@@ -25,7 +25,7 @@ function EditFarmerForm({ farmerId, onClose, onUpdate }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8081/farmers/${farmerId}`, farmer);
+      await api.put(`/farmers/${farmerId}`, farmer);
       setToast("Farmer updated successfully!");
       if (onUpdate) onUpdate();
       setTimeout(() => {

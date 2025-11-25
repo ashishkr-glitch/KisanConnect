@@ -1,41 +1,53 @@
 import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import api from "../api";
 
-// ✅ Enhanced hook to fetch full user profile
+// Hook: fetch user profile from backend using localStorage (uid/email)
 function useUserProfile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const auth = getAuth();
+    let cancelled = false;
+    const load = async () => {
+      setLoading(true);
+      try {
+        const uid = localStorage.getItem("uid");
+        const email = localStorage.getItem("email");
 
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          const docRef = doc(db, "users", user.uid);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            setProfile({
-              uid: user.uid,
-              email: user.email,
-              ...docSnap.data(),
-            });
-          } else {
-            setError("User profile not found");
+        if (uid) {
+          const resp = await api.get(`/users/${uid}`);
+          if (!cancelled) {
+            setProfile(resp.data || null);
+            setLoading(false);
+            return;
           }
-        } catch (err) {
-          setError("Error fetching profile: " + err.message);
         }
-      } else {
-        setError("User not logged in");
-      }
-      setLoading(false);
-    });
 
-    return () => unsubscribe();
+        if (email) {
+          const resp = await api.get(`/users/by-email?email=${encodeURIComponent(email)}`);
+          if (!cancelled) {
+            setProfile(resp.data || null);
+            setLoading(false);
+            return;
+          }
+        }
+
+        if (!cancelled) {
+          setProfile(null);
+          setLoading(false);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err?.message || "Error fetching profile");
+          setProfile(null);
+          setLoading(false);
+        }
+      }
+    };
+
+    load();
+    return () => { cancelled = true; };
   }, []);
 
   return { profile, loading, error };

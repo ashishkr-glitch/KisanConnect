@@ -1,0 +1,4 @@
+.ai-floating { position: fixed; right: 22px; bottom: 22px; width:56px; height:56px; background: linear-gradient(135deg,#4CAF50,#2ecc71); border-radius:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px rgba(0,0,0,0.18); cursor:pointer; z-index:2200; animation: floaty 3s ease-in-out infinite; }
+.ai-floating .ai-robot { color: #fff; font-size: 26px; transform: translateY(0); transition: transform 0.18s ease; }
+.ai-floating:hover { transform: translateY(-6px) scale(1.02); box-shadow:0 14px 30px rgba(0,0,0,0.22) }
+@keyframes floaty { 0% { transform: translateY(0) } 50% { transform: translateY(-8px) } 100% { transform: translateY(0) } }

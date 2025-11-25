@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import useToast from "../hooks/useToast";
 import "./FarmerEditModal.css";
 
@@ -33,7 +33,7 @@ function FarmerEditModal({ isOpen, onClose, farmerData, onUpdate }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.put(`http://localhost:8081/farmers/${farmerData.id}`, formData);
+      await api.put(`/farmers/${farmerData.id}`, formData);
       showToast("Farmer updated successfully!", "success");
       onUpdate();
       onClose();

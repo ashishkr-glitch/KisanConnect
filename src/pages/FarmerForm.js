@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api";
 import useToast from "../hooks/useToast";
 import useRole from "../hooks/useRole";
 import "./FarmerForm.css";
@@ -22,7 +22,7 @@ function FarmerForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8081/farmers", formData);
+      await api.post(`/farmers`, formData);
       showToast("Farmer added successfully!", "success");
       setFormData({
         name: "",
@@ -37,7 +37,7 @@ function FarmerForm() {
   };
 
   if (loading) return <p>Checking access...</p>;
-  if (role !== "farmer") return <p>Unauthorized access</p>;
+  if (role !== "farmer" && role !== "admin") return <p>Unauthorized access</p>;
 
   return (
     <div className="farmer-form-container">

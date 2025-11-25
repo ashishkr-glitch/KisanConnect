@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 // ✅ Custom hook to fetch crop statistics (admin only)
 function useCropStats() {
@@ -16,7 +16,7 @@ function useCropStats() {
     setError("");
 
     try {
-      const res = await axios.get("http://localhost:8081/crops/stats");
+      const res = await api.get(`/crops/stats`);
       setStats(res.data);
     } catch (err) {
       setError("Error fetching crop stats: " + err.message);

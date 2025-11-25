@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 import useRole from "../hooks/useRole";
 import useToast from "../hooks/useToast";
 import "./FarmerList.css";
@@ -7,14 +7,16 @@ import "./FarmerList.css";
 function FarmerList() {
   const [farmers, setFarmers] = useState([]);
   const [loadingFarmers, setLoadingFarmers] = useState(true);
-
+  
   const { role, loading: roleLoading } = useRole();
   const { showToast } = useToast();
+  const API_URL = process.env.REACT_APP_API_URL;
+  console.log("API_URL in FarmerList:", API_URL);
 
   const fetchFarmers = async () => {
     setLoadingFarmers(true);
     try {
-      const res = await axios.get("http://localhost:8081/farmers");
+      const res = await api.get(`/farmers`);
       setFarmers(res.data);
     } catch (err) {
       console.error("Error fetching farmers:", err);
@@ -28,8 +30,8 @@ function FarmerList() {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:8081/farmers/${uid}`);
-      await axios.delete(`http://localhost:8081/api/users/${uid}`);
+      await api.delete(`/farmers/${uid}`);
+      await api.delete(`/users/${uid}`);
       showToast("Farmer deleted successfully", "success");
       fetchFarmers();
     } catch (err) {
@@ -46,7 +48,7 @@ function FarmerList() {
 
   return (
     <div className="farmer-list">
-      {role === "admin" && <h2>Farmer List</h2>}
+      {(role === "admin" || role === "farmer") && <h2>Farmer List</h2>}
       <table>
         <thead>
           <tr>
@@ -54,6 +56,7 @@ function FarmerList() {
             <th>Mobile</th>
             <th>District</th>
             <th>State</th>
+            <th>UID</th>
             {role === "admin" && <th>Actions</th>}
           </tr>
         </thead>
@@ -64,6 +67,7 @@ function FarmerList() {
               <td>{farmer.mobile}</td>
               <td>{farmer.district}</td>
               <td>{farmer.state}</td>
+              <td>{(farmer.uid || "").toString().substring(0,5).toUpperCase()}</td>
               {role === "admin" && (
                 <td>
                   <button className="danger" onClick={() => handleDelete(farmer.uid)}>

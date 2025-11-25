@@ -37,6 +37,7 @@
   font-size: 16px;
 }
 
+
 .signup-container button {
   width: 100%;
   padding: 11px;
@@ -47,11 +48,29 @@
   font-size: 15px;
   cursor: pointer;
   margin-bottom: 12px;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.signup-container button:hover:not(:disabled) {
+  background-color: #219150;
+  box-shadow: 0 2px 8px rgba(39,174,96,0.12);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .signup-container button:disabled {
   background-color: #95a5a6;
   cursor: not-allowed;
+}
+
+.signup-container p a {
+  color: #27ae60;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.signup-container p a:hover {
+  color: #145a32;
+  text-decoration: underline;
 }
 
 .back-button {
