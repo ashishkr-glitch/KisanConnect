@@ -7,6 +7,7 @@ import useToast from "../hooks/useToast";
 import "./FarmerDashboard.css";
 import ConfirmDialog from "../components/ConfirmDialog";
 import useCrops from "../hooks/useCrops";
+import Skeleton from "../components/Skeleton";
 import useAuth from "../hooks/useAuth";
 
 
@@ -99,21 +100,13 @@ function FarmerDashboard() {
         <div style={{background: '#e8f5e9', padding: 12, borderRadius: 12, textAlign: 'center', boxShadow: '0 2px 8px #eee',flex: '1'}}>
           <h3 style={{margin: 0, fontSize: 12, color: '#388e3c'}}>Total Crops</h3>
           <div style={{fontSize: 24, fontWeight: 700, color: '#388e3c', marginTop: 6}}>
-            {loading ? (
-              <div style={{height: 28, width: 48, background: '#f0f0f0', borderRadius: 6, margin: '0 auto'}} />
-            ) : (
-              crops.length
-            )}
+            {loading ? <Skeleton width={48} height={28} /> : crops.length}
           </div>
         </div>
         <div style={{background: '#e3f2fd', padding: 12, borderRadius: 12, textAlign: 'center', boxShadow: '0 2px 8px #eee', flex: '1'}}>
           <h3 style={{margin: 0, fontSize: 12, color: '#1976d2'}}>Total Quantity (kg)</h3>
           <div style={{fontSize: 24, fontWeight: 700, color: '#1976d2', marginTop: 6}}>
-            {loading ? (
-              <div style={{height: 28, width: 64, background: '#f0f0f0', borderRadius: 6, margin: '0 auto'}} />
-            ) : (
-              totalQuantity
-            )}
+            {loading ? <Skeleton width={64} height={28} /> : totalQuantity}
           </div>
         </div>
       </div>
