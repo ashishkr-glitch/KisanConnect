@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api";
 import "./AddCropForm.css";
-import { getAuth } from "firebase/auth";
+import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 // ✅ Crop Add Form for Farmers
@@ -10,19 +10,18 @@ function AddCropForm() {
   const [quantity, setQuantity] = useState("");
   const [harvestDate, setHarvestDate] = useState("");
   const navigate = useNavigate();
-
+  
+  const { uid: authUid } = useAuth();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const farmerId = user?.uid;
-
+    
+    
+    let farmerId = authUid || localStorage.getItem("uid");
     if (!farmerId) {
       alert("Farmer UID not found. Please login again.");
       return;
     }
-
     const payload = {
       farmerId,
       cropType,
@@ -31,7 +30,7 @@ function AddCropForm() {
     };
 
     try {
-      await axios.post("http://localhost:8081/crops", payload);
+      await api.post(`/crops`, payload);
       // Navigate to My Crops so user can immediately see the new crop
       // pass a small state flag so the list can show a success message
       navigate("/dashboard/my-crops", { replace: true, state: { added: true } });

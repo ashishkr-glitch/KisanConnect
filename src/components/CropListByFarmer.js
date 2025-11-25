@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 import "./CropListByFarmer.css";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useLocation, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 // ✅ Farmer's Crop List Component
 function CropListByFarmer() {
@@ -10,30 +10,23 @@ function CropListByFarmer() {
   const [message, setMessage] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+  
+  const { uid: authUid } = useAuth();
 
   const fetchCropsForFarmer = async (farmerId) => {
     if (!farmerId) return;
-
     try {
-      const res = await axios.get(`http://localhost:8081/crops/farmer/${farmerId}`);
+      const res = await api.get(`/crops/farmer/${farmerId}`);
       setCrops(res.data);
     } catch (err) {
       console.error("Error fetching crops:", err);
     }
   };
 
-  useEffect(() => {
-    const auth = getAuth();
-    // If currentUser already exists (auth ready), fetch immediately
-    const user = auth.currentUser;
-    if (user && user.uid) {
-      fetchCropsForFarmer(user.uid);
-    }
 
-    // Also subscribe in case auth wasn't ready yet
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
-      if (u && u.uid) fetchCropsForFarmer(u.uid);
-    });
+  useEffect(() => {
+    const farmerId = authUid || localStorage.getItem("uid");
+    if (farmerId) fetchCropsForFarmer(farmerId);
 
     // If navigated here with a success state, show message then clear it
     if (location?.state?.added) {
@@ -44,20 +37,19 @@ function CropListByFarmer() {
       setTimeout(() => setMessage(""), 2500);
     }
 
-    return () => unsubscribe();
-  }, []);
+    return () => {};
+  }, [authUid, location, navigate]);
 
   const handleDelete = async (cropId) => {
     const confirm = window.confirm("Are you sure you want to delete this crop?");
     if (!confirm) return;
     try {
-      await axios.delete(`http://localhost:8081/crops/${cropId}`);
+      await api.delete(`/crops/${cropId}`);
       setMessage("Crop deleted successfully");
       setTimeout(() => setMessage(""), 2000);
-      // Refresh crop list
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (user && user.uid) fetchCropsForFarmer(user.uid);
+      // Refresh crop list using auth/localStorage fallback
+      const farmerId = authUid || localStorage.getItem("uid");
+      if (farmerId) fetchCropsForFarmer(farmerId);
     } catch (err) {
       setMessage("Error deleting crop: " + err.message);
       setTimeout(() => setMessage(""), 2000);

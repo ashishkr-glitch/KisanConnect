@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
 import useRole from "../hooks/useRole";
 import "./Sidebar.css";
 import { FaTachometerAlt, FaUsers, FaLeaf, FaChartPie, FaShoppingCart, FaList, FaPlus, FaHome } from "react-icons/fa";
+import { FaRobot } from "react-icons/fa";
 
 function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, containerRef: outerRef = null, showBrand = true }) {
   const { role } = useRole();
@@ -13,15 +13,14 @@ function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, contain
   const containerRef = outerRef || internalRef;
 
   const handleLogout = async () => {
-    const auth = getAuth();
     try {
-      await signOut(auth);
-    } catch (e) {
-      console.error("Error during signOut:", e);
-    }
-    try {
+      localStorage.removeItem("uid");
+      localStorage.removeItem("email");
+      localStorage.removeItem("role");
+      localStorage.removeItem("full_name");
       localStorage.removeItem("sidebarOpen");
     } catch (e) {}
+    try { window.dispatchEvent(new Event('kc-auth-change')); } catch (e) {}
     navigate("/");
   };
 
@@ -57,6 +56,17 @@ function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, contain
             <Link className={isActive("/dashboard/my-orders") ? "active" : ""} to="/dashboard/my-orders"><FaList /> <span className="label">My Orders</span></Link>
           </>
         )}
+        {/* If role is not set (e.g. loading/offline), show a sensible default set of links */}
+        {!role && (
+          <>
+            <Link className={isActive("/dashboard") ? "active" : ""} to="/dashboard"><FaTachometerAlt /> <span className="label">Dashboard</span></Link>
+            <Link className={isActive("/dashboard/crops") ? "active" : ""} to="/dashboard/crops"><FaLeaf /> <span className="label">Crops</span></Link>
+            <Link className={isActive("/dashboard/my-crops") ? "active" : ""} to="/dashboard/my-crops"><FaList /> <span className="label">My Crops</span></Link>
+          </>
+        )}
+
+        {/* Margdarshak AI link - available to all roles */}
+        <Link className={isActive("/dashboard/margdarshak") ? "active" : ""} to="/dashboard/margdarshak"><FaRobot /> <span className="label">Margdarshak AI</span></Link>
       </nav>
 
       <div className="sidebar-footer">

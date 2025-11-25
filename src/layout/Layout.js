@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Sidebar, { useSidebarFocus } from "../dashboard/Sidebar";
 import { Outlet } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
+import AIFloatingIcon from "../components/AIFloatingIcon";
 
 function Layout() {
   const { toggleTheme } = useTheme();
@@ -41,6 +42,7 @@ function Layout() {
         <main style={{ padding: "12px", flex: 1, overflow: "auto", width: "100%", margin: 0, minHeight: 0 }}>
           <Outlet />
         </main>
+        <AIFloatingIcon />
       </div>
     </div>
   );

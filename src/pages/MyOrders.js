@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 import { useNavigate } from "react-router-dom";
-import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import useAuth from "../hooks/useAuth";
 import useToast from "../hooks/useToast";
 import "./MyOrders.css";
 
@@ -13,27 +11,25 @@ function MyOrders() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { showToast } = useToast();
+  // call useAuth at top level to obey hooks rules
+  const { uid: authUid } = useAuth();
 
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
       try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user) {
-          const uid = user.uid;
-          const res = await axios.get(`http://localhost:8081/orders/buyer/${uid}`);
+        const uid = authUid || localStorage.getItem("uid");
+        if (uid) {
+          const res = await api.get(`/orders/buyer/${uid}`);
           const ordersData = res.data || [];
-          
-          // Fetch farmer names for orders that don't have them (old orders)
+          // Fetch farmer names for orders that don't have them (old orders) from backend
           const enrichedOrders = await Promise.all(
             ordersData.map(async (order) => {
               if (!order.farmerName && order.farmerId) {
                 try {
-                  const farmerDocRef = doc(db, "users", order.farmerId);
-                  const farmerDocSnap = await getDoc(farmerDocRef);
-                  if (farmerDocSnap.exists()) {
-                    const farmerData = farmerDocSnap.data();
+                  const farmerResp = await api.get(`/users/${order.farmerId}`);
+                  if (farmerResp?.data) {
+                    const farmerData = farmerResp.data;
                     order.farmerName = farmerData.fullName || (farmerData.firstName && farmerData.lastName ? `${farmerData.firstName} ${farmerData.lastName}` : farmerData.name) || "N/A";
                   }
                 } catch (err) {
@@ -56,6 +52,7 @@ function MyOrders() {
     };
 
     fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDelete = async (orderId) => {
@@ -63,7 +60,7 @@ function MyOrders() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:8081/orders/${orderId}`);
+      await api.delete(`/orders/${orderId}`);
       showToast("Order deleted successfully", "success");
       setOrders(orders.filter(o => (o.id || o.orderId) !== orderId));
     } catch (err) {

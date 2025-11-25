@@ -1,39 +1,24 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import EditDeleteButtons from "./EditDeleteButtons";
+import api from "../api";
 import "./CropList.css";
-import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import useRole from "../hooks/useRole";
 
 function CropList() {
   const [crops, setCrops] = useState([]);
-  const [role, setRole] = useState("");
+  const { role } = useRole();
 
   const fetchCrops = async () => {
     try {
-      const res = await axios.get("http://localhost:8081/crops");
+      const res = await api.get(`/crops`);
       setCrops(res.data);
     } catch (err) {
       console.error("Error fetching crops:", err);
     }
   };
 
-  const fetchUserRole = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setRole(docSnap.data().role);
-      }
-    }
-  };
-
   const handleDeleteCrop = async (cropId) => {
     try {
-      await axios.delete(`http://localhost:8081/crops/${cropId}`);
+      await api.delete(`/crops/${cropId}`);
       alert("Crop deleted successfully!");
       fetchCrops();
     } catch (err) {
@@ -42,7 +27,6 @@ function CropList() {
   };
 
   useEffect(() => {
-    fetchUserRole();
     fetchCrops();
   }, []);
 
@@ -55,7 +39,7 @@ function CropList() {
             <th>Crop Type</th>
             <th>Quantity</th>
             <th>Harvest Date</th>
-            <th>Farmer ID</th>
+            <th>Farmer UID</th>
             {role === "admin" && <th>Actions</th>}
           </tr>
         </thead>
@@ -65,7 +49,7 @@ function CropList() {
               <td>{crop.cropType}</td>
               <td>{crop.quantity}</td>
               <td>{crop.harvestDate}</td>
-              <td>{crop.farmerId}</td>
+              <td>{(crop.farmerId || "").toString().substring(0,5).toUpperCase()}</td>
               {role === "admin" && (
                 <td>
                   <button onClick={() => handleDeleteCrop(crop.id)} className="btn-danger">Delete</button>
