@@ -21,14 +21,13 @@ function FarmerOrders() {
     setLoading(true);
     try {
       const user = auth?.user;
-      const uid = user ? user.uid : localStorage.getItem("uid");
+      // const uid = user ? user.uid : localStorage.getItem("uid");
       if (!user) {
         setOrders([]);
         setLoading(false);
         return;
       }
-      let token = uid;
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      // token/header vars were unused — removed
 
       // Fetch orders
       const res = await api.get(`/orders/farmer/${user.uid}`);
@@ -56,14 +55,14 @@ function FarmerOrders() {
     setProcessing((p) => ({ ...p, [orderId]: true }));
     try {
       const user = auth?.user;
-      const uid = user ? user.uid : localStorage.getItem("uid");
+      // const uid = user ? user.uid : localStorage.getItem("uid");
 
       if (action === "accept") {
-      await api.put(`/api/orders/${orderId}/accept`, { farmerId: user ? user.uid : null });
+        await api.put(`/orders/${orderId}/accept`, { farmerId: user ? user.uid : null });
         showToast("Order accepted", "success");
         setOrders((arr) => arr.map(o => o.id === orderId ? { ...o, status: 'ACCEPTED' } : o));
       } else {
-        await api.put(`/api/orders/${orderId}/reject`, { farmerId: user ? user.uid : null });
+        await api.put(`/orders/${orderId}/reject`, { farmerId: user ? user.uid : null });
         showToast("Order rejected", "success");
         setOrders((arr) => arr.map(o => o.id === orderId ? { ...o, status: 'REJECTED' } : o));
       }

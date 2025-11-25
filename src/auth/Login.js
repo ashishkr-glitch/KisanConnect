@@ -19,7 +19,6 @@ function Login() {
       let uid = null;
       let role = null;
       let fullName = null;
-      let userData = null;
       const response = await api.post(`/auth/login-offline`, {
         email,
         password
@@ -51,7 +50,7 @@ function Login() {
         role = normalizeRole(rawRole) || (response.data.role ? response.data.role.toString().toLowerCase() : null);
         // backend may return camelCase `fullName` or snake_case `full_name`
         fullName = response.data.fullName || response.data.full_name || response.data.full_name_text || "";
-        userData = response.data;
+        // response data stored to localStorage above; no local userData variable required
         try { localStorage.setItem("uid", uid); } catch (e) {}
         try { localStorage.setItem("role", role ? role.toString().toLowerCase() : ""); } catch (e) {}
         try { localStorage.setItem("full_name", fullName || ""); } catch (e) {}

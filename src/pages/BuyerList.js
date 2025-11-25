@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import api from "../api";
 import useAuth from "../hooks/useAuth";
 import EditDeleteButtons from "../components/EditDeleteButtons";
@@ -8,16 +8,16 @@ function BuyerList() {
   const [role, setRole] = useState("");
   // call hook at top level to satisfy rules-of-hooks
   const { uid: authUid } = useAuth();
-  const fetchBuyers = async () => {
+  const fetchBuyers = useCallback(async () => {
     try {
       const res = await api.get(`/buyers`);
       setBuyers(res.data);
     } catch (err) {
       console.error("Error fetching buyers:", err);
     }
-  };
+  }, []);
 
-  const fetchUserRole = async () => {
+  const fetchUserRole = useCallback(async () => {
     // Prefer role from localStorage
     const lsRole = localStorage.getItem("role");
     if (lsRole) {
@@ -32,12 +32,12 @@ function BuyerList() {
         if (resp?.data?.role) setRole(resp.data.role);
       } catch (e) {}
     }
-  };
+  }, [authUid]);
 
   useEffect(() => {
     fetchUserRole();
     fetchBuyers();
-  }, []);
+  }, [fetchUserRole, fetchBuyers]);
 
   return (
     <div className="buyer-list">

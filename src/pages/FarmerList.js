@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import api from "../api";
 import useRole from "../hooks/useRole";
 import useToast from "../hooks/useToast";
@@ -8,12 +8,12 @@ function FarmerList() {
   const [farmers, setFarmers] = useState([]);
   const [loadingFarmers, setLoadingFarmers] = useState(true);
   
-  const { role, loading: roleLoading } = useRole();
+  const { role } = useRole();
   const { showToast } = useToast();
   const API_URL = process.env.REACT_APP_API_URL;
   console.log("API_URL in FarmerList:", API_URL);
 
-  const fetchFarmers = async () => {
+  const fetchFarmers = useCallback(async () => {
     setLoadingFarmers(true);
     try {
       const res = await api.get(`/farmers`);
@@ -23,7 +23,7 @@ function FarmerList() {
       showToast("Error fetching farmers", "error");
     }
     setLoadingFarmers(false);
-  };
+  }, [showToast]);
 
   const handleDelete = async (uid) => {
     const confirm = window.confirm("Are you sure you want to delete this farmer?");
@@ -42,7 +42,7 @@ function FarmerList() {
 
   useEffect(() => {
     fetchFarmers();
-  }, []);
+  }, [fetchFarmers]);
 
   if (loadingFarmers) return <p>Loading farmers...</p>;
 

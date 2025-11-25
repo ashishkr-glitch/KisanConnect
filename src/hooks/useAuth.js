@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 // Hook that exposes locally-stored auth info (uid, email, displayName)
 function useAuth() {
   const uid = localStorage.getItem("uid") || "";

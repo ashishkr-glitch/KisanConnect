@@ -4,7 +4,6 @@ import UserProfileModal from "./UserProfileModal";
 import ThemeToggle from "./ThemeToggle";
 import { FaBars } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
-import useUserProfile from "../hooks/useUserProfile";
 
 import { useNavigate } from "react-router-dom";
 
@@ -16,20 +15,17 @@ function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
 
   // Fetch user details from backend using uid
   const [userProfile, setUserProfile] = useState(null);
-  const [loadingProfile, setLoadingProfile] = useState(false);
   const uid = localStorage.getItem("uid") || "";
   const email = localStorage.getItem("email") || "";
 
   useEffect(() => {
     async function fetchProfile() {
-      setLoadingProfile(true);
       try {
         if (uid) {
           const resp = await fetch(`/api/users/${uid}`);
-          if (resp.ok) {
+            if (resp.ok) {
             const data = await resp.json();
             setUserProfile(data);
-            setLoadingProfile(false);
             return;
           }
         }
@@ -37,10 +33,9 @@ function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
         // Fallback: try to find user by email using a dedicated endpoint
         if (email) {
           const resp = await fetch(`/api/users/by-email?email=${encodeURIComponent(email)}`);
-          if (resp.ok) {
+            if (resp.ok) {
             const data = await resp.json();
             setUserProfile(data);
-            setLoadingProfile(false);
             return;
           }
         }
@@ -49,8 +44,7 @@ function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
       } catch (e) {
         console.error("Error fetching user profile:", e);
         setUserProfile(null);
-      }
-      setLoadingProfile(false);
+        }
     }
     fetchProfile();
   }, [uid, email]);

@@ -15,7 +15,6 @@ function Margdarshak() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [typing, setTyping] = useState(false);
   const STORAGE_KEY = "margdarshak_messages_v1";
   const navigate = useNavigate();
 
@@ -35,7 +34,6 @@ function Margdarshak() {
     }
 
     setLoading(true);
-    setTyping(true);
     try {
       // Build a Gemini-compatible request body (Google Generative Language API style)
       const payload = {
@@ -74,7 +72,6 @@ function Margdarshak() {
         setMessages((m) => [...m, { id: Date.now()+3, from: "ai", text: `Error contacting Margdarshak: ${err.message || "unknown"}${extra}`, ts: Date.now() }]);
       } finally {
         setLoading(false);
-        setTyping(false);
       }
   };
   useEffect(() => {
