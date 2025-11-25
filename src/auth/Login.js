@@ -94,8 +94,18 @@ function Login() {
         alert("Login failed: Invalid credentials");
       }
     } catch (error) {
-      // Better error messages for axios errors
+      // Better error messages for axios errors — log details to help debugging
       console.error("[Login] Login error:", error);
+      try {
+        // axios provides a toJSON helper with useful info
+        // eslint-disable-next-line no-console
+        console.log("[Login] axios error.toJSON():", error && typeof error.toJSON === 'function' ? error.toJSON() : null);
+      } catch (e) {}
+      // Log response/body/code/message separately
+      // eslint-disable-next-line no-console
+      console.log("[Login] error.response:", error?.response);
+      // eslint-disable-next-line no-console
+      console.log("[Login] error.code, message:", error?.code, error?.message);
       const msg = error?.response?.data?.message || error?.response?.data || error?.message || "Login failed";
       alert("Login failed: " + (typeof msg === "string" ? msg : JSON.stringify(msg)));
     }

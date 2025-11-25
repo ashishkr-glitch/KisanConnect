@@ -10,7 +10,11 @@ const api = axios.create({
 // Request interceptor: add auth token if available
 api.interceptors.request.use((config) => {
   const uid = localStorage.getItem("uid");
-  if (uid) {
+  // Don't attach Authorization header to auth routes (login/signup)
+  const url = config.url || "";
+  // If url contains '/auth' segment (e.g. '/auth/login-offline'), skip header
+  const isAuthRoute = /(^|\/)auth(\/|$)/.test(url);
+  if (uid && !isAuthRoute) {
     config.headers.Authorization = `Bearer ${uid}`;
   }
   return config;
