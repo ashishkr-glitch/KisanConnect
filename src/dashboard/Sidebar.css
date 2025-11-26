@@ -6,12 +6,13 @@
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 2px 0 6px rgba(0,0,0,0.1);
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   flex: 0 0 250px;
-  height: 100%;
-  max-height: 100%;
+  height: 80vh;
+  max-height: 80vh;
   transition: flex-basis 300ms ease, width 300ms ease, padding 300ms ease, box-shadow 300ms ease;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .sidebar h2 {
@@ -115,4 +116,133 @@
 .sidebar.hidden .sidebar-footer {
   opacity: 0;
   pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📱 RESPONSIVE SIDEBAR - Mobile to Desktop
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    flex: 0 0 100%;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-height: auto;
+    min-height: auto;
+  }
+
+  .sidebar h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar nav {
+    gap: 4px;
+  }
+
+  .sidebar a {
+    padding: 8px 10px;
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .sidebar-footer button {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .sidebar.collapsed {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .sidebar.collapsed h2,
+  .sidebar.collapsed .brand {
+    display: none;
+  }
+
+  .sidebar.collapsed a {
+    padding: 8px 10px;
+  }
+}
+
+/* Tablet (481px - 768px) */
+@media (481px <= width <= 768px) {
+  .sidebar {
+    width: 200px;
+    flex: 0 0 200px;
+    padding: 14px;
+  }
+
+  .sidebar h2 {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .sidebar a {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .sidebar-footer button {
+    padding: 9px;
+    font-size: 13px;
+  }
+
+  .sidebar.collapsed {
+    width: 65px;
+    padding: 10px 6px;
+  }
+}
+
+/* Large Tablet (769px - 1024px) */
+@media (769px <= width <= 1024px) {
+  .sidebar {
+    width: 220px;
+    flex: 0 0 220px;
+    padding: 16px;
+  }
+
+  .sidebar h2 {
+    font-size: 17px;
+  }
+
+  .sidebar a {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .sidebar-footer button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .sidebar.collapsed {
+    width: 70px;
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  .sidebar {
+    width: 250px;
+    flex: 0 0 250px;
+    padding: 16px;
+  }
+
+  .sidebar h2 {
+    font-size: 18px;
+  }
+
+  .sidebar a {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .sidebar-footer button {
+    padding: 10px;
+    font-size: 14px;
+  }
 }

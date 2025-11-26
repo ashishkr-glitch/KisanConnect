@@ -34,8 +34,8 @@ function EditDeleteButtons({ id, entity = "farmer", onEdit, onDeleteSuccess }) {
 
   return (
     <div style={{ marginTop: "20px" }}>
-      <h3>Admin Controls</h3>
-      <button onClick={onEdit} style={buttonStyle}>Edit</button>
+      {entity !== "buyer" && <h3>Admin Controls</h3>}
+      {entity !== "buyer" && <button onClick={onEdit} style={buttonStyle}>Edit</button>}
       <button onClick={handleDelete} style={{ ...buttonStyle, backgroundColor: "#e74c3c" }}>Delete</button>
     </div>
   );

@@ -70,6 +70,12 @@ function useCrops() {
 
   useEffect(() => {
     fetchCrops();
+    // Re-fetch when role or uid changes (includes login/logout via kc-auth-change event)
+    const handleAuthChange = () => {
+      fetchCrops();
+    };
+    window.addEventListener('kc-auth-change', handleAuthChange);
+    return () => window.removeEventListener('kc-auth-change', handleAuthChange);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

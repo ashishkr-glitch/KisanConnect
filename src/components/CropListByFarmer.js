@@ -27,8 +27,10 @@ function CropListByFarmer() {
   useEffect(() => {
     const farmerId = authUid || localStorage.getItem("uid");
     if (farmerId) fetchCropsForFarmer(farmerId);
+  }, [authUid]);
 
-    // If navigated here with a success state, show message then clear it
+  // Handle location state separately to avoid dependency loop
+  useEffect(() => {
     if (location?.state?.added) {
       setMessage("Crop added successfully");
       // clear the state so message doesn't persist on back/refresh
@@ -36,9 +38,7 @@ function CropListByFarmer() {
       // hide after 2.5s
       setTimeout(() => setMessage(""), 2500);
     }
-
-    return () => {};
-  }, [authUid, location, navigate]);
+  }, [location.pathname, location.state?.added, navigate]);
 
   const handleDelete = async (cropId) => {
     const confirm = window.confirm("Are you sure you want to delete this crop?");

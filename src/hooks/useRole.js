@@ -24,7 +24,7 @@ function useRole() {
 
   const initialRole = normalizeRole(localStorage.getItem("role") || "");
   const [role, setRole] = useState(initialRole);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialRole); // Only loading if no initial role
 
   // Move side-effects into useEffect so we don't call setState during render
   useEffect(() => {
@@ -34,11 +34,14 @@ function useRole() {
       try {
         const lsRole = localStorage.getItem("role");
         if (lsRole) {
-          if (!cancelled) {
-            setRole(lsRole);
-            setLoading(false);
+          const nr = normalizeRole(lsRole);
+          if (nr) {
+            if (!cancelled) {
+              setRole(nr);
+              setLoading(false);
+            }
+            return;
           }
-          return;
         }
 
         // Prefer uid-based lookup (faster and unambiguous), fall back to email

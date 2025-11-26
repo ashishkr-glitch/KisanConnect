@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useUserProfile from "../hooks/useUserProfile";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,23 +15,22 @@ function Margdarshak() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
   const STORAGE_KEY = "margdarshak_messages_v1";
   const navigate = useNavigate();
 
-  const API_URL = process.env.REACT_APP_GEMINI_API_URL || "";
-  const API_KEY = process.env.REACT_APP_GEMINI_API_KEY || "";
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8081";
+
+  // Auto-scroll to bottom when messages change
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
     const userMsg = { id: Date.now(), from: "user", text: input };
     setMessages((m) => [...m, userMsg]);
     setInput("");
-
-    // Call Gemini API (user must set REACT_APP_GEMINI_API_URL and REACT_APP_GEMINI_API_KEY)
-    if (!API_URL || !API_KEY) {
-      setMessages((m) => [...m, { id: Date.now()+1, from: "ai", text: "Margdarshak is not configured. Set REACT_APP_GEMINI_API_URL and REACT_APP_GEMINI_API_KEY in your .env." }]);
-      return;
-    }
 
     setLoading(true);
     try {
@@ -48,12 +47,11 @@ function Margdarshak() {
         ]
       };
 
-      // If the API_URL points to our backend proxy, do not send the API key from the client.
-      const isProxy = API_URL.includes("/api/ai");
+      // Use backend proxy for secure API communication
+      const proxyUrl = `${API_URL}/api/ai/generate`;
       const headers = { "Content-Type": "application/json" };
-      if (!isProxy && API_KEY) headers["Authorization"] = `Bearer ${API_KEY}`;
 
-      const resp = await axios.post(API_URL, payload, { headers });
+      const resp = await axios.post(proxyUrl, payload, { headers });
 
       // Try various response shapes. Google GL returns: { candidates: [ { content: { parts: [ { text } ] } } ] }
       const aiTextRaw =
@@ -74,6 +72,11 @@ function Margdarshak() {
         setLoading(false);
       }
   };
+  // Auto-scroll to bottom whenever messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   useEffect(() => {
     // Load persisted messages
     try {
@@ -158,6 +161,7 @@ function Margdarshak() {
               </div>
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
 
         <div className="composer">

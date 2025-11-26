@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import api from "../api";
 import useAuth from "../hooks/useAuth";
 import useToast from "../hooks/useToast"; // ✅ Toast hook
+import SearchFilter from "./SearchFilter";
 import "./CropMarket.css";
 
 function CropMarket() {
   const [crops, setCrops] = useState([]);
+  const [filteredCrops, setFilteredCrops] = useState([]);
   const [purchaseAmount, setPurchaseAmount] = useState({});
   const [role, setRole] = useState("");
   const { showToast } = useToast();
@@ -13,8 +15,9 @@ function CropMarket() {
 
   const fetchCrops = async () => {
     try {
-      const res = await api.get(`/auth/crops`);
+      const res = await api.get(`/crops`);
       setCrops(res.data);
+      setFilteredCrops(res.data);
     } catch (err) {
       console.error("Error fetching crops:", err);
       showToast("Failed to load crops", "error");
@@ -34,6 +37,41 @@ function CropMarket() {
         if (resp?.data?.role) setRole(resp.data.role);
       } catch (e) {}
     }
+  };
+
+  const handleSearch = (term) => {
+    if (!term) {
+      setFilteredCrops(crops);
+      return;
+    }
+    const filtered = crops.filter((crop) =>
+      crop.cropType?.toLowerCase().includes(term.toLowerCase()) ||
+      crop.cropName?.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredCrops(filtered);
+  };
+
+  const handleFilter = (filters) => {
+    let filtered = crops;
+
+    // Filter by crop type
+    if (filters.cropType) {
+      filtered = filtered.filter((c) =>
+        c.cropType?.toLowerCase().includes(filters.cropType.toLowerCase())
+      );
+    }
+
+    // Filter by quantity range
+    if (filters.quantityMin || filters.quantityMax) {
+      const min = filters.quantityMin ? parseInt(filters.quantityMin) : 0;
+      const max = filters.quantityMax ? parseInt(filters.quantityMax) : Infinity;
+      filtered = filtered.filter((c) => {
+        const qty = parseInt(c.quantity) || 0;
+        return qty >= min && qty <= max;
+      });
+    }
+
+    setFilteredCrops(filtered);
   };
 
   const handlePurchase = async (crop) => {
@@ -86,7 +124,7 @@ function CropMarket() {
         status: "PENDING"
       };
 
-        await api.post(`/api/orders`, orderPayload);
+        await api.post(`/orders`, orderPayload);
 
       // server validates and decrements crop quantity atomically
       showToast("Purchase successful! Order created.", "success");
@@ -106,6 +144,25 @@ function CropMarket() {
 
   return (
     <div className="crop-market">
+      <SearchFilter
+        onSearch={handleSearch}
+        onFilter={handleFilter}
+        searchPlaceholder="Search crops by name or type..."
+        filterOptions={[
+          {
+            key: "cropType",
+            label: "Crop Type",
+            type: "text",
+            placeholder: "e.g., Wheat, Rice",
+          },
+          {
+            key: "quantity",
+            label: "Quantity Range (kg)",
+            type: "range",
+          },
+        ]}
+      />
+
       <table>
         <thead>
           <tr>
@@ -117,43 +174,51 @@ function CropMarket() {
           </tr>
         </thead>
         <tbody>
-          {crops.map((crop) => (
-            <tr key={crop.id}>
-              <td>{crop.cropType}</td>
-              <td>{crop.quantity}</td>
-              <td>{crop.harvestDate}</td>
-              <td>{crop.farmerId}</td>
-              {role === "buyer" && (
-                <td>
-                  <input
-                    type="number"
-                    placeholder="Qty"
-                    value={purchaseAmount[crop.id] || ""}
-                    onChange={(e) =>
-                      setPurchaseAmount({
-                        ...purchaseAmount,
-                        [crop.id]: e.target.value,
-                      })
-                    }
-                    style={{ width: "80px", marginRight: "8px" }}
-                  />
-                  <button
-                    onClick={() => handlePurchase(crop)}
-                    style={{
-                      padding: "6px 10px",
-                      backgroundColor: "#27ae60",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Buy
-                  </button>
-                </td>
-              )}
+          {filteredCrops.length === 0 ? (
+            <tr>
+              <td colSpan={role === "buyer" ? 5 : 4} style={{ textAlign: "center", color: "#666" }}>
+                No crops found
+              </td>
             </tr>
-          ))}
+          ) : (
+            filteredCrops.map((crop) => (
+              <tr key={crop.id}>
+                <td>{crop.cropType}</td>
+                <td>{crop.quantity}</td>
+                <td>{crop.harvestDate}</td>
+                <td>{crop.farmerId}</td>
+                {role === "buyer" && (
+                  <td>
+                    <input
+                      type="number"
+                      placeholder="Qty"
+                      value={purchaseAmount[crop.id] || ""}
+                      onChange={(e) =>
+                        setPurchaseAmount({
+                          ...purchaseAmount,
+                          [crop.id]: e.target.value,
+                        })
+                      }
+                      style={{ width: "80px", marginRight: "8px" }}
+                    />
+                    <button
+                      onClick={() => handlePurchase(crop)}
+                      style={{
+                        padding: "6px 10px",
+                        backgroundColor: "#27ae60",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Buy
+                    </button>
+                  </td>
+                )}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

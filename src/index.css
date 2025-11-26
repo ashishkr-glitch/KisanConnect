@@ -1,10 +1,11 @@
-@import './styles/theme.css';
+@import './styles/dashboardTheme.css';
 
 html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
+  overflow-x: hidden;
 }
 
 * {
@@ -45,3 +46,44 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📱 RESPONSIVE BASE STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Mobile Meta Viewport - ensure proper rendering on mobile */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  html, body, #root {
+    font-size: 14px;
+  }
+
+  body {
+    overflow: hidden;
+    padding: 0;
+  }
+}
+
+/* Tablet (481px - 768px) */
+@media (481px <= width <= 768px) {
+  html, body, #root {
+    font-size: 15px;
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  html, body, #root {
+    font-size: 16px;
+  }
+}
+

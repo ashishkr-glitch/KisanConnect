@@ -1,14 +1,36 @@
 .farmer-dashboard {
   display: flex;
-  height: 88vh;
-  width: 75vw;
+  height: calc(100vh - 65px);
+  width: 100%;
   font-family: "Inter", sans-serif;
+  overflow: hidden;
+  margin: 0;
+  margin-right: 0;
+  padding-top: 60px;
+  box-sizing: border-box;
+  position: relative;
+  top: 0;
 }
 
 .farmer-main {
   flex: 1;
-  padding: 40px;
+  padding: 20px;
   background-color: #f9f9f9;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  margin-top: 0;
+}
+
+body.dark .farmer-main {
+  background-color: #141414;
+  color: #f0f0f0;
+}
+
+body.dark .farmer-main h2,
+body.dark .farmer-main h3,
+body.dark .farmer-main h4 {
+  color: #f0f0f0;
 }
 
 .farmer-main h2 {
@@ -23,4 +45,108 @@
 .farmer-main h3 {
   margin-bottom: 12px;
   color: #34495e;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📱 RESPONSIVE FARMER DASHBOARD
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .farmer-dashboard {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+  }
+
+  .farmer-main {
+    padding: 12px;
+    width: 100%;
+  }
+
+  .farmer-main h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .farmer-main h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .farmer-main section {
+    margin-bottom: 20px;
+  }
+}
+
+/* Tablet (481px - 768px) */
+@media (481px <= width <= 768px) {
+  .farmer-dashboard {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+  }
+
+  .farmer-main {
+    padding: 20px;
+    width: 100%;
+  }
+
+  .farmer-main h2 {
+    font-size: 20px;
+  }
+
+  .farmer-main h3 {
+    font-size: 17px;
+  }
+
+  .farmer-main section {
+    margin-bottom: 30px;
+  }
+}
+
+/* Large Tablet (769px - 1024px) */
+@media (769px <= width <= 1024px) {
+  .farmer-dashboard {
+    width: 90vw;
+  }
+
+  .farmer-main {
+    padding: 32px;
+  }
+
+  .farmer-main h2 {
+    font-size: 22px;
+  }
+
+  .farmer-main h3 {
+    font-size: 18px;
+  }
+
+  .farmer-main section {
+    margin-bottom: 35px;
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  .farmer-dashboard {
+    width: 75vw;
+  }
+
+  .farmer-main {
+    padding: 40px;
+  }
+
+  .farmer-main h2 {
+    font-size: 24px;
+  }
+
+  .farmer-main h3 {
+    font-size: 18px;
+  }
+
+  .farmer-main section {
+    margin-bottom: 40px;
+  }
 }

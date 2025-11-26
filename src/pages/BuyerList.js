@@ -37,7 +37,15 @@ function BuyerList() {
   useEffect(() => {
     fetchUserRole();
     fetchBuyers();
-  }, [fetchUserRole, fetchBuyers]);
+    
+    // Re-fetch on auth changes
+    const handleAuthChange = () => {
+      fetchUserRole();
+      fetchBuyers();
+    };
+    window.addEventListener('kc-auth-change', handleAuthChange);
+    return () => window.removeEventListener('kc-auth-change', handleAuthChange);
+  }, []);
 
   return (
     <div className="buyer-list">

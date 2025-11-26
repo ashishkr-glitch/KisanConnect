@@ -1,17 +1,191 @@
+/* Login page wrapper - two column layout */
+.login-page-wrapper {
+  display: flex;
+  height: 95vh;
+  font-family: "Inter", sans-serif;
+  background-color: #97dbe6;
+}
+
+/* Dark theme: black gradient background */
+body.dark .login-page-wrapper {
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 40%, #2d2d2d 60%, #ffffff 100%);
+}
+
+/* ===== Overrides to remove any global layout/card borders while Login is shown =====
+   These rules are specific to the Login page and loaded only with the Login component.
+   They remove borders/box-shadows that may be applied by global theme files so the
+   login form + image do not look like they're inside another page/card. */
+#root, #root > .App {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove card/section borders if the Login wrapper is accidentally placed inside one */
+.login-page-wrapper, .login-page-wrapper > * {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Ensure container stretches fully and no margins show a framed border */
+.login-page-wrapper {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Left: Image container with iframe */
+.login-image-container {
+  flex: 0 0 40%;
+  overflow: hidden;
+  background: transparent; /* keep container transparent so image doesn't look like a block */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-image-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* align inner box to the right */
+  padding-right: 16px; /* space from right edge */
+  box-sizing: border-box;
+}
+
+/* Inner box controls the visible image size while container (frame) stays full-size */
+.login-image-box {
+  width: 70%; /* increased size so image appears larger */
+  height: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px; /* internal padding so image doesn't touch box edges */
+  box-sizing: border-box;
+}
+
+/* image + glow */
+.login-image-box {
+  position: relative;
+  overflow: visible;
+}
+
+.login-image-box::before {
+  /* glow disabled - keep pseudo-element present for future tweaks */
+  display: none !important;
+}
+
+.login-image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* preserve whole image without cropping */
+  border-radius: 8px;
+  position: relative;
+  z-index: 1;
+  transition: transform 300ms ease, box-shadow 300ms ease, opacity 300ms ease;
+  /* subtle gentle float animation */
+  animation: gentleFloat 3.4s ease-in-out infinite;
+  box-shadow: none;
+  opacity: 1;
+}
+
+/* Dark theme: reduce image opacity so it appears softer */
+body.dark .login-image-img {
+  opacity: 0.55;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-12px) scale(1.05); }
+}
+
+@keyframes haloPulse {
+  0% { transform: translate(-50%, -50%) scale(0.98); opacity: 0.85; }
+  50% { transform: translate(-50%, -50%) scale(1.04); opacity: 1; }
+ 100% { transform: translate(-50%, -50%) scale(0.98); opacity: 0.85; }
+}
+
+@keyframes imagePulse {
+  0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0,166,153,0.06); }
+  50% { transform: scale(1.08); box-shadow: 0 30px 90px rgba(0,166,153,0.18); }
+ 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0,166,153,0.06); }
+}
+
+/* Right: Form wrapper */
+.login-form-wrapper {
+  flex: 0 0 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: transparent; /* allow page background to show through */
+  position: relative; /* for absolute-positioned header actions (theme toggle) */
+}
+
+.login-header-actions {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .login-header-actions {
+    top: 12px;
+    right: 12px;
+  }
+}
+
 .login-container {
   max-width: 400px;
-  margin: 60px auto;
+  width: 100%;
   padding: 30px;
-  background-color: #ffffff;
+  background-color: transparent; /* no div background - use page background */
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-family: "Inter", sans-serif;
+  /* neutral elevation shadow only */
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.06); /* even subtler outline */
+  position: relative;
+  overflow: visible;
+}
+
+/* Dark theme: blue glow effect on login form */
+body.dark .login-container {
+  border: 2px solid rgba(41,128,185,0.6);
+  box-shadow: 
+    0 0 20px rgba(41,128,185,0.35),
+    0 0 40px rgba(41,128,185,0.2),
+    0 12px 40px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+body.dark .login-container::before {
+  content: '';
+  position: absolute;
+  left: -12%;
+  top: -12%;
+  width: 124%;
+  height: 124%;
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(circle at center, rgba(41,128,185,0.3) 0%, rgba(41,128,185,0.15) 30%, rgba(41,128,185,0.05) 60%, rgba(41,128,185,0) 85%);
+  filter: blur(25px);
+  opacity: 1;
 }
 
 .login-container h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #2c3e50;
+  color: var(--text-color, #2c3e50);
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .login-container form {
@@ -22,19 +196,26 @@
 .login-container input {
   padding: 12px;
   margin-bottom: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color, #ddd);
   border-radius: 8px;
   font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.login-container input:focus {
+  outline: none;
+  border-color: #2980b9;
+  box-shadow: 0 0 0 3px rgba(41,128,185,0.1);
+}
 
 .login-container button {
   padding: 12px;
-  background-color: #2980b9;
-  color: white;
+  background: linear-gradient(135deg, var(--primary-color, #2980b9) 0%, var(--primary-light, #00a699) 100%);
+  color: var(--button-text, #ffffff);
   border: none;
   border-radius: 8px;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
@@ -45,9 +226,21 @@
   transform: translateY(-2px) scale(1.03);
 }
 
+.login-container button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-container p {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  }
 .login-container p a {
-  color: #2980b9;
-  text-decoration: underline;
+  color: var(--primary-color, #2980b9);
+  text-decoration: none;
+  font-weight: 600;
   transition: color 0.2s;
 }
 
@@ -56,8 +249,33 @@
   text-decoration: underline;
 }
 
-.login-container p {
-  text-align: center;
-  margin-top: 16px;
-  font-size: 14px;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-page-wrapper {
+    flex-direction: column;
+  }
+
+  .login-image-container {
+    flex: 0 0 300px;
+    min-height: 300px;
+  }
+
+  .login-form-wrapper {
+    flex: 1;
+    padding: 30px 20px;
+  }
+
+  .login-container {
+    max-width: 100%;
+    padding: 20px;
+    /* reduce motion on small screens */
+    animation: none !important;
+}
+  }
+
+/* Disable animations on very small screens for performance */
+@media (max-width: 480px) {
+  .login-image-img, .login-image-box::before {
+    animation: none !important;
+  }
 }

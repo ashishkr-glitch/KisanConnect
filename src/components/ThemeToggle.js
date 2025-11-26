@@ -10,22 +10,23 @@ function ThemeToggle() {
       onClick={toggleTheme}
       aria-label="Toggle Theme"
       style={{
-        background: "var(--secondary-color)",
-                border: "1px solid var(--border-color)",
-                borderRadius: "50%",
-                cursor: "pointer",
-                fontSize: 20,
-                color: "var(--primary-color)",
-                marginRight: 4,
-                width: 40,
-                height: 40,
-                minWidth: 40,
-                minHeight: 40,
-                padding: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "background 0.2s, color 0.2s"
+        background: "transparent",
+        border: "none",
+        borderRadius: "8px",
+        cursor: "pointer",
+        fontSize: 18,
+        color: "var(--primary-color)",
+        padding: "8px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)"
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "scale(1.15) rotate(15deg)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "scale(1)";
       }}
     >
       {theme === "light" ? <FaMoon /> : <FaSun />}

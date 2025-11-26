@@ -54,6 +54,17 @@ function FarmerDashboard() {
   }, []);
 
   const doAction = async (orderId, action) => {
+    // Check stock before accepting
+    if (action === "accept") {
+      const order = orders.find(o => o.id === orderId);
+      const cropAvailable = crops.find(c => c.id === order?.cropId)?.quantity || 0;
+      
+      if (order.quantity > cropAvailable) {
+        showToast(`⚠️ Insufficient stock! Need ${order.quantity}kg, only have ${cropAvailable}kg available.`, "error");
+        return;
+      }
+    }
+
     setProcessing((p) => ({ ...p, [orderId]: true }));
     try {
       const user = auth?.user;
@@ -62,13 +73,13 @@ function FarmerDashboard() {
 
       if (action === "accept") {
       await api.put(`/orders/${orderId}/accept`, { farmerId: user ? user.uid : null }, { headers });
-        showToast("Order accepted", "success");
+        showToast("✅ Order accepted successfully!", "success");
         // optimistic update: mark order accepted
         setOrders((arr) => arr.map(o => o.id === orderId ? { ...o, status: 'ACCEPTED' } : o));
         if (reload) reload();
       } else {
         await api.put(`/orders/${orderId}/reject`, { farmerId: user ? user.uid : null }, { headers });
-        showToast("Order rejected", "success");
+        showToast("❌ Order rejected", "success");
         setOrders((arr) => arr.map(o => o.id === orderId ? { ...o, status: 'REJECTED' } : o));
       }
     } catch (err) {
@@ -92,8 +103,18 @@ function FarmerDashboard() {
   const onCancel = () => setConfirm({ open: false, orderId: null, action: null });
 
   return (
-    <div className="farmer-dashboard" style={{padding: '12px 12px',display: 'block', margin: '0', width: '100%'}}>
-      <h2 style={{marginBottom: 16, fontWeight: 700, fontSize: 20, color: '#388e3c', margin: '0  auto 5%'}}>Welcome, {farmerName}!</h2>
+    <div className="farmer-dashboard" style={{
+      background: 'linear-gradient(135deg, var(--body-gradient-start) 0%, var(--body-gradient-end) 100%)',
+      color: 'var(--text-color)',
+      padding: '20px',
+      borderRadius: '8px',
+      minHeight: '100vh',
+      display: 'block',
+      margin: '0',
+      width: '100%'
+    }}>
+      {/* 🌾 Farmer Dashboard Title - हरे रंग में */}
+      <h2 style={{marginBottom: 16, fontWeight: 700, fontSize: 20, color: 'var(--primary-color)', textShadow: '0 2px 4px rgba(0,0,0,0.05)', margin: '0 auto 5%'}}>Welcome, {farmerName}!</h2>
 
       {/* Quick Stats - Vertical Layout */}
       <div style={{display: 'flex', gap: 56, marginBottom: 20, width:'60%', maxWidth: '100%', justifySelf: 'center', margin: '0 0 7%'}}>
@@ -218,8 +239,43 @@ function FarmerDashboard() {
                       <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>
                         {o.status === 'PENDING' && (
                             <>
-                              <button disabled={processing[o.id] || isInsufficient} onClick={() => handleOrderAction(o.id, 'accept')} title={isInsufficient ? `Insufficient stock: need ${o.quantity}, have ${cropAvailable}` : ''} style={{marginRight: 8, background: isInsufficient ? '#ccc' : '#43a047', color: '#fff', padding: '6px 8px', borderRadius: 6, border: 'none', cursor: isInsufficient ? 'not-allowed' : 'pointer'}}>{processing[o.id] ? 'Accepting...' : 'Accept'}</button>
-                              <button disabled={processing[o.id]} onClick={() => handleOrderAction(o.id, 'reject')} style={{background: '#e53935', color: '#fff', padding: '6px 8px', borderRadius: 6, border: 'none'}}>{processing[o.id] ? 'Rejecting...' : 'Reject'}</button>
+                              <button 
+                                disabled={processing[o.id] || isInsufficient} 
+                                onClick={() => handleOrderAction(o.id, 'accept')} 
+                                title={isInsufficient ? `⚠️ Cannot accept: Need ${o.quantity}kg, only have ${cropAvailable}kg available` : 'Click to accept order'} 
+                                style={{
+                                  marginRight: 8, 
+                                  background: isInsufficient ? '#d3d3d3' : '#43a047', 
+                                  color: isInsufficient ? '#666' : '#fff', 
+                                  padding: '6px 10px', 
+                                  borderRadius: 6, 
+                                  border: isInsufficient ? '1px solid #ff9800' : 'none', 
+                                  cursor: isInsufficient ? 'not-allowed' : 'pointer',
+                                  fontWeight: 500,
+                                  fontSize: '12px',
+                                  opacity: isInsufficient ? 0.6 : 1,
+                                  transition: 'all 0.3s ease'
+                                }}
+                              >
+                                {processing[o.id] ? 'Accepting...' : (isInsufficient ? '❌ No Stock' : 'Accept')}
+                              </button>
+                              <button 
+                                disabled={processing[o.id]} 
+                                onClick={() => handleOrderAction(o.id, 'reject')} 
+                                style={{
+                                  background: '#e53935', 
+                                  color: '#fff', 
+                                  padding: '6px 10px', 
+                                  borderRadius: 6, 
+                                  border: 'none',
+                                  fontWeight: 500,
+                                  fontSize: '12px',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.3s ease'
+                                }}
+                              >
+                                {processing[o.id] ? 'Rejecting...' : 'Reject'}
+                              </button>
                             </>
                           )}
                       </td>

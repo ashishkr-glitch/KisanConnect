@@ -13,8 +13,15 @@ function BuyerDashboard() {
     const { profile } = useUserProfile();
     const buyerFullName = profile?.fullName || localStorage.getItem("full_name") || "Buyer";
   return (
-    <div className="buyer-dashboard">
-      <h2 style={{marginBottom: 16, fontWeight: 700, fontSize: 20, color: '#388e3c'}}>Welcome, {buyerFullName}!</h2>
+    <div className="buyer-dashboard" style={{
+      background: 'linear-gradient(135deg, var(--body-gradient-start) 0%, var(--body-gradient-end) 100%)',
+      color: 'var(--text-color)',
+      padding: '20px',
+      borderRadius: '8px',
+      minHeight: '100vh'
+    }}>
+      {/* 🛍️ Buyer Dashboard Title - बैंगनी रंग में */}
+      <h2 className="dashboard-greeting" style={{marginBottom: 16, fontWeight: 700, fontSize: 20, textShadow: '0 2px 4px rgba(0,0,0,0.05)'}}>Welcome, {buyerFullName}!</h2>
       <main className="buyer-main">
         {/* Tab Navigation */}
         <div className="buyer-tab-buttons">

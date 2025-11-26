@@ -1,6 +1,7 @@
 import axios from "axios";
 
 // Shared axios instance with baseURL and interceptors
+// Use relative /api path so dev-server proxy (package.json "proxy") can forward to backend
 const api = axios.create({
   baseURL: "/api",
   timeout: 15000,

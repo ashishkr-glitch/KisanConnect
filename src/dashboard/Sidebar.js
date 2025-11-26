@@ -6,11 +6,31 @@ import { FaTachometerAlt, FaUsers, FaLeaf, FaChartPie, FaShoppingCart, FaList, F
 import { FaRobot } from "react-icons/fa";
 
 function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, containerRef: outerRef = null, showBrand = true }) {
-  const { role } = useRole();
+  const { role: hookRole } = useRole();
   const location = useLocation();
   const navigate = useNavigate();
   const internalRef = useRef(null);
   const containerRef = outerRef || internalRef;
+
+  // Normalize role from localStorage (takes priority)
+  const normalizeRole = (raw) => {
+    try {
+      if (!raw) return "";
+      let r = raw.toString().trim().toLowerCase();
+      if (r.startsWith("role_")) r = r.substring(5);
+      if (r.startsWith("role-")) r = r.substring(5);
+      if (r === "administrator" || r === "adminstrator") r = "admin";
+      if (r === "seller") r = "farmer";
+      if (r === "consumer" || r === "customer") r = "buyer";
+      if (["admin", "farmer", "buyer"].includes(r)) return r;
+      return "";
+    } catch (e) {
+      return "";
+    }
+  };
+
+  const localRole = normalizeRole(localStorage.getItem("role"));
+  const role = localRole || hookRole || ""; // Prefer localStorage, then hook, then empty
 
   const handleLogout = async () => {
     try {
@@ -21,7 +41,10 @@ function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, contain
       localStorage.removeItem("sidebarOpen");
     } catch (e) {}
     try { window.dispatchEvent(new Event('kc-auth-change')); } catch (e) {}
-    navigate("/");
+    
+    // Navigate directly to /login which is now explicitly defined as a route
+    // window.location.href will do a full page reload ensuring clean state
+    window.location.href = "/login";
   };
 
   const isActive = (path) => location.pathname === path;
@@ -38,6 +61,7 @@ function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, contain
             <Link className={isActive("/dashboard/buyers") ? "active" : ""} to="/dashboard/buyers"><FaShoppingCart /> <span className="label">Buyers</span></Link>
             <Link className={isActive("/dashboard/crops") ? "active" : ""} to="/dashboard/crops"><FaLeaf /> <span className="label">All Crops</span></Link>
             <Link className={isActive("/dashboard/analytics") ? "active" : ""} to="/dashboard/analytics"><FaChartPie /> <span className="label">Analytics</span></Link>
+            <Link className={isActive("/dashboard/analytics/advanced") ? "active" : ""} to="/dashboard/analytics/advanced"><FaChartPie /> <span className="label">Advanced Analysis</span></Link>
           </>
         )}
 

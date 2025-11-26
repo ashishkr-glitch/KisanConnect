@@ -2,27 +2,33 @@ import React, { useEffect, useState, useCallback } from "react";
 import api from "../api";
 import useRole from "../hooks/useRole";
 import useToast from "../hooks/useToast";
+import RatingComponent from "../components/RatingComponent";
 import "./FarmerList.css";
 
 function FarmerList() {
   const [farmers, setFarmers] = useState([]);
   const [loadingFarmers, setLoadingFarmers] = useState(true);
+  const [errorFarmers, setErrorFarmers] = useState(null);
   
   const { role } = useRole();
   const { showToast } = useToast();
-  const API_URL = process.env.REACT_APP_API_URL;
-  console.log("API_URL in FarmerList:", API_URL);
 
   const fetchFarmers = useCallback(async () => {
     setLoadingFarmers(true);
+    setErrorFarmers(null);
     try {
-      const res = await api.get(`/farmers`);
-      setFarmers(res.data);
+      console.log("📡 Fetching farmers from backend...");
+      const res = await api.get(`/farmers`, { timeout: 10000 });
+      setFarmers(res.data || []);
+      console.log("✅ Farmers loaded:", res.data?.length || 0);
     } catch (err) {
-      console.error("Error fetching farmers:", err);
-      showToast("Error fetching farmers", "error");
+      console.error("❌ Error fetching farmers:", err.message);
+      setErrorFarmers(err.message || "Failed to load farmers");
+      setFarmers([]);
+      showToast("Could not load farmers", "error");
+    } finally {
+      setLoadingFarmers(false);
     }
-    setLoadingFarmers(false);
   }, [showToast]);
 
   const handleDelete = async (uid) => {
@@ -42,13 +48,29 @@ function FarmerList() {
 
   useEffect(() => {
     fetchFarmers();
-  }, [fetchFarmers]);
+  }, []); // Empty dependency array: fetch only on mount, never again
 
-  if (loadingFarmers) return <p>Loading farmers...</p>;
+  if (errorFarmers) {
+    return (
+      <div className="farmer-list">
+        <p style={{ color: "red" }}>⚠️ {errorFarmers}</p>
+        <button 
+          onClick={() => fetchFarmers()} 
+          style={{ padding: "0.5rem 1rem", backgroundColor: "#3498db", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (loadingFarmers) return <p>⏳ Loading farmers...</p>;
 
   return (
     <div className="farmer-list">
-      {(role === "admin" || role === "farmer") && <h2>Farmer List</h2>}
+      {role === "admin" && <h2>Farmer List</h2>}
+      {role === "buyer" && <h2>All Farmers</h2>}
+      {role === "farmer" && <h2>Farmer List</h2>}
       <table>
         <thead>
           <tr>
@@ -56,6 +78,7 @@ function FarmerList() {
             <th>Mobile</th>
             <th>District</th>
             <th>State</th>
+            {role === "buyer" && <th>Rating</th>}
             <th>UID</th>
             {role === "admin" && <th>Actions</th>}
           </tr>
@@ -67,6 +90,20 @@ function FarmerList() {
               <td>{farmer.mobile}</td>
               <td>{farmer.district}</td>
               <td>{farmer.state}</td>
+              {role === "buyer" && (
+                <td style={{ padding: "8px" }}>
+                  <RatingComponent
+                    rating={farmer.rating || 0}
+                    reviewCount={farmer.reviewCount || 0}
+                    size="small"
+                    showCount={false}
+                    onRate={(data) => {
+                      console.log("Farmer rated:", data);
+                      showToast("Rating submitted successfully!", "success");
+                    }}
+                  />
+                </td>
+              )}
               <td>{(farmer.uid || "").toString().substring(0,5).toUpperCase()}</td>
               {role === "admin" && (
                 <td>

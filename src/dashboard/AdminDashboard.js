@@ -15,8 +15,15 @@ function AdminDashboard() {
     const { profile } = useUserProfile();
     const adminFullName = profile?.fullName || localStorage.getItem("full_name") || "Admin";
   return (
-    <div className="admin-dashboard">
-      <h2 style={{marginBottom: 16, fontWeight: 700, fontSize: 20, color: '#1976d2'}}>Welcome, {adminFullName}!</h2>
+    <div className="admin-dashboard" style={{
+      background: 'linear-gradient(135deg, var(--body-gradient-start) 0%, var(--body-gradient-end) 100%)',
+      color: 'var(--text-color)',
+      padding: '20px',
+      borderRadius: '8px',
+      minHeight: '100vh'
+    }}>
+      {/* 🏛️ Admin Dashboard Title - नीले रंग में */}
+      <h2 style={{marginBottom: 16, fontWeight: 700, fontSize: 20, color: 'var(--primary-color)', textShadow: '0 2px 4px rgba(0,0,0,0.05)'}}>Welcome, {adminFullName}!</h2>
 
       <div className="tab-buttons">
         <button onClick={() => setActiveTab("farmers")} className={activeTab === "farmers" ? "active" : ""}>Farmers</button>

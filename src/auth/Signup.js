@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
+import ThemeToggle from "../components/ThemeToggle";
 import "./Signup.css";
 
 function Signup() {
@@ -46,14 +47,16 @@ function Signup() {
         role: role
       });
       if (resp.data && resp.data.uid) {
-        const uid = resp.data.uid;
-        const fullName = resp.data.fullName || resp.data.full_name || (formData.firstName + (formData.lastName ? " " + formData.lastName : ""));
-        localStorage.setItem("uid", uid);
-        localStorage.setItem("role", role ? role.toLowerCase() : "");
-        localStorage.setItem("full_name", fullName || "");
-        if (resp.data.email) localStorage.setItem("email", resp.data.email);
+        // Clear any existing auth state first
+        localStorage.removeItem("uid");
+        localStorage.removeItem("role");
+        localStorage.removeItem("full_name");
+        localStorage.removeItem("email");
+        localStorage.removeItem("sidebarOpen");
+        
         alert("Signup successful! Please login.");
-        navigate("/login");
+        // Use replace to ensure clean navigation without back button issues
+        navigate("/", { replace: true });
       } else {
         alert("Signup failed: Backend did not return UID");
       }
@@ -64,48 +67,62 @@ function Signup() {
   };
 
   return (
-    <div className="signup-container">
-      <h2>Register</h2>
+    <div className="signup-wrapper">
+      <div className="signup-form-section">
+        <div className="signup-container">
+          <h2>Register</h2>
 
-      <select value={role} onChange={(e) => setRole(e.target.value)} required>
-        <option value="">Select Role</option>
-        <option value="farmer">Farmer</option>
-        <option value="buyer">Buyer</option>
-      </select>
+          <select value={role} onChange={(e) => setRole(e.target.value)} required>
+            <option value="">Select Role</option>
+            <option value="farmer">Farmer</option>
+            <option value="buyer">Buyer</option>
+          </select>
 
-      {role && (
-        <form onSubmit={handleSignup}>
-          <input name="firstName" placeholder="First Name" onChange={handleChange} required />
-          <input name="lastName" placeholder="Last Name" onChange={handleChange} required />
-          <input name="mobile" placeholder="Mobile Number" onChange={handleChange} required />
-          <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
-          <input name="state" placeholder="State" onChange={handleChange} required />
-          <input name="district" placeholder="District" onChange={handleChange} required />
-          <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
+          {role && (
+            <form onSubmit={handleSignup}>
+              <input name="firstName" placeholder="First Name" onChange={handleChange} required />
+              <input name="lastName" placeholder="Last Name" onChange={handleChange} required />
+              <input name="mobile" placeholder="Mobile Number" onChange={handleChange} required />
+              <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
+              <input name="state" placeholder="State" onChange={handleChange} required />
+              <input name="district" placeholder="District" onChange={handleChange} required />
+              <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
 
-          <div className="confirm-password-wrapper">
-            <input
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm Password"
-              onChange={handleChange}
-              required
-            />
-            {formData.confirmPassword && (
-              <span className="match-icon">
-                {passwordsMatch ? "✅" : "❌"}
-              </span>
-            )}
+              <div className="confirm-password-wrapper">
+                <input
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirm Password"
+                  onChange={handleChange}
+                  required
+                />
+                {formData.confirmPassword && (
+                  <span className="match-icon">
+                    {passwordsMatch ? "✅" : "❌"}
+                  </span>
+                )}
+              </div>
+
+              <button type="submit" disabled={loading}>
+                {loading ? "Registering..." : "Register"}
+              </button>
+            </form>
+          )}
+
+          <button className="back-button" onClick={() => navigate("/")}>← Back to Login</button>
+          <p>Already registered? <Link to="/">Login here</Link></p>
+        </div>
+      </div>
+      <div className="signup-image-section">
+        <div className="signup-header-actions-image">
+          <ThemeToggle />
+        </div>
+        <div className="signup-image-wrapper">
+          <div className="signup-image-box">
+            <img src="/images/farmer_photo_2.png" alt="Farmer working in field" loading="lazy" className="signup-image" />
           </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
-          </button>
-        </form>
-      )}
-
-      <button className="back-button" onClick={() => navigate("/")}>← Back to Login</button>
-      <p>Already registered? <Link to="/">Login here</Link></p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import UserProfileModal from "./UserProfileModal";
 import ThemeToggle from "./ThemeToggle";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaBook } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
+import NotificationBell from "./NotificationBell";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
 
@@ -58,7 +59,10 @@ function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
       localStorage.removeItem("full_name");
       localStorage.removeItem("sidebarOpen");
     } catch (e) {}
-    navigate("/");
+    
+    // Navigate directly to /login which is now explicitly defined as a route
+    // window.location.href will do a full page reload ensuring clean state
+    window.location.href = "/login";
   };
 
   return (
@@ -86,33 +90,66 @@ function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}>
           <ThemeToggle />
+          <Link 
+            to="/documentation" 
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              fontSize: 18,
+              color: "var(--primary-color)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "8px",
+              borderRadius: "8px",
+              transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.15) rotate(10deg)";
+              e.currentTarget.style.color = "var(--primary-dark, #004555)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.color = "var(--primary-color)";
+            }}
+            title="Documentation"
+          >
+            <FaBook style={{ transition: "transform 0.3s ease" }} />
+          </Link>
+          <NotificationBell />
           <button
             style={{
-              background: "var(--secondary-color)",
-              border: "1px solid var(--border-color)",
-              borderRadius: "50%",
+              background: "transparent",
+              border: "none",
+              borderRadius: "8px",
               cursor: isLoggedIn ? "pointer" : "not-allowed",
-              fontSize: 32,
+              fontSize: 18,
               color: "var(--primary-color)",
-              marginRight: 4,
-              width: 40,
-              height: 40,
-              minWidth: 40,
-              minHeight: 40,
-              padding: 7,
+              padding: "8px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               opacity: isLoggedIn ? 1 : 0.5,
-              transition: "background 0.2s, color 0.2s",
+              transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}
             title={isLoggedIn ? "View Profile" : "Login to view profile"}
             onClick={() => {
               if (isLoggedIn) setProfileOpen(true);
               else alert("Login to view profile");
             }}
+            onMouseEnter={(e) => {
+              if (isLoggedIn) {
+                e.currentTarget.style.transform = "scale(1.15) rotate(15deg)";
+                e.currentTarget.style.color = "var(--accent-color)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.color = "var(--primary-color)";
+            }}
           >
-            <FaUserCircle style={{ fontSize: 28, margin: 0 }} />
+            <FaUserCircle />
           </button>
           <UserProfileModal
             open={profileOpen}
@@ -124,10 +161,6 @@ function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
           </button>
         </div>
       </header>
-      {/* Welcome message below header, left-aligned, with name from backend */}
-      <div style={{marginLeft: 8, marginTop: 4, fontWeight: 600, fontSize: 18, color: '#1976d2', textAlign: 'left'}}>
-        Welcome, {userProfile?.fullName || userProfile?.name || userProfile?.displayName || userProfile?.firstName || "User"}!
-      </div>
     </>
   );
 }

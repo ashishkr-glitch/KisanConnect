@@ -3,12 +3,15 @@ import api from "../api";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useToast from "../hooks/useToast";
+import OrderTimeline from "../components/OrderTimeline";
+import RatingComponent from "../components/RatingComponent";
 import "./MyOrders.css";
 
 function MyOrders() {
   const [orders, setOrders] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const navigate = useNavigate();
   const { showToast } = useToast();
   // call useAuth at top level to obey hooks rules
@@ -69,6 +72,33 @@ function MyOrders() {
     }
   };
 
+  const handleReviewSubmit = async (orderId, farmerId, farmerName, reviewData) => {
+    try {
+      const uid = authUid || localStorage.getItem("uid");
+      const buyerName = localStorage.getItem("full_name") || "Buyer";
+      
+      await api.post(`/ratings`, {
+        farmerId,
+        buyerUid: uid,
+        buyerName,
+        rating: reviewData.rating,
+        review: reviewData.review
+      });
+      
+      showToast("Review submitted successfully!", "success");
+      
+      // Update order to mark as reviewed
+      setOrders(orders.map(o => 
+        (o.id || o.orderId) === orderId 
+          ? { ...o, reviewed: true }
+          : o
+      ));
+    } catch (err) {
+      console.error("Error submitting review:", err);
+      showToast("Error submitting review", "error");
+    }
+  };
+
   if (loading) return <p>Loading orders...</p>;
 
   return (
@@ -88,46 +118,102 @@ function MyOrders() {
         )}
 
         {!error && orders && orders.length > 0 && (
-          <table className="orders-table">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Farmer</th>
-                <th>Crop</th>
-                <th>Qty</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((o) => (
-                <tr key={o.id || o.orderId}>
-                  <td>{o.id || o.orderId}</td>
-                  <td>{o.farmerName || o.farmer || "N/A"}</td>
-                  <td>{o.cropName || o.cropType || o.crop || o.product || "N/A"}</td>
-                  <td>{o.quantity || o.qty}</td>
-                  <td>{o.status || 'Pending'}</td>
-                  <td>
-                    <button
-                      onClick={() => handleDelete(o.id || o.orderId)}
-                      style={{
-                        backgroundColor: "#e74c3c",
-                        color: "white",
-                        border: "none",
-                        padding: "6px 10px",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontSize: "18px"
-                      }}
-                      title="Delete order"
-                    >
-                      🗑️
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <>
+            {selectedOrder ? (
+              <div className="order-detail-view">
+                <button
+                  className="back-button"
+                  onClick={() => setSelectedOrder(null)}
+                  style={{
+                    marginBottom: "16px",
+                    padding: "8px 12px",
+                    backgroundColor: "var(--secondary-color)",
+                    border: "1px solid var(--border-color)",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                  }}
+                >
+                  ← Back to List
+                </button>
+                <OrderTimeline order={selectedOrder} />
+              </div>
+            ) : (
+              <table className="orders-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Farmer</th>
+                    <th>Crop</th>
+                    <th>Qty</th>
+                    <th>Status</th>
+                    <th>Review</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((o) => (
+                    <tr key={o.id || o.orderId}>
+                      <td>{o.id || o.orderId}</td>
+                      <td>{o.farmerName || o.farmer || "N/A"}</td>
+                      <td>{o.cropName || o.cropType || o.crop || o.product || "N/A"}</td>
+                      <td>{o.quantity || o.qty}</td>
+                      <td>{o.status || 'Pending'}</td>
+                      <td style={{ padding: "8px" }}>
+                        {(o.status === "ACCEPTED" || o.status === "DELIVERED") && !o.reviewed ? (
+                          <RatingComponent
+                            rating={0}
+                            reviewCount={0}
+                            size="small"
+                            showCount={false}
+                            onRate={(data) => handleReviewSubmit(o.id || o.orderId, o.farmerId, o.farmerName, data)}
+                          />
+                        ) : o.status === "ACCEPTED" || o.status === "DELIVERED" ? (
+                          <span style={{ color: "green", fontSize: "12px", fontWeight: 600 }}>✅ Reviewed</span>
+                        ) : (
+                          <span style={{ color: "#999", fontSize: "12px" }}>-</span>
+                        )}
+                      </td>
+                      <td style={{ display: "flex", gap: "8px" }}>
+                        <button
+                          onClick={() => setSelectedOrder(o)}
+                          style={{
+                            backgroundColor: "#1976d2",
+                            color: "white",
+                            border: "none",
+                            padding: "6px 10px",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontSize: "12px",
+                            fontWeight: 500,
+                          }}
+                          title="View order details"
+                        >
+                          👁️ View
+                        </button>
+                        <button
+                          onClick={() => handleDelete(o.id || o.orderId)}
+                          style={{
+                            backgroundColor: "#e74c3c",
+                            color: "white",
+                            border: "none",
+                            padding: "6px 10px",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontSize: "18px"
+                          }}
+                          title="Delete order"
+                        >
+                          🗑️
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </>
         )}
       </div>
     </div>

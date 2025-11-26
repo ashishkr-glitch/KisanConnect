@@ -10,34 +10,30 @@ import MyOrders from "./pages/MyOrders";
 import FarmerOrders from "./pages/FarmerOrders";
 import CropList from "./components/CropList";
 import CropAnalytics from "./dashboard/CropAnalytics";
+import AdminCropAnalysis from "./pages/AdminCropAnalysis";
 import Margdarshak from "./pages/Margdarshak";
 import CompleteProfile from "./pages/CompleteProfile";
+import Documentation from "./pages/Documentation";
+import UIShowcase from "./pages/UIShowcase";
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
 import Layout from "./layout/Layout";
 import NotFound from "./auth/NotFound";
 import Unauthorized from "./auth/Unauthorized";
-import "./styles/theme.css";
+import "./styles/dashboardTheme.css"; // 🎨 COMPREHENSIVE THEME - सभी elements के लिए
+import "./styles/uiKit.css"; // 🎨 UI DESIGN SYSTEM - reusable components
 
 import useRole from "./hooks/useRole";
 import useAuth from "./hooks/useAuth";
-import api from "./api";
 import { useState } from "react";
 import AddCropForm from "./components/AddCropForm";
 import CropListByFarmer from "./components/CropListByFarmer";
 
 function App() {
   const { role, loading } = useRole();
+  const { uid: authUid } = useAuth();
 
-  // Dev-only: log role and uid to help debugging why wrong dashboard shows
-  useEffect(() => {
-    try {
-      // eslint-disable-next-line no-console
-      console.log("[DEBUG] role from useRole:", role, "localStorage.role:", localStorage.getItem("role"), "uid:", localStorage.getItem("uid"));
-    } catch (e) {}
-  }, [role]);
-
-  // Compute effective role: prefer localStorage, then useRole(), then default to 'farmer'
+  // Normalize role strings to canonical form
   const normalizeRole = (raw) => {
     try {
       if (!raw) return "";
@@ -54,63 +50,29 @@ function App() {
     }
   };
 
-  // track localRole in state so updates to localStorage re-render the component
-  const [localRoleState, setLocalRoleState] = useState(() => normalizeRole(typeof window !== "undefined" ? localStorage.getItem("role") : null));
-  const localRoleRaw = typeof window !== "undefined" ? localStorage.getItem("role") : null;
-  const localRole = normalizeRole(localRoleRaw) || localRoleState;
-  // Do not default to 'farmer' silently; prefer explicit roles. Use null/empty when unknown.
-  const effectiveRole = localRole || role || "";
-  const { uid: authUid } = useAuth();
-
-  // If we don't have a role (neither localStorage nor hook), try to fetch from backend using uid/email
-  useEffect(() => {
-    let cancelled = false;
-    const tryFetch = async () => {
-      try {
-        const currentLocal = normalizeRole(localStorage.getItem("role"));
-        if (currentLocal) {
-          if (!cancelled) setLocalRoleState(currentLocal);
-          return;
-        }
-
-        const uid = localStorage.getItem("uid");
-        const email = localStorage.getItem("email");
-        let resp = null;
-        if (uid) {
-          resp = await api.get(`/users/${uid}`);
-        } else if (email) {
-          resp = await api.get(`/users/by-email?email=${encodeURIComponent(email)}`);
-        }
-
-        if (resp && resp.data && resp.data.role) {
-          const nr = normalizeRole(resp.data.role);
-          if (nr) {
-            try { localStorage.setItem("role", nr); } catch (e) {}
-            if (!cancelled) setLocalRoleState(nr);
-          }
-        }
-      } catch (e) {
-        // ignore
-      }
-    };
-
-    // run only when there's no resolved role yet
-    if (!localRole && !role) tryFetch();
-    return () => { cancelled = true; };
-  }, [localRole, role]);
-
-  // Listen for auth changes (login/logout) so we update localRoleState immediately
+  // Force re-render when auth changes (login/logout) - triggers state update to refresh localRole
+  const [authChangeVersion, setAuthChangeVersion] = useState(0);
   useEffect(() => {
     const onAuthChange = () => {
-      try {
-        const nr = normalizeRole(localStorage.getItem('role'));
-        if (nr) setLocalRoleState(nr);
-        else setLocalRoleState("");
-      } catch (e) {}
+      setAuthChangeVersion(v => v + 1);
     };
     window.addEventListener('kc-auth-change', onAuthChange);
     return () => window.removeEventListener('kc-auth-change', onAuthChange);
   }, []);
+
+  // Read localRole fresh on every render (or when authChangeVersion changes) 
+  // This ensures we always get the latest role from localStorage
+  const localRole = normalizeRole(localStorage.getItem("role"));
+  const effectiveRole = localRole || role || "";
+
+  // Debug logging - only when role changes
+  useEffect(() => {
+    try {
+      // eslint-disable-next-line no-console
+      console.log("[DEBUG] App re-render - effectiveRole:", effectiveRole, "authUid:", authUid, "localRole:", localRole, "hookRole:", role, "authChangeVersion:", authChangeVersion);
+    } catch (e) {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [effectiveRole, authUid, authChangeVersion, role, localRole]);
 
   // ✅ Initialize theme on mount
   useEffect(() => {
@@ -119,17 +81,18 @@ function App() {
     document.body.classList.add(savedTheme);
   }, []);
 
-  if (loading) return <p>Loading role...</p>; // ✅ Fallback
-  // Debug: log effective role decision and auth uid
-  try {
-    // eslint-disable-next-line no-console
-    console.log("[DEBUG] effectiveRole:", effectiveRole, "authUid:", authUid, "localRole:", localRole);
-  } catch (e) {}
+  // ✅ Apply dashboard role class to <body> so all pages inherit the dashboard theme
+  // Per-dashboard body classes removed — using a single universal theme now.
+
+  if (loading && !localRole && !authUid) return <p>Loading role...</p>; // ✅ Fallback
 
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/documentation" element={<Documentation />} />
+      <Route path="/ui-showcase" element={<UIShowcase />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/complete-profile" element={<CompleteProfile />} />
 
@@ -178,6 +141,7 @@ function App() {
         <Route path="buyers" element={effectiveRole === "admin" ? <BuyerList /> : <Navigate to="/unauthorized" />} />
         <Route path="crops" element={effectiveRole === "admin" ? <CropList /> : <Navigate to="/unauthorized" />} />
         <Route path="analytics" element={effectiveRole === "admin" ? <CropAnalytics /> : <Navigate to="/unauthorized" />} />
+        <Route path="analytics/advanced" element={effectiveRole === "admin" ? <AdminCropAnalysis /> : <Navigate to="/unauthorized" />} />
         {/* Margdarshak AI chat - available to any logged-in user */}
         <Route path="margdarshak" element={<Margdarshak />} />
       </Route>

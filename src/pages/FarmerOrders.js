@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../api";
 import useAuth from "../hooks/useAuth";
 import useToast from "../hooks/useToast";
+import RatingComponent from "../components/RatingComponent";
 import "./FarmerOrders.css";
 import ConfirmDialog from "../components/ConfirmDialog";
 
@@ -85,6 +86,34 @@ function FarmerOrders() {
   };
 
   const onCancel = () => setConfirm({ open: false, orderId: null, action: null });
+
+  const handleReviewSubmit = async (orderId, buyerUid, buyerName, reviewData) => {
+    try {
+      const user = auth?.user;
+      const uid = user ? user.uid : localStorage.getItem("uid");
+      const farmerName = localStorage.getItem("full_name") || "Farmer";
+      
+      await api.post(`/ratings`, {
+        farmerId: uid,
+        buyerUid,
+        buyerName,
+        rating: reviewData.rating,
+        review: reviewData.review
+      });
+      
+      showToast("Review submitted successfully!", "success");
+      
+      // Update order to mark as reviewed
+      setOrders(orders.map(o => 
+        o.id === orderId 
+          ? { ...o, reviewed: true }
+          : o
+      ));
+    } catch (err) {
+      console.error("Error submitting review:", err);
+      showToast("Error submitting review", "error");
+    }
+  };
 
   if (loading) return <p>Loading orders...</p>;
 
@@ -223,6 +252,7 @@ function FarmerOrders() {
                 <th>Qty</th>
                 <th>Created</th>
                 <th>Status</th>
+                <th>Review</th>
               </tr>
             </thead>
             <tbody>
@@ -234,6 +264,19 @@ function FarmerOrders() {
                   <td>{o.quantity}</td>
                   <td>{o.createdAt ? new Date(o.createdAt).toLocaleString() : "-"}</td>
                   <td style={{color: '#388e3c', fontWeight: 600}}>{o.status}</td>
+                  <td style={{ padding: "8px" }}>
+                    {!o.reviewed ? (
+                      <RatingComponent
+                        rating={0}
+                        reviewCount={0}
+                        size="small"
+                        showCount={false}
+                        onRate={(data) => handleReviewSubmit(o.id, o.buyerUid, o.buyerName, data)}
+                      />
+                    ) : (
+                      <span style={{ color: "green", fontSize: "12px", fontWeight: 600 }}>✅ Reviewed</span>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
