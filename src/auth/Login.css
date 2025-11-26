@@ -91,9 +91,9 @@ body.dark .login-page-wrapper {
   opacity: 1;
 }
 
-/* Dark theme: reduce image opacity so it appears softer */
+/* Dark theme: increase image opacity for better visibility */
 body.dark .login-image-img {
-  opacity: 0.55;
+  opacity: 0.75;
 }
 
 @keyframes gentleFloat {

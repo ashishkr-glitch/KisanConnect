@@ -72,14 +72,14 @@ function Signup() {
         <div className="signup-container">
           <h2>Register</h2>
 
-          <select value={role} onChange={(e) => setRole(e.target.value)} required>
-            <option value="">Select Role</option>
-            <option value="farmer">Farmer</option>
-            <option value="buyer">Buyer</option>
-          </select>
-
-          {role && (
+          {role ? (
             <form onSubmit={handleSignup}>
+              <select value={role} onChange={(e) => setRole(e.target.value)} className="role-select" required>
+                <option value="">Select Role</option>
+                <option value="farmer">Farmer</option>
+                <option value="buyer">Buyer</option>
+              </select>
+
               <input name="firstName" placeholder="First Name" onChange={handleChange} required />
               <input name="lastName" placeholder="Last Name" onChange={handleChange} required />
               <input name="mobile" placeholder="Mobile Number" onChange={handleChange} required />
@@ -107,6 +107,12 @@ function Signup() {
                 {loading ? "Registering..." : "Register"}
               </button>
             </form>
+          ) : (
+            <select value={role} onChange={(e) => setRole(e.target.value)} className="role-select" required>
+              <option value="">Select Role</option>
+              <option value="farmer">Farmer</option>
+              <option value="buyer">Buyer</option>
+            </select>
           )}
 
           <button className="back-button" onClick={() => navigate("/")}>← Back to Login</button>

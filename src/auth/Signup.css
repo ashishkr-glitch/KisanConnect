@@ -100,19 +100,19 @@ body.dark .signup-wrapper {
   position: relative;
   z-index: 1;
   transition: transform 300ms ease, opacity 300ms ease;
-  animation: gentleFloat 3.4s ease-in-out infinite;
+  animation: gentleFloatFlipped 3.4s ease-in-out infinite;
   box-shadow: none;
   opacity: 1;
 }
 
-/* Dark theme: reduce image opacity */
+/* Dark theme: increase image opacity for better visibility */
 body.dark .signup-image {
-  opacity: 0.55;
+  opacity: 0.75;
 }
 
-@keyframes gentleFloat {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-12px) scale(1.05); }
+@keyframes gentleFloatFlipped {
+  0%, 100% { transform: translateY(0px) scale(1) scaleX(-1); }
+  50% { transform: translateY(-12px) scale(1.05) scaleX(-1); }
 }
 
 .signup-container {
@@ -172,12 +172,13 @@ body.dark .signup-container {
   grid-column: 1 / -1;
 }
 
-/* Role select: full width */
-.signup-container > select {
+/* Role select: full width at the top of form with extra bottom spacing */
+.signup-container form .role-select {
   grid-column: 1 / -1;
-  margin-bottom: 15px; /* add space below combobox */
+  margin-bottom: 8px;
   padding: 11px !important;
   font-size: 15px !important;
+  order: -1; /* place select at the top */
 }
 
 /* Dark theme: blue glow effect on signup form */
@@ -225,6 +226,12 @@ body.dark .signup-container select:focus {
   box-shadow: 0 0 0 3px rgba(41,128,185,0.15);
 }
 
+/* Dark theme: select dropdown options */
+body.dark .signup-container select option {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
 .signup-container h2 {
   text-align: center;
   margin-bottom: 15px;
@@ -245,17 +252,19 @@ body.dark .signup-container select:focus {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* Make email and mobile inputs larger */
+/* Make email and mobile inputs larger and full width */
 .signup-container input[name="email"],
 .signup-container input[name="mobile"] {
   padding: 12px !important;
   font-size: 15px !important;
+  grid-column: 1 / -1;
 }
 
-/* Make password inputs larger */
+/* Make password inputs larger and full width */
 .signup-container input[type="password"] {
   padding: 12px !important;
   font-size: 15px !important;
+  grid-column: 1 / -1;
 }
 
 .signup-container input:focus,
