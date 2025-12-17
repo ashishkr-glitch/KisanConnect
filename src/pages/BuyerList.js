@@ -68,7 +68,7 @@ function BuyerList() {
               <td>{buyer.mobile}</td>
               <td>{buyer.district}</td>
               <td>{buyer.state}</td>
-              <td>{(buyer.uid || "").toString().substring(0,5).toUpperCase()}</td>
+              <td>{(buyer.uid || "").toString().toUpperCase()}</td>
               {role === "admin" && (
                 <td>
                   <EditDeleteButtons

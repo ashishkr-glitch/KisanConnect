@@ -124,16 +124,6 @@ function MyOrders() {
                 <button
                   className="back-button"
                   onClick={() => setSelectedOrder(null)}
-                  style={{
-                    marginBottom: "16px",
-                    padding: "8px 12px",
-                    backgroundColor: "var(--secondary-color)",
-                    border: "1px solid var(--border-color)",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                  }}
                 >
                   ← Back to List
                 </button>
@@ -160,7 +150,7 @@ function MyOrders() {
                       <td>{o.cropName || o.cropType || o.crop || o.product || "N/A"}</td>
                       <td>{o.quantity || o.qty}</td>
                       <td>{o.status || 'Pending'}</td>
-                      <td style={{ padding: "8px" }}>
+                      <td className="review-cell">
                         {(o.status === "ACCEPTED" || o.status === "DELIVERED") && !o.reviewed ? (
                           <RatingComponent
                             rating={0}
@@ -170,39 +160,22 @@ function MyOrders() {
                             onRate={(data) => handleReviewSubmit(o.id || o.orderId, o.farmerId, o.farmerName, data)}
                           />
                         ) : o.status === "ACCEPTED" || o.status === "DELIVERED" ? (
-                          <span style={{ color: "green", fontSize: "12px", fontWeight: 600 }}>✅ Reviewed</span>
+                          <span className="badge-reviewed">✅ Reviewed</span>
                         ) : (
-                          <span style={{ color: "#999", fontSize: "12px" }}>-</span>
+                          <span className="badge-none">-</span>
                         )}
                       </td>
-                      <td style={{ display: "flex", gap: "8px" }}>
+                      <td className="orders-actions">
                         <button
                           onClick={() => setSelectedOrder(o)}
-                          style={{
-                            backgroundColor: "#1976d2",
-                            color: "white",
-                            border: "none",
-                            padding: "6px 10px",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontSize: "12px",
-                            fontWeight: 500,
-                          }}
+                          className="btn btn-view"
                           title="View order details"
                         >
                           👁️ View
                         </button>
                         <button
                           onClick={() => handleDelete(o.id || o.orderId)}
-                          style={{
-                            backgroundColor: "#e74c3c",
-                            color: "white",
-                            border: "none",
-                            padding: "6px 10px",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontSize: "18px"
-                          }}
+                          className="btn btn-delete"
                           title="Delete order"
                         >
                           🗑️

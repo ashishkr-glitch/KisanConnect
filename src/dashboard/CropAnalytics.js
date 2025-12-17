@@ -69,9 +69,9 @@ function CropAnalytics() {
 
       <div style={{marginTop:10, marginBottom:14}}>
         <div style={{display:'flex',alignItems:'center',gap:12}}>
-          <div style={{minWidth:120,color:'var(--border-color)'}}>Sold / Available</div>
+          <div style={{minWidth:120,color:'var(--text-color)'}}>Sold / Available</div>
           <div style={{flex:1}} className="progress"><div className="fill" style={{width: Math.min(100, Math.max(0, soldPercent)) + '%'}}/></div>
-          <div style={{minWidth:60,textAlign:'right'}}>{isNaN(soldPercent) ? '—' : soldPercent + '%'}</div>
+          <div style={{minWidth:60,textAlign:'right',color:'var(--text-color)'}}>{isNaN(soldPercent) ? '—' : soldPercent + '%'}</div>
         </div>
       </div>
 

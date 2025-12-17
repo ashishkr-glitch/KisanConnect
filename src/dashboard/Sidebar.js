@@ -50,10 +50,13 @@ function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, contain
   const isActive = (path) => location.pathname === path;
 
     return (
-    <div id="kc_sidebar" className={`sidebar ${isOpen ? "" : "hidden"}`} ref={containerRef} role="navigation" aria-label="Main navigation" aria-hidden={!isOpen}>
-      {showBrand && <h2 className="brand">KisanConnect</h2>}
-
-      <nav>
+      <div id="kc_sidebar" className={`sidebar ${isOpen ? "" : "hidden"}`} ref={containerRef} role="navigation" aria-label="Main navigation" aria-hidden={!isOpen}>
+      {showBrand && (
+        <div className="brand-wrap">
+          <img src="/Logo420.png" alt="Kissan Connect logo" className="app-logo" />
+          <h2 className="brand">Kissan Connect</h2>
+        </div>
+      )}      <nav>
         {role === "admin" && (
           <>
             <Link className={isActive("/dashboard") ? "active" : ""} to="/dashboard"><FaTachometerAlt /> <span className="label">Dashboard</span></Link>

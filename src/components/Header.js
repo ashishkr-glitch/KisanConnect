@@ -84,8 +84,8 @@ function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
             <FaBars />
           </button>
 
-          <img src="/logo1.png" alt="Logo" style={{ height: "24px", width: "24px" }} />
-          <h2 style={{margin: 0, fontSize: "16px", fontWeight: 600}}>KisanConnect</h2>
+          <img src="/Logo420.png" alt="Kissan Connect logo" style={{ height: "40px", width: "40px" }} />
+          <h2 style={{margin: 0, fontSize: "16px", fontWeight: 600}}>Kissan Connect</h2>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}>

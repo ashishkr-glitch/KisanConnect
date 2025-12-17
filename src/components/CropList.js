@@ -49,7 +49,7 @@ function CropList() {
               <td>{crop.cropType}</td>
               <td>{crop.quantity}</td>
               <td>{crop.harvestDate}</td>
-              <td>{(crop.farmerId || "").toString().substring(0,5).toUpperCase()}</td>
+                  <td>{(crop.farmerId || "").toString().toUpperCase()}</td>
               {role === "admin" && (
                 <td>
                   <button onClick={() => handleDeleteCrop(crop.id)} className="btn-danger">Delete</button>

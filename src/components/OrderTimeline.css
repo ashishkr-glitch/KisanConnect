@@ -169,10 +169,16 @@ body.dark .rejection-reason {
 }
 
 .detail-value {
-  color: var(--border-color);
+  /* Use readable text color by default; avoid using border color for values */
+  color: var(--text-color);
   text-align: right;
   flex: 1;
   word-break: break-word;
+}
+
+/* Dark-mode specific: ensure values remain light on dark backgrounds */
+body.dark .order-timeline .detail-value {
+  color: #f0f0f0;
 }
 
 .detail-value.status-pending {

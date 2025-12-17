@@ -30,7 +30,7 @@ function Documentation() {
 
   const translations = {
     hi: {
-      title: "📚 KisanConnect दस्तावेज़",
+      title: "📚 Kissan Connect दस्तावेज़",
       subtitle: "आपके सभी सवालों के जवाब एक जगह",
       search: "अपना सवाल खोजें...",
       categories: "श्रेणियां",
@@ -41,12 +41,12 @@ function Documentation() {
       contact: "Margdarshak AI से पूछें या Support से संपर्क करें",
       email: "samjauritu@gmail.com",
       phone: "9919171589",
-      team: "KisanConnect Team",
+      team: "Kissan Connect Team",
       members: "Ashish Kumar Singh, Abhishek Verma, Akriti Pandey",
       readMore: "और पढ़ें",
     },
     en: {
-      title: "📚 KisanConnect Documentation",
+      title: "📚 Kissan Connect Documentation",
       subtitle: "Answers to all your questions in one place",
       search: "Search your question...",
       categories: "Categories",
@@ -57,7 +57,7 @@ function Documentation() {
       contact: "Ask Margdarshak AI or Contact Support",
       email: "samjauritu@gmail.com",
       phone: "9919171589",
-      team: "KisanConnect Team",
+      team: "Kissan Connect Team",
       members: "Ashish Kumar Singh, Abhishek Verma, Akriti Pandey",
       readMore: "Read More",
     },
@@ -94,10 +94,10 @@ function Documentation() {
   const docs = {
     "getting-started": [
       {
-        title_hi: "KisanConnect क्या है?",
-        title_en: "What is KisanConnect?",
+        title_hi: "Kissan Connect क्या है?",
+        title_en: "What is Kissan Connect?",
         content_hi:
-          "KisanConnect एक डिजिटल platform है जो किसानों और खरीदारों को सीधे जोड़ता है। यहाँ किसान अपनी फसलें बेच सकते हैं और खरीदार सीधे किसान से खरीद सकते हैं।",
+          "Kissan Connect एक डिजिटल platform है जो किसानों और खरीदारों को सीधे जोड़ता है। यहाँ किसान अपनी फसलें बेच सकते हैं और खरीदार सीधे किसान से खरीद सकते हैं।",
         content_en: "KisanConnect is a digital platform that directly connects farmers and buyers. Here farmers can sell their crops and buyers can purchase directly from farmers.",
         icon: "📱",
       },
@@ -721,7 +721,7 @@ We take all issues seriously.
         title_hi: "App use करने के लिए कोई fee है?",
         title_en: "Is there any fee to use the app?",
         content_hi: `
-नहीं! KisanConnect बिल्कुल FREE है:
+नहीं! Kissan Connect बिल्कुल FREE है:
 - Farmer = बिना किसी cost के अपनी फसल list कर सकते हैं
 - Buyer = बिना किसी charges के खरीद सकते हैं
 - Admin = सिर्फ system manage करते हैं
@@ -729,7 +729,7 @@ We take all issues seriously.
 हम commission या कोई hidden charges नहीं लेते।
         `,
         content_en: `
-No! KisanConnect is completely FREE:
+No! Kissan Connect is completely FREE:
 - Farmers = Can list crops without any cost
 - Buyers = Can purchase without any charges
 - Admin = Only manage the system

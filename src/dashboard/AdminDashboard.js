@@ -22,9 +22,12 @@ function AdminDashboard() {
       borderRadius: '8px',
       minHeight: '100vh'
     }}>
-      {/* 🏛️ Admin Dashboard Title - नीले रंग में */}
-      <h2 style={{marginBottom: 16, fontWeight: 700, fontSize: 20, color: 'var(--primary-color)', textShadow: '0 2px 4px rgba(0,0,0,0.05)'}}>Welcome, {adminFullName}!</h2>
 
+      <h2 className="dashboard-greeting">
+        <span className="greeting-welcome">Welcome,</span>
+        <br />
+        <span className="greeting-name">{adminFullName}</span>
+      </h2>
       <div className="tab-buttons">
         <button onClick={() => setActiveTab("farmers")} className={activeTab === "farmers" ? "active" : ""}>Farmers</button>
         <button onClick={() => setActiveTab("buyers")} className={activeTab === "buyers" ? "active" : ""}>Buyers</button>

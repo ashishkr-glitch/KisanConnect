@@ -67,7 +67,7 @@ function FarmerList() {
   if (loadingFarmers) return <p>⏳ Loading farmers...</p>;
 
   return (
-    <div className="farmer-list">
+    <div className="farmer-list buyer-list">
       {role === "admin" && <h2>Farmer List</h2>}
       {role === "buyer" && <h2>All Farmers</h2>}
       {role === "farmer" && <h2>Farmer List</h2>}
@@ -104,7 +104,7 @@ function FarmerList() {
                   />
                 </td>
               )}
-              <td>{(farmer.uid || "").toString().substring(0,5).toUpperCase()}</td>
+              <td>{(farmer.uid || "").toString().toUpperCase()}</td>
               {role === "admin" && (
                 <td>
                   <button className="danger" onClick={() => handleDelete(farmer.uid)}>

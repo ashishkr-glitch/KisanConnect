@@ -3,7 +3,8 @@
   display: flex;
   min-height: 95vh;
   font-family: "Inter", sans-serif;
-  background-color: #97dbe6;
+  /* let the global/body background show through for a consistent page color */
+  background: transparent !important;
   height: 95vh;
 }
 
@@ -86,7 +87,9 @@ body.dark .signup-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  /* remove internal framing so the image sits directly on the page background */
+  padding: 0;
+  background: transparent !important;
   box-sizing: border-box;
   position: relative;
   overflow: visible;
@@ -96,13 +99,15 @@ body.dark .signup-wrapper {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 8px;
+  /* remove border-radius so the image doesn't show a clipped rectangle */
+  border-radius: 0;
   position: relative;
   z-index: 1;
   transition: transform 300ms ease, opacity 300ms ease;
   animation: gentleFloatFlipped 3.4s ease-in-out infinite;
   box-shadow: none;
   opacity: 1;
+  background: transparent !important;
 }
 
 /* Dark theme: increase image opacity for better visibility */

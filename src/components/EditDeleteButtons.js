@@ -33,22 +33,16 @@ function EditDeleteButtons({ id, entity = "farmer", onEdit, onDeleteSuccess }) {
   };
 
   return (
-    <div style={{ marginTop: "20px" }}>
+    <div className="edit-delete-controls" style={{ marginTop: "16px" }}>
       {entity !== "buyer" && <h3>Admin Controls</h3>}
-      {entity !== "buyer" && <button onClick={onEdit} style={buttonStyle}>Edit</button>}
-      <button onClick={handleDelete} style={{ ...buttonStyle, backgroundColor: "#e74c3c" }}>Delete</button>
+      {entity !== "buyer" && (
+        <button onClick={onEdit} className="secondary">Edit</button>
+      )}
+      <button onClick={handleDelete} className="danger">Delete</button>
     </div>
   );
 }
 
-const buttonStyle = {
-  padding: "10px 16px",
-  marginRight: "10px",
-  backgroundColor: "#3498db",
-  color: "white",
-  border: "none",
-  borderRadius: "6px",
-  cursor: "pointer"
-};
+// styling is handled by global CSS classes (button.secondary, button.danger)
 
 export default EditDeleteButtons;

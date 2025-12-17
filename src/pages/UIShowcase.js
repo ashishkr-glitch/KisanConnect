@@ -10,7 +10,7 @@ function UIShowcase() {
     <div className="showcase-container">
       {/* Header */}
       <div className="showcase-header">
-        <h1>🎨 KisanConnect UI Design System</h1>
+        <h1>🎨 Kissan Connect UI Design System</h1>
         <p>Complete component library and design tokens</p>
       </div>
 

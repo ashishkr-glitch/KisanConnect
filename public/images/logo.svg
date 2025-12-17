@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Compact single-tone leaf logo for Kissan Connect -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Kissan Connect logo">
+	<title>Kissan Connect</title>
+	<g fill="#2ecc71" fill-rule="evenodd">
+		<!-- outer leaf -->
+		<path d="M8 36C8 20 28 4 36 4c0 0 6 0 10 6 4 6-2 20-20 34-3 2-8-6-2-8z"/>
+		<!-- inner cut -->
+		<path d="M22 30c4-6 10-8 14-6 0 0 1 4-6 10-7 6-10 4-8-4z" fill="#218c52"/>
+	</g>
+</svg>

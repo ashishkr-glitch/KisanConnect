@@ -22,6 +22,81 @@
   color: var(--text-color);
 }
 
+/* Brand animation for KisanConnect heading - subtle pulse + shimmer */
+.brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 0; */
+  margin: 0;
+  animation: brandPulse 6s ease-in-out infinite;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.2;
+  height: 60px;
+}
+
+/* Logo image wrapper - logo and brand text side by side */
+.brand-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  /* margin-top: 0; */
+  padding: 0;
+  width: 100%;
+  height: auto;
+}
+
+.app-logo {
+  width: 60px;
+  height: 60px;
+  display: block;
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.brand::after {
+  content: '';
+  position: absolute;
+  /* top: 0; */
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0) 100%);
+  transform: skewX(-20deg);
+  animation: brandShimmer 3.2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes brandPulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes brandShimmer {
+  0% { left: -120%; }
+  100% { left: 220%; }
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .brand, .brand::after { animation: none !important; }
+}
+
 .sidebar nav {
   display: flex;
   flex-direction: column;
@@ -83,6 +158,10 @@
 
 .sidebar.collapsed h2,
 .sidebar.collapsed .brand {
+  display: none;
+}
+
+.sidebar.collapsed .app-logo {
   display: none;
 }
 

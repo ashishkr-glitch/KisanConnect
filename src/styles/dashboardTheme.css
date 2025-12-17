@@ -183,6 +183,7 @@ body.dark .sidebar a:hover {
   transform: translateY(-3px) scale(1.01);
   border-color: rgba(0,200,255,0.28);
   box-shadow: 0 12px 36px rgba(0,150,255,0.12), 0 0 18px rgba(0,200,255,0.06);
+  color: #000000 !important;
 }
 
 /* Make pill/tab active state more visible in dark mode */
@@ -277,6 +278,14 @@ body.dark .sidebar nav a.active {
   font-weight: 600;
 }
 
+/* Ensure active sidebar option text (and any child icons) is pure black in dark mode
+   so the creamy active background reads correctly. Higher specificity + !important
+   avoids theme-level overrides. */
+body.dark .sidebar nav a.active,
+body.dark .sidebar nav a.active * {
+  color: #000000 !important;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    🎨 BUTTONS - Modern glassmorphic buttons with smooth animations
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -343,6 +352,30 @@ button.danger {
 
 button.danger:hover {
   box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+}
+
+/* ===== Legacy/Delete button aliases =====
+   Unify different class names used across the app so all
+   delete/danger buttons look identical (gradient + shadow).
+   Using !important to ensure inline/legacy CSS doesn't win. */
+.btn-danger, .btn-delete, .danger, button.danger {
+  background: linear-gradient(135deg, var(--danger-color, #d32f2f) 0%, #e74c3c 100%) !important;
+  box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3) !important;
+  color: var(--button-text, #ffffff) !important;
+  border: none !important;
+}
+
+.btn-danger:hover, .btn-delete:hover, .danger:hover, button.danger:hover {
+  box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4) !important;
+}
+
+/* Dark mode aliases */
+body.dark .btn-danger,
+body.dark .btn-delete,
+body.dark .danger,
+body.dark button.danger {
+  color: var(--button-text) !important;
+  background: var(--danger-color) !important;
 }
 
 button.secondary {
@@ -501,6 +534,20 @@ table tbody td {
   padding: 14px 16px;
   color: var(--text-color, #1a1a1a);
   font-weight: 500;
+}
+
+/* Match buyer list rows to farmer list: slightly tighter rows for compact tables */
+.buyer-list th,
+.buyer-list td,
+.buyer-list table th,
+.buyer-list table td {
+  padding: 12px !important;
+  font-size: 14px !important;
+}
+
+.buyer-list tr:hover,
+.buyer-list table tr:hover {
+  background-color: var(--hover-bg) !important;
 }
 
 body.dark table tbody {

@@ -138,8 +138,9 @@ function Margdarshak() {
 
   return (
     <div className="margdarshak-page">
-      <div style={{marginBottom: 16, fontWeight: 600, fontSize: 18, color: '#1976d2'}}>
-        Welcome, {greetName}!
+      <div className="greeting-message">
+        <span className="greeting-label">Welcome,</span>
+        <span className="greeting-name"> {greetName}!</span>
       </div>
       <div className="margdarshak-header">
         <h2>Margdarshak AI</h2>

@@ -113,18 +113,21 @@ function FarmerDashboard() {
       margin: '0',
       width: '100%'
     }}>
-      {/* 🌾 Farmer Dashboard Title - हरे रंग में */}
-      <h2 style={{marginBottom: 16, fontWeight: 700, fontSize: 20, color: 'var(--primary-color)', textShadow: '0 2px 4px rgba(0,0,0,0.05)', margin: '0 auto 5%'}}>Welcome, {farmerName}!</h2>
 
+      <h2 className="dashboard-greeting">
+        <span className="greeting-welcome">Welcome,</span>
+        <br />
+        <span className="greeting-name">{farmerName}</span>
+      </h2>
       {/* Quick Stats - Vertical Layout */}
-      <div style={{display: 'flex', gap: 56, marginBottom: 20, width:'60%', maxWidth: '100%', justifySelf: 'center', margin: '0 0 7%'}}>
-        <div style={{background: '#e8f5e9', padding: 12, borderRadius: 12, textAlign: 'center', boxShadow: '0 2px 8px #eee',flex: '1'}}>
+      <div className="farmer-quick-stats" style={{display: 'flex', gap: 56, marginBottom: 20, width:'60%', maxWidth: '100%', justifySelf: 'center', margin: '0 0 7%'}}>
+        <div className="stat-card stat-total-crops" style={{padding: 12, borderRadius: 12, textAlign: 'center', flex: '1'}}>
           <h3 style={{margin: 0, fontSize: 12, color: '#388e3c'}}>Total Crops</h3>
           <div style={{fontSize: 24, fontWeight: 700, color: '#388e3c', marginTop: 6}}>
             {loading ? <Skeleton width={48} height={28} /> : crops.length}
           </div>
         </div>
-        <div style={{background: '#e3f2fd', padding: 12, borderRadius: 12, textAlign: 'center', boxShadow: '0 2px 8px #eee', flex: '1'}}>
+        <div className="stat-card stat-total-qty" style={{padding: 12, borderRadius: 12, textAlign: 'center', flex: '1'}}>
           <h3 style={{margin: 0, fontSize: 12, color: '#1976d2'}}>Total Quantity (kg)</h3>
           <div style={{fontSize: 24, fontWeight: 700, color: '#1976d2', marginTop: 6}}>
             {loading ? <Skeleton width={64} height={28} /> : totalQuantity}
@@ -133,7 +136,7 @@ function FarmerDashboard() {
       </div>
 
       {/* Recent Crops */}
-      <section style={{margin: 'auto 5% auto'}}>
+      <section className="recent-crops" style={{margin: 'auto 5% auto'}}>
         <h3 style={{marginBottom: 12, fontWeight: 600, color: '#388e3c', fontSize: 14}}>Your Recent Crops</h3>
         {loading ? (
           <div>Loading crops...</div>
@@ -142,20 +145,20 @@ function FarmerDashboard() {
         ) : crops.length === 0 ? (
           <div>No crops added yet.</div>
         ) : (
-          <table style={{width: '100%', maxWidth: '900px', borderCollapse: 'collapse', marginBottom: 12, background: 'var(--modal-bg)', borderRadius: 8, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.08)'}}>
+          <table className="table-card" style={{width: '100%', maxWidth: '900px', borderCollapse: 'collapse', marginBottom: 12, borderRadius: 8, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.08)'}}>
             <thead>
-              <tr style={{background: 'var(--secondary-color)'}}>
-                <th style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)', textAlign: 'left', fontSize: '12px'}}>Crop Type</th>
-                <th style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)', textAlign: 'left', fontSize: '12px'}}>Quantity</th>
-                <th style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)', textAlign: 'left', fontSize: '12px'}}>Harvest Date</th>
+              <tr className="table-header">
+                <th>Crop Type</th>
+                <th>Quantity</th>
+                <th>Harvest Date</th>
               </tr>
             </thead>
             <tbody>
               {crops.slice(0, 5).map((crop) => (
                 <tr key={crop.id}>
-                  <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)', fontSize: '12px'}}>{crop.cropType}</td>
-                  <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)', fontSize: '12px'}}>{crop.quantity}</td>
-                  <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)', fontSize: '12px'}}>{crop.harvestDate}</td>
+                  <td>{crop.cropType}</td>
+                  <td>{crop.quantity}</td>
+                  <td>{crop.harvestDate}</td>
                 </tr>
               ))}
             </tbody>
@@ -168,7 +171,7 @@ function FarmerDashboard() {
       </section>
 
       {/* Received Orders - show latest pending orders and allow accept/reject */}
-      <section style={{margin: '30px auto', width: '100%', maxWidth: 980}}>
+      <section className="orders-section" style={{margin: '30px auto', width: '100%', maxWidth: 980}}>
         <h3 style={{marginBottom: 12, fontWeight: 600, color: '#1976d2', fontSize: 14}}>Orders</h3>
         
         {/* Tab Navigation */}
@@ -212,16 +215,16 @@ function FarmerDashboard() {
             {orders.filter(o => o.status === 'PENDING' && o.quantity <= (crops.find(c => c.id === o.cropId)?.quantity || 0)).length === 0 ? (
               <div style={{color: '#666'}}>No pending orders with available stock.</div>
             ) : (
-              <table style={{width: '100%', borderCollapse: 'collapse', background: 'var(--modal-bg)', borderRadius: 8, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)'}}>
+              <table className="table-card" style={{width: '100%', borderCollapse: 'collapse', borderRadius: 8, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)'}}>
                 <thead>
-                  <tr style={{background: 'var(--secondary-color)'}}>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Order ID</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Buyer</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Crop</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Requested</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Available</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Status</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Actions</th>
+                  <tr className="table-header">
+                    <th>Order ID</th>
+                    <th>Buyer</th>
+                    <th>Crop</th>
+                    <th>Requested</th>
+                    <th>Available</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -229,50 +232,28 @@ function FarmerDashboard() {
                     const cropAvailable = crops.find(c => c.id === o.cropId)?.quantity || 0;
                     const isInsufficient = o.quantity > cropAvailable;
                     return (
-                    <tr key={o.id} style={{background: isInsufficient ? '#fff3e0' : 'transparent'}}>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>{o.id}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>{o.buyerName || o.buyerUid}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>{o.cropType}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>{o.quantity}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)', color: isInsufficient ? '#d32f2f' : 'inherit'}}>{cropAvailable} {isInsufficient && '⚠️'}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>{o.status}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>
+                    <tr key={o.id} className={isInsufficient ? 'row-insufficient' : ''}>
+                      <td>{o.id}</td>
+                      <td>{o.buyerName || o.buyerUid}</td>
+                      <td>{o.cropType}</td>
+                      <td>{o.quantity}</td>
+                      <td className={isInsufficient ? 'cell-insufficient' : ''}>{cropAvailable} {isInsufficient && '⚠️'}</td>
+                      <td>{o.status}</td>
+                      <td>
                         {o.status === 'PENDING' && (
                             <>
                               <button 
                                 disabled={processing[o.id] || isInsufficient} 
                                 onClick={() => handleOrderAction(o.id, 'accept')} 
                                 title={isInsufficient ? `⚠️ Cannot accept: Need ${o.quantity}kg, only have ${cropAvailable}kg available` : 'Click to accept order'} 
-                                style={{
-                                  marginRight: 8, 
-                                  background: isInsufficient ? '#d3d3d3' : '#43a047', 
-                                  color: isInsufficient ? '#666' : '#fff', 
-                                  padding: '6px 10px', 
-                                  borderRadius: 6, 
-                                  border: isInsufficient ? '1px solid #ff9800' : 'none', 
-                                  cursor: isInsufficient ? 'not-allowed' : 'pointer',
-                                  fontWeight: 500,
-                                  fontSize: '12px',
-                                  opacity: isInsufficient ? 0.6 : 1,
-                                  transition: 'all 0.3s ease'
-                                }}
+                                className={`action-btn accept ${isInsufficient ? 'disabled' : ''}`}
                               >
                                 {processing[o.id] ? 'Accepting...' : (isInsufficient ? '❌ No Stock' : 'Accept')}
                               </button>
                               <button 
                                 disabled={processing[o.id]} 
                                 onClick={() => handleOrderAction(o.id, 'reject')} 
-                                style={{
-                                  background: '#e53935', 
-                                  color: '#fff', 
-                                  padding: '6px 10px', 
-                                  borderRadius: 6, 
-                                  border: 'none',
-                                  fontWeight: 500,
-                                  fontSize: '12px',
-                                  cursor: 'pointer',
-                                  transition: 'all 0.3s ease'
-                                }}
+                                className="action-btn reject"
                               >
                                 {processing[o.id] ? 'Rejecting...' : 'Reject'}
                               </button>
@@ -291,24 +272,24 @@ function FarmerDashboard() {
             {orders.filter(o => o.status === 'ACCEPTED').length === 0 ? (
               <div style={{color: '#666'}}>No active orders.</div>
             ) : (
-              <table style={{width: '100%', borderCollapse: 'collapse', background: 'var(--modal-bg)', borderRadius: 8, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)'}}>
+              <table className="table-card" style={{width: '100%', borderCollapse: 'collapse', borderRadius: 8, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)'}}>
                 <thead>
-                  <tr style={{background: 'var(--secondary-color)'}}>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Order ID</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Buyer</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Crop</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Quantity</th>
-                    <th style={{padding: '8px 10px', textAlign: 'left', fontSize: '12px'}}>Status</th>
+                  <tr className="table-header">
+                    <th>Order ID</th>
+                    <th>Buyer</th>
+                    <th>Crop</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {orders.filter(o => o.status === 'ACCEPTED').map((o) => (
                     <tr key={o.id}>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>{o.id}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>{o.buyerName || o.buyerUid}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>{o.cropType}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)'}}>{o.quantity}</td>
-                      <td style={{padding: '8px 10px', borderBottom: '1px solid var(--border-color)', color: '#388e3c', fontWeight: 600}}>{o.status}</td>
+                      <td>{o.id}</td>
+                      <td>{o.buyerName || o.buyerUid}</td>
+                      <td>{o.cropType}</td>
+                      <td>{o.quantity}</td>
+                      <td className="status-cell">{o.status}</td>
                     </tr>
                   ))}
                 </tbody>
