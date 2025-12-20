@@ -1,0 +1,448 @@
+DATA FLOW DIAGRAM & ER DIAGRAM - KISANCONNECT PROJECT
+
+1. DATA FLOW DIAGRAM (DFD)
+
+1.1 Level 0 DFD (Context Diagram)
+
+High-level view showing the entire system as a single process.
+
+External Entities:
+- Farmer
+- Agricultural Expert
+- Administrator
+- Weather API (external data source)
+- AI/LLM Service (external service)
+- Firebase Authentication (external service)
+- Cloud Storage (external service)
+
+Data Flows:
+
+Farmer ↔ KisanConnect System:
+→ User credentials, farm details, crop information, queries
+← Dashboard, weather, recommendations, alerts, expert responses
+
+Expert ↔ KisanConnect System:
+→ Query responses, verification feedback
+← Farmer queries, trends, analytics
+
+Administrator ↔ KisanConnect System:
+→ Configuration, user management commands
+← System status, analytics, audit logs
+
+Weather API → KisanConnect System:
+→ Real-time weather data, forecasts
+
+AI/LLM Service → KisanConnect System:
+→ Generated responses to farmer queries
+
+Firebase → KisanConnect System:
+→ Authentication tokens, user verification
+
+Cloud Storage → KisanConnect System:
+→ Stored images, documents
+
+1.2 Level 1 DFD (Main Processes)
+
+System broken into major processes:
+
+Process 1: User Authentication & Management
+- Input: User credentials, profile data
+- Processing: Validate credentials, manage user sessions, store user data
+- Output: Authentication tokens, user profiles, role information
+- Data Store: User database
+
+Process 2: Crop & Farm Management
+- Input: Crop data, farm details, planting information
+- Processing: Validate crop details, recommend crops, track crop progress
+- Output: Crop records, recommendations, performance reports
+- Data Store: Crop database
+
+Process 3: Weather Data Integration
+- Input: Location coordinates, weather API data
+- Processing: Fetch weather data, generate alerts, interpret data
+- Output: Weather information, alerts, recommendations
+- Data Store: Weather cache, alert history
+
+Process 4: Manifest Planning & Tracking
+- Input: Crop data, resource allocation, execution updates
+- Processing: Create manifests, update status, generate reports
+- Output: Manifest records, progress reports, performance metrics
+- Data Store: Manifest database
+
+Process 5: AI Assistant & Expert Network
+- Input: User queries, AI responses, expert feedback
+- Processing: Send queries to LLM, route to experts, store conversations
+- Output: AI responses, expert answers, conversation history
+- Data Store: Conversation database
+
+Process 6: Alert Management (Pest/Disease/Weather)
+- Input: Weather data, crop type, location
+- Processing: Generate alerts, send notifications
+- Output: Alerts, notifications, alert history
+- Data Store: Alert database
+
+Process 7: Admin & Reporting
+- Input: System configuration, user data, activity logs
+- Processing: Generate reports, manage users, configure system
+- Output: Dashboards, reports, system analytics
+- Data Store: Audit logs, analytics database
+
+Data Flow Between Processes:
+
+Farmer → Process 1: Credentials
+Process 1 → Process 2,4,5: Authenticated user ID
+Farmer → Process 2: Crop data
+Process 2 → Process 3,6: Crop type, location for recommendation/alert
+Process 3 → Process 6: Weather data
+Process 6 → Farmer: Alerts
+Process 4 ← Process 2: Crop info
+Process 5 ← Farmer: Queries
+External AI ← Process 5: Query text
+External AI → Process 5: Response
+Process 5 → Farmer: AI response
+Expert → Process 5: Verification
+Process 7 ← All processes: Activity data
+
+1.3 Level 1 Detailed Processes
+
+Process 2.1: Crop Recommendation
+- Input: User farm data (location, soil, farm size), market data
+- Processing: 
+  a) Retrieve user farm characteristics
+  b) Query crop database for suitability
+  c) Filter by sustainability criteria
+  d) Score by market demand
+  e) Rank top crops
+- Output: Ranked crop recommendations
+- Data Store: Crop database, market price cache
+
+Process 3.1: Generate Weather Alerts
+- Input: Current weather data, crop type, location
+- Processing:
+  a) Match weather conditions with pest life cycles
+  b) Check for extreme weather events
+  c) Determine risk level
+  d) Generate alert message
+- Output: Alert records with risk levels
+- Data Store: Alert database, pest-weather mapping
+
+Process 5.1: AI Query Processing
+- Input: Natural language query from farmer
+- Processing:
+  a) Add user context (location, crops, farm type)
+  b) Send to LLM with agricultural system prompt
+  c) Receive response
+  d) Enrich with local data if needed
+  e) Format for farmer understanding
+- Output: Formatted AI response
+- Data Store: Conversation history
+
+2. ENTITY-RELATIONSHIP (ER) DIAGRAM
+
+2.1 Entities & Attributes
+
+Entity: User
+- PK: user_id (UUID)
+- Attributes: email, password_hash, full_name, phone, role, location (JSON), farm_size, soil_type, created_at, updated_at, is_active
+
+Entity: Role
+- PK: role_id
+- Attributes: role_name (FARMER, EXPERT, ADMIN), description, permissions (array)
+
+Entity: Crop
+- PK: crop_id (UUID)
+- FK: user_id (references User)
+- Attributes: crop_name, crop_type, planting_date, expected_harvest_date, area_cultivated (acres), status, variety, seed_cost, fertilizer_type, created_at
+
+Entity: Manifest
+- PK: manifest_id (UUID)
+- FK: user_id (references User)
+- Attributes: name, description, start_date, end_date, planned_yield, actual_yield, status, budget, created_at, completed_at
+
+Entity: ManifestLineItem
+- PK: line_item_id
+- FK: manifest_id, crop_id
+- Attributes: task_name, planned_date, actual_date, description, status
+
+Entity: Weather
+- PK: weather_id
+- FK: location_id (implicit through coordinates)
+- Attributes: temperature, humidity, rainfall, wind_speed, timestamp, forecast_json, data_source
+
+Entity: WeatherAlert
+- PK: alert_id
+- FK: user_id, crop_id
+- Attributes: alert_type, message, severity, generated_at, expires_at, is_notified
+
+Entity: PestDiseaseDatabase
+- PK: pest_id
+- Attributes: pest_name, image_url, description, ideal_conditions (JSON), management_strategies (JSON), organic_methods, chemical_methods, prevention_tips
+
+Entity: PestAlert
+- PK: pest_alert_id
+- FK: user_id, crop_id, pest_id
+- Attributes: risk_level, generated_at, expires_at, management_tips, is_notified
+
+Entity: Conversation
+- PK: conversation_id (UUID)
+- FK: user_id (references User)
+- Attributes: message_text, message_role (USER/ASSISTANT/EXPERT), timestamp, related_crop_id, helpful_score
+
+Entity: ConversationThread
+- PK: thread_id
+- FK: user_id
+- Attributes: thread_title, start_date, last_message_date, is_resolved, expert_id (if expert response)
+
+Entity: AuditLog
+- PK: log_id
+- FK: user_id (who performed action)
+- Attributes: action_type, entity_type, entity_id, old_value, new_value, timestamp, ip_address
+
+Entity: SystemConfiguration
+- PK: config_id
+- Attributes: config_key, config_value, description, last_updated_by
+
+2.2 Relationships
+
+User — Role (Many-to-One)
+- A user has one role
+- A role can be assigned to many users
+- Cardinality: N:1
+- Participation: Total on User side
+
+User — Crop (One-to-Many)
+- A user can have many crops
+- Each crop belongs to one user
+- Cardinality: 1:N
+- Foreign Key: crop.user_id references user.user_id
+
+User — Manifest (One-to-Many)
+- A user can have many manifests
+- Each manifest belongs to one user
+- Cardinality: 1:N
+- Foreign Key: manifest.user_id references user.user_id
+
+User — Conversation (One-to-Many)
+- A user can have many conversations
+- Each conversation belongs to one user
+- Cardinality: 1:N
+- Foreign Key: conversation.user_id references user.user_id
+
+User — WeatherAlert (One-to-Many)
+- A user can receive many weather alerts
+- Each alert is for one user (or broadcast)
+- Cardinality: 1:N
+- Foreign Key: weather_alert.user_id references user.user_id
+
+User — PestAlert (One-to-Many)
+- A user receives many pest alerts
+- Each alert is for one user
+- Cardinality: 1:N
+- Foreign Key: pest_alert.user_id references user.user_id
+
+Crop — Manifest (One-to-Many)
+- A crop can be in many manifests
+- A manifest line item references one crop
+- Cardinality: 1:N
+- Junction table: ManifestLineItem (composite key)
+
+Crop — PestAlert (One-to-Many)
+- A crop can have many pest alerts
+- Each alert is for one crop
+- Cardinality: 1:N
+- Foreign Key: pest_alert.crop_id references crop.crop_id
+
+PestDiseaseDatabase — PestAlert (One-to-Many)
+- A pest can trigger many alerts
+- Each alert references one pest
+- Cardinality: 1:N
+- Foreign Key: pest_alert.pest_id references pest_disease_database.pest_id
+
+Manifest — ManifestLineItem (One-to-Many)
+- A manifest has many line items (tasks)
+- Each line item belongs to one manifest
+- Cardinality: 1:N
+- Foreign Key: manifest_line_item.manifest_id references manifest.manifest_id
+
+User — ConversationThread (One-to-Many)
+- A user initiates many conversation threads
+- Each thread belongs to one user
+- Cardinality: 1:N
+- Foreign Key: conversation_thread.user_id references user.user_id
+
+ConversationThread — Conversation (One-to-Many)
+- A thread contains many messages
+- Each message belongs to one thread
+- Cardinality: 1:N
+- Foreign Key: conversation.thread_id references conversation_thread.thread_id
+
+User — AuditLog (One-to-Many)
+- A user performs many actions (logged)
+- Each log entry links to a user
+- Cardinality: 1:N
+- Foreign Key: audit_log.user_id references user.user_id
+
+2.3 ER Diagram Description
+
+```
+┌─────────────────┐
+│      User       │
+├─────────────────┤
+│ user_id (PK)    │
+│ email           │
+│ password_hash   │
+│ full_name       │
+│ phone           │
+│ role_id (FK)    │◄───┐
+│ location        │    │
+│ farm_size       │    │
+│ soil_type       │    │
+│ created_at      │    │
+└─────────────────┘    │
+       │ 1             │
+       │ │ N           │
+       ├─┼──────────┐  │
+       │ │          │  │
+       │ └────────┐ │  │
+       │          │ │  │
+    ┌──┴────────┐ │ │  │
+    │   Crop    │ │ │  │
+    ├───────────┤ │ │  │
+    │crop_id(PK)│ │ │  │
+    │user_id(FK)├─┘ │  │
+    │crop_name  │   │  │
+    │status     │   │  │
+    │...        │   │  │
+    └───────────┘   │  │
+                    │  │ ┌────────────┐
+                    │  ├─►  Role     │
+                    │  │ ├────────────┤
+      ┌─────────────┤  │ │role_id(PK)│
+      │             │  │ │role_name  │
+    ┌─┴──────────────┴──┐ │description│
+    │     Manifest      │ └────────────┘
+    ├───────────────────┤
+    │manifest_id (PK)   │
+    │user_id (FK)       │
+    │start_date         │
+    │planned_yield      │
+    │actual_yield       │
+    │status             │
+    └───────────────────┘
+           │ 1
+           │ │ N
+           │ │
+    ┌──────┴─────────┐
+    │ManifestLineItem│
+    ├────────────────┤
+    │line_item_id(PK)│
+    │manifest_id(FK) │
+    │crop_id (FK)    │
+    │task_name       │
+    │status          │
+    └────────────────┘
+
+    ┌─────────────────────┐
+    │      Weather        │
+    ├─────────────────────┤
+    │weather_id (PK)      │
+    │temperature         │
+    │humidity            │
+    │rainfall            │
+    │wind_speed          │
+    │timestamp           │
+    └─────────────────────┘
+
+    ┌──────────────────────┐
+    │    WeatherAlert      │
+    ├──────────────────────┤
+    │alert_id (PK)         │
+    │user_id (FK)          │
+    │alert_type           │
+    │severity             │
+    │message              │
+    │generated_at         │
+    └──────────────────────┘
+
+    ┌──────────────────────┐
+    │    Conversation      │
+    ├──────────────────────┤
+    │conversation_id (PK)  │
+    │user_id (FK)          │
+    │thread_id (FK)        │
+    │message_text         │
+    │message_role         │
+    │timestamp            │
+    │helpful_score        │
+    └──────────────────────┘
+
+    ┌──────────────────────┐
+    │   PestAlert          │
+    ├──────────────────────┤
+    │pest_alert_id (PK)    │
+    │user_id (FK)          │
+    │crop_id (FK)          │
+    │pest_id (FK)          │
+    │risk_level           │
+    │generated_at         │
+    │expires_at           │
+    └──────────────────────┘
+
+    ┌──────────────────────┐
+    │ PestDiseaseDatabase  │
+    ├──────────────────────┤
+    │pest_id (PK)          │
+    │pest_name            │
+    │image_url            │
+    │description          │
+    │ideal_conditions(JSON)│
+    │management_strategies│
+    └──────────────────────┘
+```
+
+3. KEY DESIGN DECISIONS
+
+3.1 Normalization
+
+Database is normalized to 3rd Normal Form (3NF):
+- No partial dependencies (all non-key attributes depend on full primary key).
+- No transitive dependencies (no non-key attribute depends on another non-key attribute).
+- Benefits: Reduced data redundancy, consistency, easier maintenance.
+
+3.2 JSON Fields
+
+Some complex data stored as JSON:
+- location (coordinates, district, state)
+- forecast_data (detailed weather for 7 days)
+- management_strategies (list of pest management options)
+- ideal_conditions (weather conditions for pest/disease)
+
+Advantages: Flexibility, schema-less data, nested data structures.
+Tradeoff: Slightly harder to query; mitigated by PostgreSQL's JSON operators.
+
+3.3 Indexes
+
+Indexes on frequently queried columns:
+- user.email (unique index for login)
+- user.role_id (filtered queries)
+- crop.user_id (for user's crops)
+- manifest.user_id (for user's manifests)
+- weather_alert.user_id + generated_at (recent alerts)
+- conversation.user_id + timestamp (conversation history)
+- audit_log.user_id + timestamp (audit trails)
+
+3.4 Soft Deletes
+
+Recommended for audit trail purposes:
+- Add "deleted_at" timestamp column to important tables (User, Crop, Manifest).
+- Instead of hard deleting, set deleted_at = NOW().
+- Benefits: Audit trail, accidental deletion recovery, data retention compliance.
+
+3.5 Partitioning (Future)
+
+For large-scale deployment, consider table partitioning:
+- Conversation table: Partition by user_id (data locality).
+- Weather table: Partition by location + date (time-series data).
+- AuditLog table: Partition by timestamp (archival strategy).
+
+-- End of DFD & ER Diagram

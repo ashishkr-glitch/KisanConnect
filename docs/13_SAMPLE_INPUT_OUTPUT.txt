@@ -1,0 +1,770 @@
+SAMPLE INPUT & OUTPUT - KISANCONNECT PROJECT
+
+This document demonstrates actual usage scenarios with sample data, inputs, and expected system outputs.
+
+=== SCENARIO 1: FARMER REGISTRATION & PROFILE SETUP ===
+
+Sample Input (Registration Form):
+- Email: rajesh_kumar@gmail.com
+- Password: SecurePass@2024
+- Full Name: Rajesh Kumar Singh
+- Phone: +91-9876543210
+- State: Maharashtra
+- District: Nashik
+- Village: Igatpuri
+- Farm Size: 5 hectares
+- Soil Type: Black Soil
+- Primary Crop: Sugarcane
+
+API Request:
+POST /api/v1/auth/signup
+Content-Type: application/json
+
+{
+  "email": "rajesh_kumar@gmail.com",
+  "password": "SecurePass@2024",
+  "profile": {
+    "firstName": "Rajesh",
+    "lastName": "Singh",
+    "phone": "+91-9876543210",
+    "location": {
+      "state": "Maharashtra",
+      "district": "Nashik",
+      "village": "Igatpuri"
+    },
+    "farm": {
+      "size": 5.0,
+      "sizeUnit": "hectares",
+      "soilType": "BLACK_SOIL",
+      "irrigationType": "CANAL"
+    }
+  }
+}
+
+Expected Output (JSON Response):
+Status: 201 Created
+
+{
+  "success": true,
+  "message": "User registered successfully",
+  "data": {
+    "userId": 1001,
+    "email": "rajesh_kumar@gmail.com",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "profile": {
+      "firstName": "Rajesh",
+      "lastName": "Singh",
+      "location": "Nashik, Maharashtra",
+      "farmSize": "5.0 hectares"
+    }
+  },
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+
+UI Display After Registration:
+- Welcome page shows: "Welcome Rajesh! 👋"
+- Dashboard displays farm summary: "5 hectares in Nashik, Black Soil"
+- Suggested next step: "Add your first crop"
+
+---
+
+=== SCENARIO 2: CROP RECOMMENDATION REQUEST ===
+
+Sample Input (User Query):
+- Farmer: Rajesh Kumar (from Scenario 1)
+- Current Season: Monsoon (June-September)
+- Query Type: "What crops can I plant this monsoon?"
+
+API Request:
+GET /api/v1/crops/recommend?season=MONSOON&userId=1001
+
+Backend Processing:
+1. Fetch farmer location: Nashik, Maharashtra
+2. Fetch current weather: Temperature 28°C, Humidity 75%, Rainfall 450mm expected
+3. Fetch soil type: Black Soil
+4. Fetch farm size: 5 hectares
+5. Calculate suitability scores for all 150+ crops in database
+
+Recommendation Algorithm Output (Internal):
+- Sugarcane: Score 92 (optimal in monsoon, black soil suitable, water intensive match)
+- Cotton: Score 85 (monsoon suitable, black soil good, market demand high)
+- Soybean: Score 78 (alternative legume, black soil compatible)
+- Groundnut: Score 62 (lower rainfall tolerance)
+- Maize: Score 45 (not ideal for monsoon in this region)
+
+API Response (JSON):
+Status: 200 OK
+
+{
+  "success": true,
+  "userId": 1001,
+  "season": "MONSOON",
+  "location": "Nashik, Maharashtra",
+  "farmDetails": {
+    "size": 5.0,
+    "soilType": "Black Soil",
+    "irrigationType": "Canal"
+  },
+  "recommendations": [
+    {
+      "rank": 1,
+      "cropName": "Sugarcane",
+      "suitabilityScore": 92,
+      "reasoning": [
+        "Optimal for black soil in monsoon season",
+        "Water requirements align with expected rainfall",
+        "High market demand in region",
+        "Can be harvested Jan-Mar for good prices"
+      ],
+      "estimatedYield": "80-100 tons/hectare",
+      "estimatedIncome": "₹4,00,000-5,00,000 for 5 hectares",
+      "riskLevel": "LOW",
+      "waterRequired": 2000,
+      "cropDuration": 12,
+      "marketPrice": "₹270-300/quintal"
+    },
+    {
+      "rank": 2,
+      "cropName": "Cotton",
+      "suitabilityScore": 85,
+      "reasoning": [
+        "Well-suited to black soil",
+        "Monsoon timing aligns with planting season",
+        "Growing market demand",
+        "Lower water requirements than sugarcane"
+      ],
+      "estimatedYield": "20-25 quintals/hectare",
+      "estimatedIncome": "₹1,80,000-2,50,000 for 5 hectares",
+      "riskLevel": "MEDIUM",
+      "waterRequired": 600,
+      "cropDuration": 6,
+      "marketPrice": "₹5,500-6,500/quintal"
+    },
+    {
+      "rank": 3,
+      "cropName": "Soybean",
+      "suitabilityScore": 78,
+      "reasoning": [
+        "Good alternative for diversification",
+        "Fixes nitrogen in black soil",
+        "Lower input costs",
+        "Growing export market"
+      ],
+      "estimatedYield": "18-20 quintals/hectare",
+      "estimatedIncome": "₹90,000-1,00,000 for 5 hectares",
+      "riskLevel": "LOW",
+      "waterRequired": 450,
+      "cropDuration": 4.5,
+      "marketPrice": "₹4,800-5,200/quintal"
+    }
+  ],
+  "weatherForecast": {
+    "nextWeek": {
+      "temperature": "28-32°C",
+      "humidity": "72-78%",
+      "rainfall": "60-80mm",
+      "windSpeed": "15-20 km/h"
+    },
+    "nextMonth": {
+      "expectedRainfall": "200-250mm",
+      "drySpells": "3-4 days in second week"
+    }
+  },
+  "timestamp": "2024-06-15T14:20:00Z"
+}
+
+UI Display (Recommendation Page):
+┌─────────────────────────────────────────────────────────┐
+│ 🌾 RECOMMENDED CROPS FOR YOUR FARM                      │
+│ Location: Nashik, Maharashtra | Season: Monsoon         │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│ #1 SUGARCANE ⭐⭐⭐⭐⭐ 92% Match                        │
+│ ├─ Best for: Black soil, monsoon planting              │
+│ ├─ Expected Yield: 80-100 tons/hectare                 │
+│ ├─ Income: ₹4,00,000 - ₹5,00,000                       │
+│ ├─ Water Needed: 2000 mm (matches rainfall)            │
+│ └─ [SELECT] [MORE INFO] [WEATHER IMPACT]               │
+│                                                          │
+│ #2 COTTON ⭐⭐⭐⭐ 85% Match                             │
+│ ├─ Best for: Diversification, lower water             │
+│ ├─ Expected Yield: 20-25 quintals/hectare             │
+│ ├─ Income: ₹1,80,000 - ₹2,50,000                       │
+│ └─ [SELECT] [MORE INFO] [WEATHER IMPACT]               │
+│                                                          │
+│ #3 SOYBEAN ⭐⭐⭐⭐ 78% Match                            │
+│ ├─ Best for: Crop rotation, soil improvement          │
+│ ├─ Expected Yield: 18-20 quintals/hectare             │
+│ └─ [SELECT] [MORE INFO] [WEATHER IMPACT]               │
+│                                                          │
+└─────────────────────────────────────────────────────────┘
+
+---
+
+=== SCENARIO 3: WEATHER ALERT AND PEST WARNING ===
+
+Sample Input (Weather Data - Automatic):
+- Date: 2024-07-20
+- Location: Nashik (19.98°N, 73.79°E)
+- Temperature: 24°C (dip from normal 28°C)
+- Humidity: 92% (high)
+- Rainfall: 120mm in 24 hours
+- Wind Speed: 8 km/h (low)
+
+Backend Weather Analysis:
+1. Temperature anomaly detected: 4°C below normal
+2. Humidity spike: 92% (high moisture)
+3. Heavy rainfall recorded
+4. Low wind speed: fungal disease risk
+
+Pest/Disease Risk Calculation:
+- Sugarcane Smut Risk: HIGH (high humidity + low wind = spore spread)
+- Red Rot Risk: MEDIUM (moisture triggers infection)
+- Leaf Blast Risk: HIGH (exact conditions for fungal growth)
+
+Alert Generation System Response:
+- Severity: HIGH
+- Action Required: YES
+- Notification Method: SMS + Push Notification + Email
+
+Sample Output (Alert to Farmer):
+
+[PUSH NOTIFICATION]
+🚨 WEATHER ALERT - Fungal Disease Risk
+"High humidity and rainfall in Nashik may trigger sugarcane smut. 
+Take preventive action immediately. Tap for details."
+
+[SMS]
+"KISANCONNECT ALERT: Disease risk in Nashik. Sugarcane smut HIGH risk. 
+Spray fungicide today. Call 1800-KISANCONNECT for expert help."
+
+[EMAIL]
+Subject: 🌾 Disease Alert for Your Farm - Immediate Action Required
+From: alerts@kisanconnect.app
+
+Dear Rajesh,
+
+We detected weather conditions favorable for sugarcane smut in your area.
+
+ALERT DETAILS:
+├─ Crop: Sugarcane
+├─ Disease: Sugarcane Smut
+├─ Risk Level: HIGH 🔴
+├─ Confidence: 85%
+└─ Window: Next 24-48 hours
+
+IMMEDIATE ACTIONS RECOMMENDED:
+1. Inspect crop for black, dusty spores on shoots
+2. Remove infected plants if present (< 5%)
+3. Spray systemic fungicide:
+   - Carbendazim 12% + Mancozeb 63% (WP)
+   - OR Hexaconazole 5% (EC)
+   - Spray at 500 liters/hectare
+4. Repeat after 7-10 days if necessary
+
+EXPECTED WEATHER:
+├─ Next 24hrs: 95mm rain, 25°C, 90% humidity
+├─ Next 48hrs: 45mm rain, 26°C, 85% humidity  
+└─ Next 72hrs: Clearing up, 28°C, 70% humidity
+
+EXPERT RECOMMENDATION:
+"With these weather conditions and your sugarcane growth stage, 
+preventive fungicide spray is highly recommended. Early action 
+can prevent 60-80% crop loss."
+
+[NEED EXPERT HELP? Click here to connect with agricultural expert]
+
+API Response (For Weather Dashboard):
+{
+  "timestamp": "2024-07-20T15:30:00Z",
+  "location": "Nashik",
+  "currentConditions": {
+    "temperature": 24,
+    "humidity": 92,
+    "rainfall24h": 120,
+    "windSpeed": 8
+  },
+  "alerts": [
+    {
+      "id": "ALERT_20240720_001",
+      "alertType": "PEST_DISEASE",
+      "severity": "HIGH",
+      "crop": "Sugarcane",
+      "disease": "Smut",
+      "riskScore": 85,
+      "description": "High humidity and low wind speeds create ideal conditions",
+      "affectedArea": "5 hectares",
+      "recommendedActions": [
+        "Inspect crop for disease symptoms",
+        "Apply systemic fungicide",
+        "Monitor soil moisture",
+        "Improve field drainage"
+      ],
+      "fungicideOptions": [
+        {
+          "name": "Carbendazim 12% + Mancozeb 63%",
+          "dosage": "3g/liter",
+          "cost": "₹45/liter",
+          "availability": "Local agricultural store"
+        }
+      ],
+      "expertAdvice": "Contact Dr. Sharma - Plant Pathologist",
+      "expiryTime": "2024-07-22T15:30:00Z"
+    }
+  ],
+  "forecast7day": [
+    {
+      "date": "2024-07-20",
+      "high": 26,
+      "low": 22,
+      "rainfall": 120,
+      "humidity": 92,
+      "windSpeed": 8
+    },
+    // ... more days
+  ]
+}
+
+---
+
+=== SCENARIO 4: MANIFEST CREATION AND TASK TRACKING ===
+
+Sample Input (Farmer Creating Manifest for Sugarcane):
+
+User Input Form:
+- Crop Selected: Sugarcane
+- Planting Date: 15-June-2024
+- Expected Harvest Date: 10-January-2025
+- Target Yield: 500 quintals (100 quintals/hectare × 5 hectares)
+- Farm Division: 5 hectares in single plot
+
+API Request:
+POST /api/v1/manifest
+{
+  "cropId": 45,
+  "plantingDate": "2024-06-15",
+  "expectedHarvestDate": "2025-01-10",
+  "targetYield": 500.0,
+  "yieldUnit": "quintals",
+  "farmPlotIds": [201]
+}
+
+System Processing:
+1. Validate crop and dates
+2. Generate automated task schedule
+3. Calculate critical periods
+4. Generate resource estimates
+
+Expected Output (Manifest Created):
+
+{
+  "manifestId": 5001,
+  "status": "ACTIVE",
+  "crop": "Sugarcane",
+  "farmSize": 5,
+  "plantingDate": "2024-06-15",
+  "expectedHarvestDate": "2025-01-10",
+  "duration": "210 days (7 months)",
+  "targetYield": 500,
+  "predictedYield": 480,
+  "yieldVarianceRisk": "8%",
+  
+  "automatedTaskSchedule": [
+    {
+      "taskId": 1,
+      "taskName": "Land Preparation",
+      "category": "PREPARATION",
+      "scheduledDate": "2024-06-01",
+      "daysBeforePlanting": 14,
+      "duration": "5-7 days",
+      "description": "Plough field 3-4 times, remove weeds and stubble",
+      "requiredResources": {
+        "laborCost": "₹5,000",
+        "fuelCost": "₹3,000",
+        "equipmentCost": "₹2,000"
+      },
+      "status": "NOT_STARTED",
+      "priority": "HIGH"
+    },
+    {
+      "taskId": 2,
+      "taskName": "Seed Treatment",
+      "category": "PRE_PLANTING",
+      "scheduledDate": "2024-06-10",
+      "daysBeforePlanting": 5,
+      "duration": "1 day",
+      "description": "Treat seeds with fungicide (Carbendazim) for smut prevention",
+      "requiredResources": {
+        "fungicide": "2.5 kg",
+        "laborCost": "₹500"
+      },
+      "status": "NOT_STARTED",
+      "priority": "HIGH"
+    },
+    {
+      "taskId": 3,
+      "taskName": "Planting",
+      "category": "PLANTING",
+      "scheduledDate": "2024-06-15",
+      "duration": "5-7 days",
+      "description": "Plant treated seed cane at 2m row spacing, 20mm depth",
+      "seedRequired": "4-5 tons",
+      "requiredResources": {
+        "seed": "4500 kg",
+        "seedCost": "₹45,000",
+        "laborCost": "₹8,000"
+      },
+      "status": "PENDING",
+      "priority": "CRITICAL"
+    },
+    {
+      "taskId": 4,
+      "taskName": "Germination Check",
+      "category": "MONITORING",
+      "scheduledDate": "2024-07-06",
+      "daysAfterPlanting": 21,
+      "duration": "1 day",
+      "description": "Check germination rate (should be >90%)",
+      "targetMetric": "> 90% germination",
+      "status": "NOT_STARTED",
+      "priority": "MEDIUM"
+    },
+    {
+      "taskId": 5,
+      "taskName": "First Irrigation",
+      "category": "IRRIGATION",
+      "scheduledDate": "2024-07-01",
+      "daysAfterPlanting": 16,
+      "duration": "1-2 days",
+      "description": "First light irrigation for moisture establishment",
+      "waterRequired": "250 mm",
+      "cost": "₹1,500",
+      "status": "NOT_STARTED",
+      "priority": "HIGH"
+    },
+    {
+      "taskId": 6,
+      "taskName": "First Weeding",
+      "category": "WEEDING",
+      "scheduledDate": "2024-08-15",
+      "daysAfterPlanting": 61,
+      "duration": "10-12 days",
+      "description": "Manual/mechanical weeding, optional herbicide",
+      "weedingMethods": ["Manual", "Mechanical", "Herbicide (2,4-D)"],
+      "cost": "₹4,000-6,000",
+      "status": "NOT_STARTED",
+      "priority": "HIGH"
+    },
+    {
+      "taskId": 7,
+      "taskName": "First Fertilizer Application",
+      "category": "FERTILIZER",
+      "scheduledDate": "2024-08-01",
+      "daysAfterPlanting": 47,
+      "duration": "1-2 days",
+      "description": "Apply 100 kg N, 50 kg P2O5, 50 kg K2O per hectare",
+      "fertilizerComposition": {
+        "nitrogen": 500,
+        "phosphorus": 250,
+        "potassium": 250
+      },
+      "cost": "₹5,500",
+      "status": "NOT_STARTED",
+      "priority": "MEDIUM"
+    },
+    {
+      "taskId": 8,
+      "taskName": "Pest Monitoring",
+      "category": "PEST_MANAGEMENT",
+      "scheduledDate": "2024-08-20",
+      "frequency": "Every 2 weeks",
+      "duration": "Ongoing",
+      "description": "Monitor for top borer, stem borer, scale insects",
+      "monitoringChecklist": [
+        "White grubs in soil",
+        "Shoot fly damage on young leaves",
+        "Top borer within 60 days",
+        "Scale insects on leaf sheath"
+      ],
+      "costIfAction": "₹3,000-5,000 per spray",
+      "status": "NOT_STARTED",
+      "priority": "MEDIUM"
+    },
+    {
+      "taskId": 9,
+      "taskName": "Ratoon Shoot Emergence",
+      "category": "MONITORING",
+      "scheduledDate": "2024-09-15",
+      "daysAfterPlanting": 92,
+      "duration": "1 day",
+      "description": "Monitor ratoon shoot emergence in plant cane",
+      "status": "NOT_STARTED",
+      "priority": "LOW"
+    },
+    {
+      "taskId": 10,
+      "taskName": "Harvest Preparation",
+      "category": "HARVEST",
+      "scheduledDate": "2024-12-20",
+      "daysBeforeHarvest": 21,
+      "duration": "5-7 days",
+      "description": "Inspect crop maturity, arrange transportation & machinery",
+      "harvestWindowStart": "2025-01-01",
+      "harvestWindowEnd": "2025-02-28",
+      "status": "NOT_STARTED",
+      "priority": "HIGH"
+    },
+    {
+      "taskId": 11,
+      "taskName": "Harvesting",
+      "category": "HARVEST",
+      "scheduledDate": "2025-01-10",
+      "duration": "15-20 days",
+      "description": "Harvest mature cane, arrange for crushing",
+      "laborRequired": "150-200 man-days",
+      "cost": "₹8,000-10,000",
+      "yieldExpected": 500,
+      "status": "NOT_STARTED",
+      "priority": "CRITICAL"
+    }
+  ],
+
+  "resourceEstimate": {
+    "totalCost": "₹95,000",
+    "breakup": {
+      "seeds": "₹45,000 (47%)",
+      "fertilizers": "₹18,000 (19%)",
+      "irrigation": "₹12,000 (13%)",
+      "pesticides": "₹8,000 (8%)",
+      "labor": "₹12,000 (13%)"
+    },
+    "expectedRevenue": "₹1,25,000 (@ ₹250/quintal)",
+    "expectedProfit": "₹30,000",
+    "profitMargin": "32%"
+  },
+
+  "criticalPeriods": [
+    {
+      "period": "Germination (0-21 days)",
+      "riskFactors": ["Dry soil", "Pests", "Poor seed quality"],
+      "mitigations": ["Proper irrigation", "Seed treatment", "Regular monitoring"]
+    },
+    {
+      "period": "Tillering (30-90 days)",
+      "riskFactors": ["Weeds", "Pests", "Nutrient deficiency"],
+      "mitigations": ["Timely weeding", "Pest monitoring", "Fertilizer application"]
+    },
+    {
+      "period": "Formative Growth (90-150 days)",
+      "riskFactors": ["Disease", "Water stress", "Nutrient stress"],
+      "mitigations": ["Irrigation scheduling", "Fungicide spray", "Balanced nutrition"]
+    },
+    {
+      "period": "Maturation (150-210 days)",
+      "riskFactors": ["Red rot", "Harvest delay", "Weather damage"],
+      "mitigations": ["Disease monitoring", "Timely harvest", "Pest management"]
+    }
+  ]
+}
+
+UI Display (Manifest Dashboard):
+
+┌────────────────────────────────────────────────────────────────┐
+│ 📋 MANIFEST: Sugarcane - 5 hectares                           │
+│ Status: ACTIVE | Planting: 15-Jun-2024 | Harvest: 10-Jan-2025│
+├────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│ PROGRESS: ████████░░░░░░░░░░░░░░░░░░ 32% (66 days done)      │
+│                                                                 │
+│ UPCOMING TASKS (Next 30 Days):                                 │
+│ ┌──────────────────────────────────────────────────────────┐  │
+│ │ 1. ✅ COMPLETED - Planting (15-Jun) [Germination 95%]   │  │
+│ │ 2. ⏱️  DUE TODAY - First Weeding (15-Aug)                │  │
+│ │    └─ Manual weeding recommended, ~10 man-days         │  │
+│ │ 3. ⚠️  SOON - First Fertilizer (1-Aug)                  │  │
+│ │    └─ Apply: 100kg N + 50kg P + 50kg K per hectare     │  │
+│ │ 4. 📅 UPCOMING - Pest Monitoring (20-Aug)              │  │
+│ │    └─ Check for stem borer, top borer                  │  │
+│ │                                                          │  │
+│ └──────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│ RESOURCES SPENT: ₹25,000 / ₹95,000 (26%)                      │
+│ PROJECTED PROFIT: ₹30,000 (32% margin)                        │
+│                                                                 │
+│ [EDIT MANIFEST] [VIEW ALL TASKS] [EXPORT REPORT]              │
+│                                                                 │
+└────────────────────────────────────────────────────────────────┘
+
+---
+
+=== SCENARIO 5: AI ASSISTANT CONVERSATION ===
+
+Sample Input (Farmer Question):
+
+User Query: "Mera sugarcane field mein shoots par kale dhagge dikh rahe hain. 
+Ye kya problem hai? Aur iski solution kya hai?"
+
+[Translation: "I see black threads on shoots in my sugarcane field. 
+What's this problem? What's the solution?"]
+
+API Request:
+POST /api/v1/ai/chat
+{
+  "conversationId": 12345,
+  "userId": 1001,
+  "message": "Mera sugarcane field mein shoots par kale dhagge dikh rahe hain. Ye kya problem hai? Aur iski solution kya hai?",
+  "language": "HINDI",
+  "context": {
+    "crop": "Sugarcane",
+    "location": "Nashik",
+    "currentWeather": {
+      "temperature": 32,
+      "humidity": 80,
+      "rainfall": "120mm last week"
+    },
+    "cropStage": "Tillering (60 days old)"
+  }
+}
+
+AI/LLM Processing:
+1. Translate query to English
+2. Analyze context (crop, location, weather, stage)
+3. Identify problem: Black thread-like structures = Smut fungus
+4. Generate comprehensive response
+5. Provide actionable recommendations
+
+Expected Output (AI Response):
+
+{
+  "conversationId": 12345,
+  "messageId": "MSG_20240720_001",
+  "response": {
+    "summary": "आपके sugarcane में smut disease दिख रहा है।",
+    "problemIdentification": {
+      "name": "Sugarcane Smut",
+      "scientificName": "Ustilago scitaminea",
+      "severity": "MEDIUM",
+      "symptoms": [
+        "काली लकीरें या धागे shoots पर दिखते हैं",
+        "Infected shoots का बढ़ना रुक जाता है",
+        "White sheath से black powder निकलता है",
+        "Cross-section में black discoloration"
+      ],
+      "causeFactor": "High humidity + Low wind + Contaminated seed"
+    },
+    "recommendations": {
+      "immediate": [
+        "Remove and burn infected shoots within 24 hours",
+        "If infection is < 5%, no major action needed",
+        "If infection is 5-10%, selective removal recommended"
+      ],
+      "preventive": [
+        "अगले season के लिए seed को treat करें",
+        "Use carbendazim 12% + mancozeb 63% (WP) से",
+        "3 grams per liter पानी में घोलकर spray करें",
+        "14 days के अंतराल पर दोबारा spray करें"
+      ],
+      "culturalPractices": [
+        "Field में better drainage सुनिश्चित करें",
+        "Wind circulation के लिए plants को thin करें",
+        "Infected plant material को field से बाहर ले जाएं",
+        "Crop rotation अगले season में करें"
+      ]
+    },
+    "estimatedLoss": {
+      "currentInfection": "2-3%",
+      "estimatedYieldLoss": "50-75 quintals if untreated",
+      "costOfTreatment": "₹1,500-2,000",
+      "costOfInaction": "₹15,000-25,000"
+    },
+    "weatherImpact": {
+      "currentCondition": "High humidity (80%) + Low wind = Favorable for disease",
+      "forecast": "Weather will improve in next 3-4 days",
+      "recommendation": "स्प्रे करने से पहले सूखा दिन चुनें"
+    },
+    "expertAdvice": "If concerned, connect with Dr. Sharma (Plant Pathologist)",
+    "actionItems": [
+      "आज remove infected shoots",
+      "अगले 2-3 दिन में fungicide spray करें",
+      "7-10 दिनों के बाद दोबारा चेक करें"
+    ],
+    "documentedCases": "Similar cases reported in 45% farms in Nashik last year"
+  },
+  "conversationHistory": [
+    {
+      "timestamp": "2024-07-20T15:30:00Z",
+      "role": "USER",
+      "message": "Mera sugarcane field mein shoots par kale dhagge dikh rahe hain..."
+    },
+    {
+      "timestamp": "2024-07-20T15:31:00Z",
+      "role": "ASSISTANT",
+      "message": "[Above comprehensive response]"
+    }
+  ],
+  "relatedResources": [
+    {
+      "title": "Sugarcane Smut Management Guide",
+      "url": "/resources/smut-management",
+      "type": "GUIDE"
+    },
+    {
+      "title": "Expert Video: Disease Identification",
+      "url": "/videos/disease-id",
+      "type": "VIDEO"
+    }
+  ],
+  "feedbackRequest": {
+    "message": "क्या ये जानकारी helpful थी?",
+    "options": ["Very Helpful", "Somewhat Helpful", "Not Helpful"]
+  }
+}
+
+UI Display (Chat Interface):
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🤖 KisanConnect AI Assistant | Chat #12345                      │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│ USER (15:30):                                                     │
+│ "Mera sugarcane field mein shoots par kale dhagge dikh rahe      │
+│ hain. Ye kya problem hai?"                                       │
+│                                                                   │
+│ AI ASSISTANT (15:31):                                             │
+│ 🌾 Problem Identified: SUGARCANE SMUT                           │
+│                                                                   │
+│ ⚠️  SEVERITY: MEDIUM (2-3% infection currently)                  │
+│                                                                   │
+│ What's Happening:                                                │
+│ Black threads visible on shoots are caused by Ustilago           │
+│ scitaminea fungus. Current weather (80% humidity, low wind)      │
+│ is favorable for its spread.                                     │
+│                                                                   │
+│ ✅ What You Should Do (Urgent):                                 │
+│ 1. आज ही infected shoots को हटाएं और जलाएं                     │
+│ 2. 24 घंटे के अंदर field को स्वच्छ करें                         │
+│ 3. 2-3 दिनों में fungicide spray करें:                          │
+│    - Carbendazim 12% + Mancozeb 63%                              │
+│    - 3g/liter, 500 liters/hectare                               │
+│ 4. 7-10 दिनों के बाद फिर से चेक करें                            │
+│                                                                   │
+│ 💰 Financial Impact:                                            │
+│ ├─ If treated: Loss ~₹2,000, Save ₹25,000+                     │
+│ └─ If ignored: Loss ~₹25,000 (25-30% yield loss)               │
+│                                                                   │
+│ 🌤️  Weather Update:                                             │
+│ Conditions improving in next 3-4 days. Good window for           │
+│ spraying before weather clears.                                  │
+│                                                                   │
+│ 👨‍🌾 Need Expert Help?                                             │
+│ [CONNECT WITH DR. SHARMA - Plant Pathologist]                   │
+│                                                                   │
+│ [👎] [👍] Was this helpful? [HELPFUL] [NOT HELPFUL]            │
+│                                                                   │
+│ ┌────────────────────────────────────────────────────────────┐  │
+│ │ Type your question here...                              📎 │  │
+│ └────────────────────────────────────────────────────────────┘  │
+│                                                                   │
+└─────────────────────────────────────────────────────────────────┘
+
+-- End of Sample Input & Output

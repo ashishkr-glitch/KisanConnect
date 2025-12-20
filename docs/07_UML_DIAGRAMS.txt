@@ -1,0 +1,521 @@
+UML DIAGRAMS - KISANCONNECT PROJECT
+
+This document describes the UML diagrams used in KisanConnect system design. Actual diagram images should be included separately.
+
+1. USE CASE DIAGRAM
+
+1.1 Use Case Diagram Description
+
+System Boundary: KisanConnect Platform
+
+Actors:
+- Farmer (Primary Actor)
+- Agricultural Expert (Secondary Actor)
+- Administrator (Secondary Actor)
+- External Services (Weather API, AI/LLM, Firebase)
+
+Main Use Cases:
+
+For Farmer Actor:
+- UC-1: Register/Sign Up → Create account with role selection.
+- UC-2: Login → Authenticate using credentials.
+- UC-3: View Dashboard → See weather, crop summary, alerts.
+- UC-4: Add Crop → Enter crop details and create crop record.
+- UC-5: Get Crop Recommendations → Receive AI-based crop suggestions.
+- UC-6: View Weather Data → Check real-time weather for location.
+- UC-7: Create Manifest → Plan crop planting and harvesting schedule.
+- UC-8: Track Manifest → Monitor manifest progress and update status.
+- UC-9: View Pest Alerts → Receive and view pest/disease alerts.
+- UC-10: Ask AI Assistant → Chat with AI for agricultural advice.
+- UC-11: Connect with Expert → Ask questions to agricultural experts.
+- UC-12: Manage Profile → Update personal and farm details.
+- UC-13: View Conversation History → See past interactions with AI and experts.
+
+For Expert Actor:
+- UC-14: Login → Expert authentication.
+- UC-15: View Farmer Queries → List of farmer questions/requests.
+- UC-16: Provide Expert Response → Answer farmer queries with verified advice.
+- UC-17: Verify AI Responses → Check AI-generated recommendations for accuracy.
+- UC-18: Monitor Farming Trends → View aggregated data on farming practices and challenges.
+
+For Administrator Actor:
+- UC-19: Admin Login → Administrative authentication.
+- UC-20: Manage Users → Add, edit, delete users; reset passwords.
+- UC-21: Manage Crops Database → Add new crops, update crop information.
+- UC-22: Generate Reports → System health, user analytics, usage statistics.
+- UC-23: Configure System → Set alerts thresholds, API keys, system parameters.
+- UC-24: View Audit Logs → Monitor system activities and user actions.
+- UC-25: Manage Roles & Permissions → Create roles, assign permissions.
+
+System Use Cases (Triggered by System, not Actor):
+- UC-26: Fetch Weather Data → Regular job to update weather information.
+- UC-27: Generate Pest Alerts → Scheduled job to create pest alerts based on weather.
+- UC-28: Send Notifications → System sends alerts and reminders to users.
+- UC-29: Cache Data → System caches frequently accessed data for performance.
+- UC-30: Log Activities → System records user activities and system events.
+
+1.2 Use Case Relationships
+
+Extends:
+- UC-2 (Login) << UC-3 (View Dashboard) → Login must happen before accessing dashboard.
+- UC-4 (Add Crop) << UC-5 (Get Crop Recommendations) → Crop recommendation depends on having crops.
+- UC-7 (Create Manifest) << UC-4 (Add Crop) → Manifest creation depends on crops being added.
+
+Includes:
+- UC-2 (Login) uses UC-29 (Log Activities).
+- UC-3 (View Dashboard) includes UC-26 (Fetch Weather Data).
+- UC-8 (Track Manifest) includes UC-30 (Log Activities).
+
+2. CLASS DIAGRAM
+
+2.1 Core Classes
+
+User Class:
+```
+User
+  - userId: String (PK)
+  - email: String (unique)
+  - password: String (hashed)
+  - fullName: String
+  - phone: String
+  - role: Role (FARMER, EXPERT, ADMIN)
+  - location: Location (GPS coordinates)
+  - farmSize: Double (acres)
+  - soilType: String
+  - createdAt: DateTime
+  - updatedAt: DateTime
+
+Methods:
+  + register(): void
+  + login(): void
+  + logout(): void
+  + updateProfile(): void
+  + getRole(): Role
+```
+
+Crop Class:
+```
+Crop
+  - cropId: String (PK)
+  - userId: String (FK)
+  - cropType: String (rice, wheat, maize, etc.)
+  - plantingDate: Date
+  - expectedHarvestDate: Date
+  - areaCultivated: Double (acres)
+  - status: CropStatus (PLANNED, GROWING, HARVESTED)
+  - variety: String
+  - createdAt: DateTime
+
+Methods:
+  + addCrop(): void
+  + updateCrop(): void
+  + getCropRecommendations(): List<Recommendation>
+  + trackProgress(): CropProgress
+  + getYieldForecast(): Double
+```
+
+Manifest Class:
+```
+Manifest
+  - manifestId: String (PK)
+  - userId: String (FK)
+  - cropId: String (FK)
+  - name: String
+  - description: String
+  - plannedYield: Double
+  - actualYield: Double
+  - status: ManifestStatus (PLANNING, EXECUTING, COMPLETED)
+  - startDate: Date
+  - endDate: Date
+  - createdAt: DateTime
+  - completedAt: DateTime
+
+Methods:
+  + createManifest(): void
+  + updateStatus(): void
+  + generateReport(): ManifestReport
+  + getPerformanceMetrics(): Metrics
+```
+
+Weather Class:
+```
+Weather
+  - weatherId: String (PK)
+  - location: Location (GPS)
+  - temperature: Double (Celsius)
+  - humidity: Double (%)
+  - rainfall: Double (mm)
+  - windSpeed: Double (km/h)
+  - forecast: List<ForecastData>
+  - fetchedAt: DateTime
+  - expireAt: DateTime
+
+Methods:
+  + fetchWeatherData(): void
+  + getForecast(days: int): List<ForecastData>
+  + isAlertCondition(): boolean
+  + generateRecommendation(): String
+```
+
+Conversation Class:
+```
+Conversation
+  - conversationId: String (PK)
+  - userId: String (FK)
+  - messageText: String
+  - role: MessageRole (USER, ASSISTANT, EXPERT)
+  - timestamp: DateTime
+  - feedbackScore: Double (1-5)
+  - relatedCrop: String (FK, optional)
+
+Methods:
+  + addMessage(): void
+  + getConversationHistory(): List<Conversation>
+  + provideFeedback(): void
+```
+
+PestAlert Class:
+```
+PestAlert
+  - alertId: String (PK)
+  - userId: String (FK)
+  - cropId: String (FK)
+  - pestName: String
+  - riskLevel: RiskLevel (LOW, MEDIUM, HIGH)
+  - generatedAt: DateTime
+  - expiresAt: DateTime
+  - managementStrategies: List<String>
+  - isNotified: boolean
+
+Methods:
+  + generateAlert(): void
+  + sendNotification(): void
+  + getManagementTips(): List<String>
+```
+
+2.2 Class Relationships
+
+Associations:
+- User "has many" Crops (1:N, one user can have multiple crops)
+- User "has many" Manifests (1:N)
+- User "has many" Conversations (1:N)
+- Crop "has many" PestAlerts (1:N)
+- Manifest "references" Crop (1:1, many-to-one)
+- PestAlert "notifies" User (N:1)
+
+Inheritance (Polymorphism):
+- User as base class with specializations:
+  - Farmer extends User
+  - Expert extends User
+  - Administrator extends User
+
+Aggregation:
+- Manifest aggregates ManifestLineItems (planting tasks, harvesting tasks)
+- Conversation aggregates Messages
+
+3. ACTIVITY DIAGRAM (Crop Recommendation Flow)
+
+Activity Description:
+
+Start
+  ↓
+User initiates crop recommendation request
+  ↓
+System retrieves user's farm details (location, soil, size)
+  ↓
+System fetches current weather data
+  ↓
+System queries market price data
+  ↓
+Decision: Data available?
+  ├─ No → Apply default parameters, generate recommendations
+  └─ Yes → Apply full algorithm
+  ↓
+System queries similar farms' historical data
+  ↓
+System applies recommendation algorithm:
+  - Match crops to soil type and climate
+  - Filter by water availability and sustainability
+  - Score by market demand and profitability
+  ↓
+System ranks recommendations (top 3-5)
+  ↓
+System enriches with rationale (why this crop recommended)
+  ↓
+System caches recommendations (for 7 days)
+  ↓
+System returns recommendations to frontend
+  ↓
+Frontend displays recommendations in user-friendly format
+  ↓
+Decision: User accepts recommendation?
+  ├─ Yes → Add crop to user's farms
+  │  ↓
+  │  System logs user action
+  │  ↓
+  │  System sends confirmation
+  └─ No → Show alternative crops or close
+  ↓
+End
+
+4. STATE DIAGRAM (Manifest States)
+
+States:
+
+PLANNING State:
+- Initial state when manifest is created
+- User can edit all manifest details
+- Transitions to:
+  - EXECUTING: When manifest start date arrives or user manually starts
+
+EXECUTING State:
+- Manifest is active and being executed
+- User tracks progress by updating task completion
+- Real-time monitoring of weather and pest alerts relevant to manifest
+- Transitions to:
+  - COMPLETED: When end date arrives or user manually marks complete
+  - ABANDONED: If user cancels manifest (can be recovered from history)
+
+COMPLETED State:
+- Manifest execution finished
+- System calculates actual yield vs. planned yield
+- System generates performance report
+- Data retained for historical analysis
+- Transitions to:
+  - ARCHIVED: After 1 year (for storage optimization)
+
+ABANDONED State:
+- User or system cancelled manifest
+- Retains data for analysis
+- Transitions to:
+  - REACTIVATED: If user restarts similar manifest
+
+State Transitions (Events):
+
+PLANNING → EXECUTING:
+- Event: OnManifestStart (user clicks start or start date reached)
+- Guard: All required details filled
+- Action: Update status in database, log event
+
+EXECUTING → COMPLETED:
+- Event: OnManifestEnd (end date reached or user marks complete)
+- Guard: None required
+- Action: Generate report, calculate metrics, notify user
+
+EXECUTING → ABANDONED:
+- Event: OnManifestCancel (user cancels)
+- Guard: None required
+- Action: Save abandonment reason, retain data
+
+COMPLETED → ARCHIVED:
+- Event: OnYearElapsed (scheduled job runs annually)
+- Guard: Last modified date > 1 year ago
+- Action: Move to archive table
+
+5. SEQUENCE DIAGRAM (User Login & Dashboard Load)
+
+Sequence:
+
+Actor: Farmer
+Object 1: Frontend (LoginPage component)
+Object 2: Firebase Authentication
+Object 3: Backend Spring Boot API
+Object 4: Database
+Object 5: Weather Service
+
+Steps:
+
+1. Farmer → LoginPage: Enter email & password
+2. LoginPage → Firebase: Call authentication API
+3. Firebase → Firebase: Validate credentials
+4. Firebase → LoginPage: Return ID token
+5. LoginPage → API: POST /api/auth/login with ID token
+6. API → API: Validate JWT with Firebase Admin SDK
+7. API → API: Generate custom JWT token
+8. API → Database: Query user profile
+9. Database → API: Return user data (including role, location)
+10. API → LoginPage: Return JWT + user data
+11. LoginPage → Frontend: Store JWT in localStorage
+12. LoginPage → DashboardPage: Navigate to dashboard
+13. DashboardPage → API: GET /api/weather (include location in request)
+14. API → Weather Service: Fetch real-time weather data
+15. Weather Service → API: Return weather data
+16. API → Database: Query user's crops
+17. Database → API: Return crop list with status
+18. API → Database: Query recent alerts for user
+19. Database → API: Return recent pest alerts
+20. API → DashboardPage: Return aggregated dashboard data
+21. DashboardPage → Farmer: Render dashboard with weather, crops, alerts
+
+6. COMPONENT DIAGRAM
+
+Frontend Components:
+- LoginComponent: Handles authentication UI
+- DashboardComponent: Main dashboard page
+- CropManagementComponent: Crop CRUD operations
+- ManifestComponent: Manifest planning and tracking
+- WeatherComponent: Weather display and interpretation
+- AIAssistantComponent: Chat interface
+- ExpertNetworkComponent: Connect with experts
+- AdminPanelComponent: Administration interface
+
+Backend Components:
+- AuthenticationController: Handle login/logout
+- UserController: User management endpoints
+- CropController: Crop management endpoints
+- ManifestController: Manifest endpoints
+- WeatherController: Weather endpoints
+- AIController: AI chat endpoints
+- AdminController: Admin endpoints
+
+Services:
+- AuthenticationService
+- UserService
+- CropService
+- ManifestService
+- WeatherService
+- AIService
+- NotificationService
+
+Data Access:
+- UserRepository
+- CropRepository
+- ManifestRepository
+- ConversationRepository
+- PestAlertRepository
+
+External Integrations:
+- FirebaseAuthProvider
+- WeatherAPIProvider
+- AILLMProvider (OpenAI/MargDarshak)
+- StorageProvider (S3/Firebase)
+
+Dependencies:
+- Components depend on Services
+- Services depend on Repositories
+- Repositories depend on Database
+- Controllers depend on Services
+
+7. PACKAGE DIAGRAM (Module Organization)
+
+Backend Packages:
+
+com.kisan.auth
+  - AuthenticationController
+  - AuthenticationService
+  - JwtTokenProvider
+  - AuthenticationFilter
+
+com.kisan.user
+  - UserController
+  - UserService
+  - UserRepository
+  - User (Entity)
+
+com.kisan.crop
+  - CropController
+  - CropService
+  - CropRepository
+  - Crop (Entity)
+  - CropRecommender (Strategy)
+
+com.kisan.manifest
+  - ManifestController
+  - ManifestService
+  - ManifestRepository
+  - Manifest (Entity)
+
+com.kisan.weather
+  - WeatherController
+  - WeatherService
+  - WeatherRepository
+  - Weather (Entity)
+  - WeatherAPIProvider (External)
+
+com.kisan.ai
+  - AIController
+  - AIService
+  - ConversationRepository
+  - Conversation (Entity)
+  - LLMProvider (External)
+
+com.kisan.alert
+  - PestAlertService
+  - PestAlertRepository
+  - PestAlert (Entity)
+  - AlertGenerator (Strategy)
+
+com.kisan.admin
+  - AdminController
+  - AdminService
+  - AuditLogRepository
+
+com.kisan.common
+  - GlobalExceptionHandler
+  - CorsConfig
+  - SecurityConfig
+  - CachingConfig
+
+Frontend Packages:
+
+src/auth
+  - Login.js
+  - Signup.js
+  - ProtectedRoute.js
+  - authService.js
+
+src/components
+  - Dashboard.js
+  - CropManagement.js
+  - Manifest.js
+  - AIAssistant.js
+  - Weather.js
+  - AdminPanel.js
+  - Common UI components
+
+src/hooks
+  - useAuth.js
+  - useFetch.js
+  - useWeather.js
+
+src/api
+  - api.js (Axios interceptors)
+  - endpoints.js
+
+src/styles
+  - CSS files, theme configuration
+
+8. DEPLOYMENT DIAGRAM
+
+Development Environment:
+- Developer Machine
+  - VS Code / IntelliJ
+  - Local React dev server (port 3000)
+  - Local Spring Boot server (port 8081)
+  - Local PostgreSQL (docker container)
+  - Git repository
+
+Staging Environment:
+- Staging Server (Cloud VM)
+  - Docker containers (frontend, backend, database)
+  - docker-compose orchestration
+  - Staging Firebase project
+  - Staging weather API keys
+  - Staging LLM API keys
+
+Production Environment:
+- Production Server (Cloud)
+  - Kubernetes cluster (optional) or managed container service
+  - Load Balancer (Nginx / AWS ELB)
+  - Frontend CDN (CloudFront / Firebase Hosting)
+  - Backend API servers (auto-scaled)
+  - Production PostgreSQL (managed service, replicated)
+  - Redis cache layer
+  - Production Firebase project
+  - Production API integrations
+  - SSL/TLS certificates
+
+Deployment Pipeline:
+Git Push → GitHub Actions CI → Test & Build → Docker Build → Push to Registry → Deploy to Staging → Manual Approval → Deploy to Production
+
+-- End of UML Diagrams

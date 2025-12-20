@@ -1,0 +1,418 @@
+UI DESIGN / LAYOUT - KISANCONNECT PROJECT
+
+1. DESIGN PRINCIPLES
+
+1.1 User-Centered Design
+- Designed for farmers with low to medium digital literacy.
+- Simple, intuitive navigation with clear visual hierarchy.
+- Minimal text; prefer icons, images, and visualizations.
+- Large touch targets for mobile users (minimum 48x48px).
+
+1.2 Accessibility
+- High contrast colors (WCAG AA compliant).
+- Readable fonts (at least 16px for body text).
+- Multilingual support (English, Hindi).
+- Alt text for all images and icons.
+- Keyboard navigation support.
+
+1.3 Responsive Design
+- Mobile-first approach (design for mobile, enhance for desktop).
+- Breakpoints: 320px (mobile), 768px (tablet), 1024px (desktop).
+- Fluid layouts that adapt to screen size.
+
+1.4 Visual Consistency
+- Consistent color palette (primary: green - growth/agriculture, secondary: yellow - sunshine/warmth).
+- Unified typography (system fonts for fast loading).
+- Icon set consistency (Farm icons, weather icons, crop icons).
+- Spacing and alignment grid (8px base unit).
+
+2. COLOR SCHEME
+
+Primary Colors:
+- Green (#2D7A3F): Primary actions, positive feedback, healthy status
+- Yellow-Green (#7CB342): Secondary actions, highlights
+- Light Green (#C8E6C9): Light backgrounds, card backgrounds
+
+Neutral Colors:
+- Dark Gray (#424242): Text, headings
+- Medium Gray (#757575): Secondary text, borders
+- Light Gray (#F5F5F5): Backgrounds, inactive states
+- White (#FFFFFF): Surfaces
+
+Status Colors:
+- Success: Green (#4CAF50)
+- Warning: Orange (#FF9800)
+- Error: Red (#E53935)
+- Info: Blue (#2196F3)
+
+3. TYPOGRAPHY
+
+Font Family:
+- Headlines: System font stack (San Francisco, Segoe UI, Roboto) - modern, readable
+- Body: Same system fonts - consistent, fast loading
+- Monospace: Courier New - for data displays
+
+Font Sizes:
+- H1 (Page titles): 28px, bold
+- H2 (Section headers): 24px, bold
+- H3 (Subsection headers): 20px, semi-bold
+- Body: 16px, regular
+- Small: 14px, regular
+- Extra-small: 12px, regular (captions)
+
+Line Height:
+- Headers: 1.2
+- Body: 1.6 (better readability)
+
+4. LAYOUT & WIREFRAMES
+
+4.1 Login Page Layout
+
+┌─────────────────────────────────────┐
+│    KisanConnect Logo (centered)     │
+├─────────────────────────────────────┤
+│                                     │
+│  [Email Input Field]                │
+│  [Password Input Field]             │
+│  [Remember Me Checkbox]             │
+│  [Login Button - Full Width]        │
+│                                     │
+│  OR                                 │
+│  [Login with Google - Full Width]   │
+│  [Login with Firebase - Full Width] │
+│                                     │
+│  Don't have an account? [Sign Up]   │
+│  [Forgot Password?]                 │
+│                                     │
+└─────────────────────────────────────┘
+
+Mobile: Vertical stack, full-width inputs
+Desktop: Centered container (400px width), same layout
+
+4.2 Dashboard Page Layout
+
+┌─────────────────────────────────────────────────────────┐
+│ [Menu] KisanConnect      [Notifications] [User Profile] │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│ ┌────────────────────┐   ┌──────────────────────────┐  │
+│ │ Weather Section    │   │  Quick Stats             │  │
+│ │ ┌────────────────┐ │   │  ┌──────────────────┐   │  │
+│ │ │ [Weather Icon] │ │   │  │ Active Crops: 3  │   │  │
+│ │ │ 28°C, Humid    │ │   │  │ Manifests: 2     │   │  │
+│ │ │ Monsoon Soon!  │ │   │  │ Alerts: 1        │   │  │
+│ │ └────────────────┘ │   │  └──────────────────┘   │  │
+│ │ [View Forecast]    │   │                         │  │
+│ └────────────────────┘   └──────────────────────────┘  │
+│                                                         │
+│ ┌────────────────────────────────────────────────────┐ │
+│ │ Recent Alerts                                      │ │
+│ │ ┌─────────────────────────────────────────────┐  │ │
+│ │ │ 🌾 High risk of Army Worm in Rice [More]    │  │ │
+│ │ │ ⚠️ Heavy rainfall expected [More]           │  │ │
+│ │ └─────────────────────────────────────────────┘  │ │
+│ └────────────────────────────────────────────────────┘ │
+│                                                         │
+│ ┌────────────────────────────────────────────────────┐ │
+│ │ My Crops                                           │ │
+│ │ ┌─────────────────┐ ┌─────────────────┐           │ │
+│ │ │ 🌾 Rice        │ │ 🌽 Maize       │           │ │
+│ │ │ Status: Growing│ │ Status: Planned│           │ │
+│ │ │ Area: 2 acres  │ │ Area: 1 acre   │           │ │
+│ │ └─────────────────┘ └─────────────────┘           │ │
+│ │ [Add New Crop] [View All Crops]                  │ │
+│ └────────────────────────────────────────────────────┘ │
+│                                                         │
+│ ┌────────────────────────────────────────────────────┐ │
+│ │ Need Advice? [Chat with AI] [Connect with Expert]│ │
+│ └────────────────────────────────────────────────────┘ │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+Mobile: Single column, vertical scrolling
+Desktop: Multi-column grid layout
+
+4.3 Crop Management Page
+
+┌─────────────────────────────────────────────────────────┐
+│ [Back] Crop Management              [Help] [Settings]   │
+├─────────────────────────────────────────────────────────┤
+│ [Filter by Status] [Sort by Date]                       │
+│                                                         │
+│ ┌────────────────────────────────────────────────────┐ │
+│ │ Crops List (Filterable Table/Cards)              │ │
+│ │ ┌──────────────────────────────────────────────┐  │ │
+│ │ │ Rice | Area: 2 acres | Growing               │  │ │
+│ │ │ Planted: Mar 15 | Harvest: Jun 15            │  │ │
+│ │ │ [View Details] [Edit] [Delete]               │  │ │
+│ │ └──────────────────────────────────────────────┘  │ │
+│ │                                                   │ │
+│ │ ┌──────────────────────────────────────────────┐  │ │
+│ │ │ Maize | Area: 1 acre | Planning              │  │ │
+│ │ │ Expected Plant: Apr 1                        │  │ │
+│ │ │ [View Details] [Edit] [Delete]               │  │ │
+│ │ └──────────────────────────────────────────────┘  │ │
+│ │                                                   │ │
+│ │ [Load More] or Pagination                       │ │
+│ └────────────────────────────────────────────────────┘ │
+│                                                         │
+│ ┌────────────────────────────────────────────────────┐ │
+│ │ [+ Add New Crop - Primary Button]                 │ │
+│ └────────────────────────────────────────────────────┘ │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+Add Crop Modal/Form:
+┌─────────────────────────────────────┐
+│ Add New Crop            [X Close]    │
+├─────────────────────────────────────┤
+│ Crop Type: [Dropdown ▼]             │
+│ Variety: [Text Input]               │
+│ Planting Date: [Date Picker]        │
+│ Expected Harvest: [Date Picker]     │
+│ Area (acres): [Number Input]        │
+│ Irrigation: [Radio Buttons]         │
+│   ○ Rainfed  ● Canal  ○ Tube Well  │
+│ Soil Type: [Dropdown ▼]             │
+│                                     │
+│ [Cancel]               [Add Crop]   │
+└─────────────────────────────────────┘
+
+4.4 Weather Page
+
+┌─────────────────────────────────────────────────────────┐
+│ [Back] Weather & Alerts         [Your Location]         │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│ Current Weather                                         │
+│ ┌────────────────────────────────────────────────────┐ │
+│ │  [☀️ Large Weather Icon]                         │ │
+│ │  Temperature: 28°C                              │ │
+│ │  Feels Like: 32°C                               │ │
+│ │  Humidity: 75%                                  │ │
+│ │  Rainfall: 5mm                                  │ │
+│ │  Wind: 15 km/h                                  │ │
+│ │  Recommendation: Good conditions for watering  │ │
+│ └────────────────────────────────────────────────────┘ │
+│                                                         │
+│ 7-Day Forecast                                          │
+│ ┌─┬─┬─┬─┬─┬─┬─┐                                       │
+│ │☀️│☀️│🌧️│🌧️│🌧️│☁️│☁️│                               │
+│ │28│27│24│23│22│26│25│                               │
+│ │ ▼ ▼ ▼ ▼ ▼ ▼ ▼ │                               │
+│ │Mon|Tue|Wed|Thu|Fri|Sat|Sun│                       │
+│ └─┴─┴─┴─┴─┴─┴─┘                                       │
+│                                                         │
+│ Alerts & Recommendations                                │
+│ ┌────────────────────────────────────────────────────┐ │
+│ │ ⚠️ Monsoon season starting soon                  │ │
+│ │    Recommendation: Apply drainage to fields     │ │
+│ │                                                   │ │
+│ │ 🌾 Frost risk (low) this week                    │ │
+│ │    Your crops: Not affected                      │ │
+│ └────────────────────────────────────────────────────┘ │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+4.5 AI Assistant Chat Page
+
+┌─────────────────────────────────────────────────────────┐
+│ [Back] AI Agricultural Assistant   [History]  [+New]    │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│ Chat History                                            │
+│ ┌────────────────────────────────────────────────────┐ │
+│ │ You: My rice is turning yellow. What's wrong? │ │
+│ │ [08:30 AM]                                   │ │
+│ │                                              │ │
+│ │ AI: Yellow leaves often indicate nitrogen   │ │
+│ │ deficiency. Here are solutions...            │ │
+│ │ - Apply urea fertilizer                      │ │
+│ │ - Ensure proper watering                     │ │
+│ │ [Helpful ✓] [Feedback]                      │ │
+│ │ [09:05 AM]                                   │ │
+│ │                                              │ │
+│ │ You: How much urea should I apply?           │ │
+│ │ [09:10 AM]                                   │ │
+│ │                                              │ │
+│ │ AI: For rice, typical application is...     │ │
+│ │ [Helpful ✓] [Feedback]                      │ │
+│ │ [09:15 AM]                                   │ │
+│ │                                              │ │
+│ └────────────────────────────────────────────────────┘ │
+│                                                         │
+│ ┌────────────────────────────────────────────────────┐ │
+│ │ [Your message here...]                           │ │
+│ │                              [Send] [Voice Input]  │ │
+│ └────────────────────────────────────────────────────┘ │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+5. COMPONENT SPECIFICATIONS
+
+5.1 Button Styles
+
+Primary Button: 
+- Background: Green (#2D7A3F)
+- Text: White
+- Padding: 12px 24px
+- Border-radius: 6px
+- Font-weight: bold
+- States: Normal, Hover (darker green), Active (even darker), Disabled (gray)
+
+Secondary Button:
+- Background: Light Gray (#F5F5F5)
+- Text: Dark Gray (#424242)
+- Same padding and styling
+
+5.2 Card Component
+
+┌──────────────────────────────┐
+│ [Icon] Title                 │
+│ ─────────────────────────────│
+│ Content line 1               │
+│ Content line 2               │
+│ ─────────────────────────────│
+│ [Action Link] [Close]        │
+└──────────────────────────────┘
+
+5.3 Form Elements
+
+Input Fields:
+- Border: Light Gray (#E0E0E0), 2px
+- Focus: Green (#2D7A3F), 3px
+- Padding: 10px 12px
+- Font-size: 16px
+- Rounded corners: 4px
+
+Dropdown (Select):
+- Similar styling to input
+- Arrow icon on right
+- Options list styled for readability
+
+Checkboxes & Radio Buttons:
+- Large (20x20px) for mobile touch
+- Green when selected
+- Clear label next to input
+
+5.4 Modal/Dialog
+
+┌─────────────────────────────┐
+│ Title              [X Close] │
+├─────────────────────────────┤
+│ [Content Area]              │
+│                             │
+├─────────────────────────────┤
+│ [Cancel]        [Submit]    │
+└─────────────────────────────┘
+
+6. RESPONSIVE BREAKPOINTS
+
+Mobile (≤600px):
+- Single column layout
+- Full-width cards and buttons
+- Bottom sheet for modals
+- Hamburger menu
+
+Tablet (601-1024px):
+- Two-column grid
+- Medium-sized cards
+- Top navigation
+- Slide-in side menu option
+
+Desktop (>1024px):
+- Three-column grid or customizable layout
+- Compact cards
+- Sticky header
+- Fixed side navigation
+
+7. NAVIGATION STRUCTURE
+
+For Farmer Role:
+```
+Main Menu
+├── Dashboard (home)
+├── Weather & Alerts
+├── Crop Management
+│   ├── My Crops
+│   ├── Add Crop
+│   └── Crop Recommendations
+├── Manifest Planning
+│   ├── My Manifests
+│   └── Create Manifest
+├── AI Assistant
+├── Expert Network
+├── My Profile
+└── Settings & Logout
+```
+
+For Expert Role:
+```
+Expert Menu
+├── Dashboard
+├── Farmer Queries
+├── Verify AI Responses
+├── Farming Analytics
+├── My Profile
+└── Logout
+```
+
+For Admin Role:
+```
+Admin Menu
+├── Dashboard
+├── User Management
+├── Manage Crops Database
+├── System Configuration
+├── Audit Logs
+├── Generate Reports
+└── Logout
+```
+
+8. ACCESSIBILITY CONSIDERATIONS
+
+- High contrast ratio (WCAG AA) for all text
+- Large touch targets (48x48px minimum)
+- Keyboard navigation support (Tab, Enter, Space)
+- Screen reader friendly (alt text, ARIA labels)
+- Font sizes minimum 16px for body text
+- Color not sole indicator (use icons, text labels too)
+- Multilingual support (English, Hindi)
+- RTL support ready (for future)
+
+9. PERFORMANCE OPTIMIZATIONS
+
+- Lazy loading for images
+- CSS-in-JS or SCSS for minimal CSS
+- Minified JavaScript and CSS
+- Efficient SVG icons instead of images where possible
+- Progressive enhancement for slow connections
+- Skeleton loaders for content placeholders
+
+10. DESIGN TOKENS
+
+Colors:
+  Primary Green: #2D7A3F
+  Success Green: #4CAF50
+  Warning Orange: #FF9800
+  Error Red: #E53935
+  Neutral Gray: #757575
+
+Spacing:
+  XS: 4px
+  S: 8px
+  M: 16px
+  L: 24px
+  XL: 32px
+
+Border Radius:
+  Small: 4px
+  Medium: 6px
+  Large: 8px
+
+Shadows:
+  Elevation 1: 0 2px 4px rgba(0,0,0,0.1)
+  Elevation 2: 0 4px 8px rgba(0,0,0,0.15)
+  Elevation 3: 0 8px 16px rgba(0,0,0,0.2)
+
+-- End of UI Design/Layout

@@ -1,0 +1,355 @@
+SYSTEM DESIGN - KISANCONNECT PROJECT
+
+1. ARCHITECTURAL OVERVIEW
+
+1.1 High-Level Architecture
+
+KisanConnect follows a layered, client-server architecture with three main tiers:
+
+Presentation Layer (Frontend):
+- React SPA (Single Page Application)
+- Responsive UI for desktop and mobile
+- Location: localhost:3000 (development), deployed on Firebase/CDN (production)
+- Communicates with backend via REST APIs
+
+Application Layer (Backend):
+- Spring Boot REST API server
+- Business logic, authentication, data processing
+- Location: localhost:8081 (development), deployed on cloud (production)
+- Handles requests from frontend and processes data
+
+Data Layer (Database):
+- PostgreSQL relational database
+- Persistent storage for users, crops, manifests, conversations
+- Location: Database server, managed service in production
+
+External Services:
+- Firebase Authentication: User authentication and token management
+- Weather API: Real-time and forecast weather data
+- AI/LLM Services: OpenAI GPT or MargDarshak for agricultural advice
+- Cloud Storage: AWS S3 or Firebase Storage for images/documents
+
+1.2 Architectural Diagram Description
+
+```
+                              EXTERNAL SERVICES
+                         /        |        |        \
+              Firebase Auth   Weather API   AI LLM   S3 Storage
+
+
+    PRESENTATION LAYER (Frontend)
+    ┌─────────────────────────────────┐
+    │   React SPA Application         │
+    │  ┌──────────────────────────┐   │
+    │  │  Pages & Components      │   │
+    │  │  - Login/Signup          │   │
+    │  │  - Dashboard             │   │
+    │  │  - Crop Management       │   │
+    │  │  - Manifest Planning     │   │
+    │  │  - Weather Display       │   │
+    │  │  - AI Assistant Chat     │   │
+    │  │  - Admin Panel           │   │
+    │  └──────────────────────────┘   │
+    │  ┌──────────────────────────┐   │
+    │  │  Routing (React Router)  │   │
+    │  └──────────────────────────┘   │
+    │  ┌──────────────────────────┐   │
+    │  │  HTTP Client (Axios)     │   │
+    │  └──────────────────────────┘   │
+    └─────────────────────────────────┘
+             ↑ HTTP/REST ↓
+
+
+    APPLICATION LAYER (Backend)
+    ┌─────────────────────────────────┐
+    │   Spring Boot REST API Server   │
+    │  ┌──────────────────────────┐   │
+    │  │  Controller Layer        │   │
+    │  │  - UserController        │   │
+    │  │  - CropController        │   │
+    │  │  - ManifestController    │   │
+    │  │  - WeatherController     │   │
+    │  │  - AIAssistantController │   │
+    │  │  - AdminController       │   │
+    │  └──────────────────────────┘   │
+    │  ┌──────────────────────────┐   │
+    │  │  Service Layer           │   │
+    │  │  - UserService           │   │
+    │  │  - CropService           │   │
+    │  │  - ManifestService       │   │
+    │  │  - WeatherService        │   │
+    │  │  - AIService             │   │
+    │  └──────────────────────────┘   │
+    │  ┌──────────────────────────┐   │
+    │  │  Repository Layer (DAO)  │   │
+    │  │  - UserRepository        │   │
+    │  │  - CropRepository        │   │
+    │  │  - ManifestRepository    │   │
+    │  │  - ConversationRepo      │   │
+    │  └──────────────────────────┘   │
+    │  ┌──────────────────────────┐   │
+    │  │  Security & Auth         │   │
+    │  │  - Spring Security       │   │
+    │  │  - JWT & Firebase        │   │
+    │  │  - RBAC & Authorization  │   │
+    │  └──────────────────────────┘   │
+    │  ┌──────────────────────────┐   │
+    │  │  Utilities & Helpers     │   │
+    │  │  - Exception Handling    │   │
+    │  │  - Logging & Monitoring  │   │
+    │  │  - Caching (Redis)       │   │
+    │  └──────────────────────────┘   │
+    └─────────────────────────────────┘
+             ↑ JDBC ↓
+
+
+    DATA LAYER (Database)
+    ┌─────────────────────────────────┐
+    │   PostgreSQL Database           │
+    │  ┌──────────────────────────┐   │
+    │  │  Tables                  │   │
+    │  │  - users                 │   │
+    │  │  - crops                 │   │
+    │  │  - manifests             │   │
+    │  │  - pest_alerts           │   │
+    │  │  - conversations         │   │
+    │  │  - roles & permissions   │   │
+    │  │  - audit_logs            │   │
+    │  └──────────────────────────┘   │
+    └─────────────────────────────────┘
+```
+
+2. COMPONENT ARCHITECTURE
+
+2.1 Frontend Components
+
+Page Components:
+- LoginPage: User authentication interface.
+- SignupPage: New user registration with role selection.
+- Dashboard: Main landing page with weather, crop summary, alerts.
+- CropManagement: Add, edit, track crops.
+- ManifestPlanning: Create and manage crop manifests.
+- AIAssistant: Chat interface for agricultural queries.
+- ExpertNetwork: Connect with agricultural experts.
+- AdminPanel: User management, system configuration.
+- Profile: User profile and farm details management.
+
+Reusable UI Components:
+- Navbar: Navigation header with user profile and logout.
+- Sidebar: Navigation menu with role-based options.
+- WeatherCard: Display weather information with icon.
+- CropCard: Display crop details and status.
+- Chart Component: Visualize crop data and trends.
+- Modal: Pop-up dialogs for forms and confirmations.
+- Alert Component: Display notifications and warnings.
+- Loading Spinner: Indicate loading state.
+
+Service Components:
+- api.js: Centralized HTTP client with Axios, interceptors for auth.
+- authService: Handle Firebase authentication and token management.
+- weatherService: Fetch and cache weather data.
+- aiService: Communicate with AI/LLM backend.
+
+2.2 Backend Components
+
+REST API Endpoints (Controllers):
+POST /api/auth/signup → Register new user
+POST /api/auth/login → Authenticate user
+POST /api/auth/logout → Logout user
+GET /api/users/{id} → Get user profile
+PUT /api/users/{id} → Update user profile
+
+GET /api/crops → List user's crops
+POST /api/crops → Create new crop
+PUT /api/crops/{id} → Update crop
+DELETE /api/crops/{id} → Delete crop
+
+GET /api/manifests → List manifests
+POST /api/manifests → Create manifest
+PUT /api/manifests/{id} → Update manifest
+GET /api/manifests/{id}/report → Get manifest report
+
+GET /api/weather → Get weather for user location
+POST /api/weather/alert → Subscribe to alerts
+
+POST /api/ai/chat → Send message to AI assistant
+GET /api/conversations/{id} → Get conversation history
+
+GET /api/experts → List available experts
+POST /api/experts/query → Ask expert question
+
+Services (Business Logic):
+- UserService: User management, authentication.
+- CropService: Crop CRUD and recommendations.
+- ManifestService: Manifest management and tracking.
+- WeatherService: Weather data fetching and caching, alert generation.
+- AIService: Communication with LLM APIs, response generation.
+- ExpertService: Expert network management.
+- AdminService: System administration operations.
+
+Repositories (Data Access):
+- UserRepository: User data access.
+- CropRepository: Crop data access.
+- ManifestRepository: Manifest data access.
+- ConversationRepository: AI conversation history.
+- PestAlertRepository: Pest/disease alerts.
+- AuditLogRepository: System audit logs.
+
+Security & Middleware:
+- JwtAuthenticationFilter: Intercept requests, validate JWT tokens.
+- RoleBasedAccessControl: RBAC enforcement via Spring Security.
+- ExceptionHandler: Global exception handling and error responses.
+- CorsConfig: CORS configuration for frontend access.
+
+3. DATA FLOW DESIGN
+
+3.1 User Authentication Flow
+
+1. User enters credentials on LoginPage.
+2. Frontend calls Firebase Authentication API.
+3. Firebase returns ID token.
+4. Frontend sends ID token to backend (/api/auth/login).
+5. Backend validates token with Firebase Admin SDK.
+6. Backend creates JWT token and returns to frontend.
+7. Frontend stores JWT in localStorage/sessionStorage.
+8. Subsequent requests include JWT in Authorization header.
+9. JwtAuthenticationFilter validates JWT on each request.
+10. If valid, request proceeds; if invalid, return 401 Unauthorized.
+
+3.2 Crop Recommendation Flow
+
+1. User navigates to crop management and clicks "Get Recommendation".
+2. Frontend sends request (/api/crops/recommendations) with user farm data.
+3. Backend CropService receives request.
+4. Service queries UserRepository for farm details (location, soil type, farm size).
+5. Service fetches current weather and market data.
+6. Service applies recommendation algorithm considering:
+   - Crop suitability to climate and soil.
+   - Market demand and current prices.
+   - Water availability and sustainability.
+7. Service queries database for similar farms' crop success rates.
+8. Service returns top 3-5 crop recommendations with rationale.
+9. Frontend displays recommendations in a user-friendly format.
+10. User can accept recommendation and add crop to their farms.
+
+3.3 Pest Alert Generation Flow
+
+1. Scheduled job runs daily at 6 AM (before farmers check app).
+2. Job fetches weather data for all user locations.
+3. For each location-crop combination, job queries pest database.
+4. Job matches weather conditions with pest life cycles.
+5. Job identifies likely pests for upcoming week.
+6. Job generates alerts and stores in database.
+7. Job sends push notifications to relevant users.
+8. Alerts visible in Dashboard and dedicated Alert page.
+9. User clicks alert to see pest details and management strategies.
+
+3.4 AI Chat Flow
+
+1. Farmer types question in AI Assistant chat interface.
+2. Frontend sends message to backend (/api/ai/chat).
+3. Backend AIService receives message.
+4. Service sends message to OpenAI/MargDarshak API with system prompt (agricultural context).
+5. LLM generates response based on agricultural knowledge.
+6. Service enriches response with local context if available.
+7. Service stores conversation in database (linked to user).
+8. Service returns response to frontend.
+9. Frontend displays response in chat history.
+10. User can provide feedback (helpful/not helpful) for model improvement.
+
+4. DESIGN PATTERNS USED
+
+4.1 MVC (Model-View-Controller)
+- Frontend: React components as View, Redux (optional) as state management.
+- Backend: Spring MVC with Controllers, Services, Models.
+- Clear separation between presentation and business logic.
+
+4.2 Repository Pattern
+- Data access abstraction layer (Spring Data JPA repositories).
+- Enables easy unit testing and flexibility in switching databases.
+
+4.3 Service Layer Pattern
+- Business logic centralized in Service classes.
+- Controllers call services; services call repositories.
+- Enables code reusability and clear responsibility separation.
+
+4.4 Factory Pattern
+- WeatherServiceFactory: Create weather service instances based on provider.
+- AIServiceFactory: Create AI service instances for different LLM providers.
+
+4.5 Strategy Pattern
+- RecommendationStrategy: Different recommendation algorithms can be plugged in.
+- AlertStrategy: Different alert generation algorithms.
+
+4.6 Observer Pattern
+- Event listeners for user actions (crop added, manifest created).
+- Triggers notifications and logging.
+
+4.7 Decorator Pattern
+- Authentication decorators for API endpoints requiring specific roles.
+
+5. DATABASE DESIGN
+
+5.1 Key Tables
+
+Users Table:
+- Columns: user_id (PK), email, password_hash, full_name, phone, role, location (GPS), farm_size, soil_type, created_at, updated_at.
+- Indexes: email (unique), phone, role, location.
+
+Crops Table:
+- Columns: crop_id (PK), user_id (FK), crop_type, planting_date, expected_harvest, area_acres, status, variety, created_at.
+- Indexes: user_id, crop_type, planting_date.
+
+Manifests Table:
+- Columns: manifest_id (PK), user_id (FK), name, description, planned_yield, actual_yield, status, created_at, completed_at.
+- Indexes: user_id, status, created_at.
+
+Conversations Table:
+- Columns: conversation_id (PK), user_id (FK), message_text, role (user/assistant), timestamp.
+- Indexes: user_id, timestamp.
+
+PestAlerts Table:
+- Columns: alert_id (PK), user_id (FK), crop_id (FK), pest_name, risk_level, generated_at, expires_at.
+- Indexes: user_id, generated_at, risk_level.
+
+6. SECURITY DESIGN
+
+6.1 Authentication & Authorization
+- JWT-based authentication for stateless API.
+- Role-Based Access Control (RBAC) with roles: Farmer, Expert, Admin.
+- Each endpoint protected based on required role.
+
+6.2 Data Protection
+- HTTPS/TLS for all communications.
+- Password hashing using bcrypt (Spring Security).
+- Sensitive data fields encrypted at rest (PII, location).
+- SQL injection prevention through prepared statements (ORM).
+
+6.3 API Security
+- CORS properly configured to only allow frontend domain.
+- Rate limiting on login and sensitive endpoints.
+- Input validation on all API endpoints.
+- OWASP Top 10 protections implemented.
+
+7. SCALABILITY DESIGN
+
+7.1 Horizontal Scalability
+- Stateless backend services (can run multiple instances).
+- Load balancer (Nginx, AWS ELB) distributes traffic.
+- Session store in Redis (shared across instances).
+
+7.2 Database Scalability
+- Database replication for read scaling.
+- Connection pooling (HikariCP) to manage connections efficiently.
+- Eventual migration to database sharding if needed.
+
+7.3 Caching Strategy
+- Frontend caching (service workers, local storage).
+- Backend caching (Redis) for frequently accessed data (weather, market prices).
+- Database query caching for read-heavy operations.
+
+7.4 CDN & Static Asset Delivery
+- Static assets (CSS, JS, images) served via CDN.
+- Reduces server load and improves user-perceived performance.
+
+-- End of System Design

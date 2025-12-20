@@ -1,0 +1,447 @@
+DATABASE DESIGN - KISANCONNECT PROJECT
+
+1. DATABASE OVERVIEW
+
+Database Management System: PostgreSQL 14+
+Hosting: Managed service (AWS RDS, Azure Database, or self-hosted)
+Schema: Public schema (kisan_db)
+Backup Strategy: Daily automated backups with 30-day retention
+Replication: Master-replica for read scaling (optional)
+
+2. TABLE DEFINITIONS
+
+2.1 Users Table
+
+CREATE TABLE users (
+  user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  full_name VARCHAR(255) NOT NULL,
+  phone VARCHAR(15) UNIQUE,
+  role_id UUID NOT NULL REFERENCES roles(role_id),
+  location JSONB, -- {latitude, longitude, district, state}
+  farm_size_acres DECIMAL(10,2),
+  soil_type VARCHAR(100),
+  bio TEXT,
+  profile_image_url VARCHAR(512),
+  is_active BOOLEAN DEFAULT true,
+  email_verified BOOLEAN DEFAULT false,
+  phone_verified BOOLEAN DEFAULT false,
+  last_login_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP NULL,
+  
+  -- Constraints
+  CONSTRAINT user_email_check CHECK (email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$'),
+  CONSTRAINT farm_size_positive CHECK (farm_size_acres > 0)
+);
+
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_role_id ON users(role_id);
+CREATE INDEX idx_users_is_active ON users(is_active);
+CREATE INDEX idx_users_created_at ON users(created_at);
+
+2.2 Roles Table
+
+CREATE TABLE roles (
+  role_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  role_name VARCHAR(50) UNIQUE NOT NULL,
+  description TEXT,
+  permissions JSONB, -- Array of permission strings
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO roles (role_name, permissions) VALUES
+  ('FARMER', '["view_dashboard", "manage_crops", "create_manifest", "chat_ai", "view_weather"]'),
+  ('EXPERT', '["respond_queries", "verify_recommendations", "view_analytics"]'),
+  ('ADMIN', '["manage_users", "manage_crops_db", "generate_reports", "configure_system"]');
+
+2.3 Crops Table
+
+CREATE TABLE crops (
+  crop_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  crop_type VARCHAR(100) NOT NULL, -- rice, wheat, maize, cotton, sugarcane, etc.
+  variety VARCHAR(150),
+  planting_date DATE NOT NULL,
+  expected_harvest_date DATE NOT NULL,
+  area_cultivated_acres DECIMAL(10,2) NOT NULL,
+  status VARCHAR(50) NOT NULL DEFAULT 'PLANNED', -- PLANNED, GROWING, HARVESTED, ABANDONED
+  soil_type VARCHAR(100),
+  irrigation_type VARCHAR(100), -- rainfed, canal, tube_well, drip, sprinkler
+  seed_type VARCHAR(150),
+  seed_cost DECIMAL(10,2),
+  fertilizer_type VARCHAR(150),
+  pest_management_method VARCHAR(100),
+  notes TEXT,
+  expected_yield_qty DECIMAL(10,2),
+  expected_yield_unit VARCHAR(50) DEFAULT 'kg', -- kg, quintal, ton
+  actual_yield_qty DECIMAL(10,2),
+  harvest_date DATE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP NULL,
+  
+  CONSTRAINT crop_dates_valid CHECK (planting_date < expected_harvest_date),
+  CONSTRAINT area_positive CHECK (area_cultivated_acres > 0),
+  CONSTRAINT yield_positive CHECK (expected_yield_qty > 0 OR expected_yield_qty IS NULL)
+);
+
+CREATE INDEX idx_crops_user_id ON crops(user_id);
+CREATE INDEX idx_crops_status ON crops(status);
+CREATE INDEX idx_crops_crop_type ON crops(crop_type);
+CREATE INDEX idx_crops_planting_date ON crops(planting_date);
+
+2.4 Manifests Table
+
+CREATE TABLE manifests (
+  manifest_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  planned_yield DECIMAL(10,2),
+  actual_yield DECIMAL(10,2),
+  status VARCHAR(50) NOT NULL DEFAULT 'PLANNING', -- PLANNING, EXECUTING, COMPLETED, ABANDONED
+  budget DECIMAL(12,2),
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  completed_at TIMESTAMP NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TIMESTAMP NULL,
+  
+  CONSTRAINT manifest_dates_valid CHECK (start_date < end_date)
+);
+
+CREATE INDEX idx_manifests_user_id ON manifests(user_id);
+CREATE INDEX idx_manifests_status ON manifests(status);
+CREATE INDEX idx_manifests_created_at ON manifests(created_at);
+
+2.5 Manifest Line Items Table
+
+CREATE TABLE manifest_line_items (
+  line_item_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  manifest_id UUID NOT NULL REFERENCES manifests(manifest_id) ON DELETE CASCADE,
+  crop_id UUID REFERENCES crops(crop_id) ON DELETE SET NULL,
+  task_name VARCHAR(255) NOT NULL,
+  task_description TEXT,
+  task_category VARCHAR(100), -- sowing, fertilization, pesticide, harvesting, storage
+  planned_date DATE NOT NULL,
+  actual_date DATE,
+  status VARCHAR(50) DEFAULT 'PENDING', -- PENDING, IN_PROGRESS, COMPLETED, SKIPPED
+  assigned_to VARCHAR(255),
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_line_items_manifest_id ON manifest_line_items(manifest_id);
+CREATE INDEX idx_line_items_crop_id ON manifest_line_items(crop_id);
+
+2.6 Weather Table
+
+CREATE TABLE weather (
+  weather_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  location JSONB NOT NULL, -- {latitude, longitude}
+  temperature DECIMAL(5,2),
+  humidity DECIMAL(5,2),
+  rainfall DECIMAL(10,2),
+  wind_speed DECIMAL(5,2),
+  wind_direction VARCHAR(20),
+  pressure DECIMAL(7,2),
+  uv_index DECIMAL(3,1),
+  forecast_json JSONB, -- 7-day forecast data
+  data_source VARCHAR(100), -- OpenWeatherMap, WeatherAPI, etc.
+  timestamp TIMESTAMP NOT NULL,
+  expires_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  
+  CONSTRAINT location_not_null CHECK (location IS NOT NULL)
+);
+
+CREATE INDEX idx_weather_location ON weather USING GIST (location);
+CREATE INDEX idx_weather_timestamp ON weather(timestamp DESC);
+
+2.7 Weather Alerts Table
+
+CREATE TABLE weather_alerts (
+  alert_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  alert_type VARCHAR(100) NOT NULL, -- frost, heatwave, heavy_rain, drought, storm
+  severity VARCHAR(20) NOT NULL, -- LOW, MEDIUM, HIGH, CRITICAL
+  message TEXT NOT NULL,
+  recommendation TEXT,
+  generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  expires_at TIMESTAMP NOT NULL,
+  is_notified BOOLEAN DEFAULT false,
+  notification_sent_at TIMESTAMP NULL
+);
+
+CREATE INDEX idx_weather_alerts_user_id ON weather_alerts(user_id);
+CREATE INDEX idx_weather_alerts_generated_at ON weather_alerts(generated_at DESC);
+
+2.8 Pest Disease Database Table
+
+CREATE TABLE pest_disease_database (
+  pest_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  pest_name VARCHAR(255) NOT NULL UNIQUE,
+  common_name VARCHAR(255),
+  type VARCHAR(50), -- pest, disease, weed
+  affected_crops JSONB, -- array of crop types
+  description TEXT,
+  image_url VARCHAR(512),
+  ideal_conditions JSONB, -- {temperature_range, humidity_range, season}
+  symptoms TEXT,
+  management_strategies JSONB, -- array of strategies
+  organic_methods JSONB, -- organic control methods
+  chemical_methods JSONB, -- chemical pesticides with recommendations
+  biological_control TEXT,
+  prevention_tips TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_pest_pest_name ON pest_disease_database(pest_name);
+CREATE INDEX idx_pest_affected_crops ON pest_disease_database USING GIN (affected_crops);
+
+2.9 Pest Alerts Table
+
+CREATE TABLE pest_alerts (
+  pest_alert_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  crop_id UUID REFERENCES crops(crop_id) ON DELETE CASCADE,
+  pest_id UUID REFERENCES pest_disease_database(pest_id),
+  risk_level VARCHAR(20) NOT NULL DEFAULT 'MEDIUM', -- LOW, MEDIUM, HIGH, CRITICAL
+  message TEXT,
+  management_tips TEXT,
+  recommended_pesticide VARCHAR(255),
+  generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  expires_at TIMESTAMP NOT NULL,
+  is_notified BOOLEAN DEFAULT false,
+  notification_sent_at TIMESTAMP NULL
+);
+
+CREATE INDEX idx_pest_alerts_user_id ON pest_alerts(user_id);
+CREATE INDEX idx_pest_alerts_crop_id ON pest_alerts(crop_id);
+CREATE INDEX idx_pest_alerts_generated_at ON pest_alerts(generated_at DESC);
+
+2.10 Conversations Table
+
+CREATE TABLE conversations (
+  conversation_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  thread_id UUID REFERENCES conversation_threads(thread_id) ON DELETE CASCADE,
+  message_text TEXT NOT NULL,
+  message_role VARCHAR(50) NOT NULL, -- USER, ASSISTANT, EXPERT
+  tokens_used INT, -- for API cost tracking
+  helpful_score INT CHECK (helpful_score IS NULL OR helpful_score IN (0, 1, -1)), -- thumbs up/down
+  related_crop_id UUID REFERENCES crops(crop_id) ON DELETE SET NULL,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_conversations_user_id ON conversations(user_id);
+CREATE INDEX idx_conversations_thread_id ON conversations(thread_id);
+CREATE INDEX idx_conversations_timestamp ON conversations(timestamp DESC);
+
+2.11 Conversation Threads Table
+
+CREATE TABLE conversation_threads (
+  thread_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  title VARCHAR(255),
+  topic VARCHAR(100), -- pest, weather, crop_selection, disease, yield, etc.
+  start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  last_message_date TIMESTAMP,
+  is_resolved BOOLEAN DEFAULT false,
+  expert_id UUID REFERENCES users(user_id), -- if expert has responded
+  resolved_by VARCHAR(100),
+  notes TEXT
+);
+
+CREATE INDEX idx_threads_user_id ON conversation_threads(user_id);
+CREATE INDEX idx_threads_start_date ON conversation_threads(start_date DESC);
+
+2.12 Audit Logs Table
+
+CREATE TABLE audit_logs (
+  log_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(user_id) ON DELETE SET NULL,
+  action_type VARCHAR(100) NOT NULL, -- CREATE, UPDATE, DELETE, LOGIN, LOGOUT
+  entity_type VARCHAR(100), -- User, Crop, Manifest, etc.
+  entity_id VARCHAR(255),
+  old_value JSONB,
+  new_value JSONB,
+  ip_address VARCHAR(45),
+  user_agent TEXT,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_audit_logs_user_id ON audit_logs(user_id);
+CREATE INDEX idx_audit_logs_entity_type ON audit_logs(entity_type);
+CREATE INDEX idx_audit_logs_timestamp ON audit_logs(timestamp DESC);
+
+2.13 System Configuration Table
+
+CREATE TABLE system_config (
+  config_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  config_key VARCHAR(255) UNIQUE NOT NULL,
+  config_value TEXT,
+  description TEXT,
+  data_type VARCHAR(50), -- string, integer, boolean, json
+  last_updated_by UUID REFERENCES users(user_id),
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+3. VIEWS (MATERIALIZED VIEWS FOR PERFORMANCE)
+
+3.1 Farmer Dashboard Summary View
+
+CREATE MATERIALIZED VIEW farmer_dashboard_summary AS
+SELECT 
+  u.user_id,
+  u.full_name,
+  COUNT(DISTINCT c.crop_id) as total_crops,
+  COUNT(DISTINCT CASE WHEN c.status = 'GROWING' THEN c.crop_id END) as active_crops,
+  COUNT(DISTINCT m.manifest_id) as total_manifests,
+  COUNT(DISTINCT CASE WHEN m.status = 'EXECUTING' THEN m.manifest_id END) as active_manifests,
+  COUNT(DISTINCT pa.pest_alert_id) as recent_alerts,
+  COALESCE(AVG(c.expected_yield_qty), 0) as avg_expected_yield,
+  u.updated_at
+FROM users u
+LEFT JOIN crops c ON u.user_id = c.user_id AND c.deleted_at IS NULL
+LEFT JOIN manifests m ON u.user_id = m.user_id AND m.deleted_at IS NULL
+LEFT JOIN pest_alerts pa ON u.user_id = pa.user_id AND pa.generated_at > NOW() - INTERVAL '30 days'
+WHERE u.deleted_at IS NULL
+GROUP BY u.user_id, u.full_name, u.updated_at;
+
+CREATE UNIQUE INDEX idx_dashboard_summary_user ON farmer_dashboard_summary(user_id);
+
+REFRESH MATERIALIZED VIEW CONCURRENTLY farmer_dashboard_summary;
+
+4. STORED PROCEDURES
+
+4.1 Generate Pest Alerts Procedure
+
+CREATE OR REPLACE FUNCTION generate_pest_alerts()
+RETURNS TABLE(alerts_generated INT) AS $$
+DECLARE
+  v_alerts_generated INT := 0;
+BEGIN
+  -- For each crop, check weather conditions and match with pests
+  INSERT INTO pest_alerts (user_id, crop_id, pest_id, risk_level, generated_at, expires_at)
+  SELECT 
+    c.user_id,
+    c.crop_id,
+    pd.pest_id,
+    CASE 
+      WHEN w.temperature > (pd.ideal_conditions->>'max_temp')::NUMERIC THEN 'CRITICAL'
+      WHEN ABS(w.temperature - ((pd.ideal_conditions->>'optimal_temp')::NUMERIC)) < 5 THEN 'HIGH'
+      ELSE 'MEDIUM'
+    END,
+    NOW(),
+    NOW() + INTERVAL '7 days'
+  FROM crops c
+  JOIN users u ON c.user_id = u.user_id
+  JOIN pest_disease_database pd ON pd.affected_crops @> jsonb_build_array(c.crop_type)
+  JOIN (SELECT location, temperature, humidity, timestamp FROM weather ORDER BY timestamp DESC LIMIT 1) w 
+    ON ST_DWithin(
+      ST_GeomFromGeoJSON(c.soil_type::text),
+      ST_GeomFromGeoJSON(w.location::text),
+      0.1 -- within 0.1 degrees, roughly 10km
+    )
+  WHERE c.status = 'GROWING'
+    AND c.deleted_at IS NULL
+    AND NOT EXISTS (
+      SELECT 1 FROM pest_alerts pa 
+      WHERE pa.crop_id = c.crop_id AND pa.pest_id = pd.pest_id 
+      AND pa.expires_at > NOW()
+    )
+  ON CONFLICT DO NOTHING;
+  
+  GET DIAGNOSTICS v_alerts_generated = ROW_COUNT;
+  
+  RETURN QUERY SELECT v_alerts_generated;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Schedule this to run daily via cron job or task scheduler
+
+4.2 Archive Old Data Procedure
+
+CREATE OR REPLACE PROCEDURE archive_old_data()
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  -- Archive conversations older than 1 year
+  UPDATE conversations 
+  SET created_at = created_at 
+  WHERE timestamp < NOW() - INTERVAL '1 year'
+  AND NOT EXISTS (SELECT 1 FROM conversation_threads ct WHERE ct.thread_id = conversations.thread_id AND ct.is_resolved = false);
+  
+  -- Move old audit logs to archive table
+  DELETE FROM audit_logs WHERE timestamp < NOW() - INTERVAL '2 years';
+  
+  -- Refresh materialized views
+  REFRESH MATERIALIZED VIEW CONCURRENTLY farmer_dashboard_summary;
+  
+  COMMIT;
+END;
+$$;
+
+5. INDEXES SUMMARY
+
+Primary Key Indexes: Automatic (user_id, crop_id, etc.)
+
+Foreign Key Indexes: Automatic (role_id, user_id references)
+
+Business Logic Indexes:
+- users: email (unique), role_id, is_active, created_at
+- crops: user_id, status, crop_type, planting_date
+- manifests: user_id, status, created_at
+- weather: location (spatial), timestamp
+- conversations: user_id, thread_id, timestamp
+- weather_alerts: user_id, generated_at
+- pest_alerts: user_id, crop_id, generated_at
+- audit_logs: user_id, entity_type, timestamp
+
+Total Indexes: ~20 (primary + foreign keys + business logic)
+
+6. BACKUP & RECOVERY STRATEGY
+
+Backup Frequency: Daily (automated)
+Backup Retention: 30 days
+Recovery Point Objective (RPO): 1 day
+Recovery Time Objective (RTO): 2-4 hours
+
+Backup Destinations:
+- Primary: Database managed service backup (AWS RDS backups)
+- Secondary: Encrypted S3 bucket with versioning
+- Tertiary: Off-site encrypted backup (weekly)
+
+Recovery Procedure:
+- Full restore: Restore from most recent backup
+- Point-in-time recovery: Use transaction logs (if available)
+- Partial recovery: Restore specific tables from backup
+
+7. MONITORING & MAINTENANCE
+
+Query Performance Monitoring:
+- Enable PostgreSQL slow query log (log_min_duration_statement)
+- Monitor long-running transactions
+- Periodically run EXPLAIN ANALYZE on slow queries
+
+Index Maintenance:
+- Monthly ANALYZE to update table statistics
+- Quarterly REINDEX on large tables
+- Monitor unused indexes and drop if necessary
+
+Disk Usage Monitoring:
+- Track total database size monthly
+- Archive or delete old data according to retention policy
+- Monitor growth rate to plan for scaling
+
+-- End of Database Design

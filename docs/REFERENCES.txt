@@ -1,0 +1,20 @@
+References
+
+The following tools and resources were used during the development and documentation of the KisanConnect project. Official websites are provided for citation and further information.
+
+1. ChatGPT (OpenAI) — https://chat.openai.com/ — Used for drafting, content generation and clarifications.
+2. GitHub Copilot — https://github.com/features/copilot — Assisted with code suggestions and snippets.
+3. IntelliJ IDEA — https://www.jetbrains.com/idea/ — Primary IDE for backend (Java/Spring) development.
+4. Visual Studio Code — https://code.visualstudio.com/ — Frontend development, editing and debugging.
+5. Microsoft Word — https://www.microsoft.com/en-us/microsoft-365/word — Final documentation formatting and hardcopy preparation.
+6. Apache Maven — https://maven.apache.org/ — Build and dependency management for the backend.
+7. Spring Boot — https://spring.io/projects/spring-boot — Backend framework used in the project.
+8. Firebase — https://firebase.google.com/ — Used for authentication and realtime services.
+9. Google Chrome — https://www.google.com/chrome/ — Browser used for testing and debugging.
+10. Postman — https://www.postman.com/ — API testing and debugging.
+11. Git — https://git-scm.com/ — Version control tool.
+12. GitHub — https://github.com/ — Source code hosting and issue tracking.
+13. Figma — https://www.figma.com/ — UI/UX design and prototyping.
+14. Redis — https://redis.io/ — Caching layer used in the backend.
+15. GitHub Actions — https://github.com/features/actions — CI/CD pipelines used for automated builds and deployments.
+16. Lighthouse — https://developers.google.com/web/tools/lighthouse — Performance auditing and metrics.
