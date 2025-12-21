@@ -1,0 +1,250 @@
+/* ╔════════════════════════════════════════════════════════════════════════════╗
+   ║     🎨 QUICK COLOR CHANGER - तीनों Dashboards के लिए Quick Reference      ║
+   ║                                                                            ║
+   ║  Yeh file dashboardTheme.css के लिए quick reference है।                  ║
+   ║  अपना पसंदीदा color code यहाँ से चुनो और dashboardTheme.css में paste करो ║
+   ╚════════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📋 COPY-PASTE COLOR SCHEMES
+   
+   नीचे दिए गए themes को पूरा copy करके dashboardTheme.css में paste करो
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🔵 BLUE THEME (ADMIN) - Professional & Serious
+   
+   Copy everything below और paste करो :root.admin-theme की जगह
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/*
+:root.admin-theme {                      (paste this block into the matching theme section in dashboardTheme.css)
+  --primary-color: #0ea5e9;             /* previously --admin-primary */
+  --primary-light: #38bdf8;             /* previously --admin-primary-light */
+  --primary-dark: #0284c7;              /* previously --admin-primary-dark */
+  --accent-color: #0d47a1;              /* previously --admin-accent */
+  --success-color: #388e3c;             /* previously --admin-success */
+  --warning-color: #f57c00;             /* previously --admin-warning */
+  --error-color: #d32f2f;               /* previously --admin-error */
+  --body-gradient-start: #0ea5e9;       /* previously --admin-gradient-start */
+  --body-gradient-end: #0284c7;         /* previously --admin-gradient-end */
+  --text-color: #1a1a1a;                /* previously --admin-text-primary */
+  --text-secondary: #666666;            /* previously --admin-text-secondary */
+  --card-bg: #ffffff;                   /* previously --admin-bg-card */
+  --table-bg: #f5f5f5;                  /* previously --admin-bg-table */
+  --border-color: #e0e0e0;              /* previously --admin-border */
+}
+*/
+
+// Alternative Blue Options:
+/*
+Navy Blue:
+  --admin-primary: #1e3a8a;
+  --admin-primary-light: #3b82f6;
+  --admin-primary-dark: #1e40af;
+  
+Deep Blue:
+  --admin-primary: #1e40af;
+  --admin-primary-light: #3b82f6;
+  --admin-primary-dark: #1e3a8a;
+  
+Cyan Blue:
+  --admin-primary: #06b6d4;
+  --admin-primary-light: #22d3ee;
+  --admin-primary-dark: #0891b2;
+*/
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🟢 GREEN THEME (FARMER) - Growth & Nature
+   
+   Copy everything below और paste करो :root.farmer-theme की जगह
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/*
+:root.farmer-theme {                     (paste this block into the matching theme section in dashboardTheme.css)
+  --primary-color: #10b981;             /* previously --farmer-primary */
+  --primary-light: #34d399;             /* previously --farmer-primary-light */
+  --primary-dark: #059669;              /* previously --farmer-primary-dark */
+  --accent-color: #229954;              /* previously --farmer-accent */
+  --success-color: #27ae60;             /* previously --farmer-success */
+  --warning-color: #f39c12;             /* previously --farmer-warning */
+  --error-color: #e74c3c;               /* previously --farmer-error */
+  --body-gradient-start: #10b981;       /* previously --farmer-gradient-start */
+  --body-gradient-end: #059669;         /* previously --farmer-gradient-end */
+  --text-color: #042014;                /* previously --farmer-text-primary */
+  --text-secondary: #555555;            /* previously --farmer-text-secondary */
+  --card-bg: #ffffff;                   /* previously --farmer-bg-card */
+  --table-bg: #ecfdf5;                  /* previously --farmer-bg-table */
+  --border-color: #a7f3d0;              /* previously --farmer-border */
+}
+*/
+
+// Alternative Green Options:
+/*
+Forest Green:
+  --farmer-primary: #14532d;
+  --farmer-primary-light: #15803d;
+  --farmer-primary-dark: #0d3d1e;
+  
+Vibrant Green:
+  --farmer-primary: #22c55e;
+  --farmer-primary-light: #4ade80;
+  --farmer-primary-dark: #16a34a;
+  
+Spring Green:
+  --farmer-primary: #6ee7b7;
+  --farmer-primary-light: #a7f3d0;
+  --farmer-primary-dark: #2d9d78;
+*/
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🟣 PURPLE THEME (BUYER) - Premium & Luxury
+   
+   Copy everything below और paste करो :root.buyer-theme की जगह
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/*
+:root.buyer-theme {                      (paste this block into the matching theme section in dashboardTheme.css)
+  --primary-color: #d946ef;             /* previously --buyer-primary */
+  --primary-light: #e879f9;             /* previously --buyer-primary-light */
+  --primary-dark: #c026d3;              /* previously --buyer-primary-dark */
+  --accent-color: #6a1b9a;              /* previously --buyer-accent */
+  --success-color: #ab47bc;             /* previously --buyer-success */
+  --warning-color: #ff9800;             /* previously --buyer-warning */
+  --error-color: #f44336;               /* previously --buyer-error */
+  --body-gradient-start: #d946ef;       /* previously --buyer-gradient-start */
+  --body-gradient-end: #c026d3;         /* previously --buyer-gradient-end */
+  --text-color: #2d1b4e;                /* previously --buyer-text-primary */
+  --text-secondary: #666666;            /* previously --buyer-text-secondary */
+  --card-bg: #ffffff;                   /* previously --buyer-bg-card */
+  --table-bg: #faf5ff;                  /* previously --buyer-bg-table */
+  --border-color: #f3d0f7;              /* previously --buyer-border */
+}
+*/
+
+// Alternative Purple Options:
+/*
+Deep Purple:
+  --buyer-primary: #7c3aed;
+  --buyer-primary-light: #a855f7;
+  --buyer-primary-dark: #6d28d9;
+  
+Royal Purple:
+  --buyer-primary: #9c27b0;
+  --buyer-primary-light: #ba68c8;
+  --buyer-primary-dark: #7b1fa2;
+  
+Violet:
+  --buyer-primary: #6366f1;
+  --buyer-primary-light: #818cf8;
+  --buyer-primary-dark: #4f46e5;
+*/
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🌈 HOW TO USE - यह फाइल कैसे इस्तेमाल करें
+   ═══════════════════════════════════════════════════════════════════════════
+
+   1️⃣ यहाँ से अपना पसंदीदा color scheme चुनो (ऊपर दिए गए में से)
+   
+   2️⃣ पूरे block को copy करो (/* से */ तक)
+   
+   3️⃣ dashboardTheme.css खोलो
+   
+   4️⃣ उसी नाम के theme को find करो (Ctrl+F)
+      जैसे: ":root.admin-theme {"
+   
+   5️⃣ पुरानी values को delete करो
+   
+   6️⃣ अपना नया theme paste करो
+   
+   7️⃣ Browser refresh करो (F5 या Ctrl+R)
+   
+   ✅ Done! तुम्हारे dashboard का रंग बदल गया!
+   
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🎨 COLOR PICKER WEBSITES - अगर अपना रंग बनाना है
+   ═══════════════════════════════════════════════════════════════════════════
+
+   ✅ Google Color Picker:
+      - Google search करो: "color picker"
+      - या यहाँ जाओ: https://colorpicker.com/
+   
+   ✅ Material Design Colors:
+      - https://material.io/resources/color/
+      - Pre-made professional colors
+   
+   ✅ Coolors.co:
+      - https://coolors.co/
+      - Automatic color palettes बनाता है
+   
+   ✅ Tailwind Color Palette:
+      - https://tailwindcss.com/docs/customizing-colors
+      - Modern web colors
+   
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📱 LIGHT & DARK THEME VARIANTS
+   
+   हर एक dashboard के लिए light और dark दोनों modes हैं।
+   Dark mode के लिए भी colors customize कर सकते हो:
+   
+   File में देखो:
+   - body.light.admin-theme { ... }
+   - body.dark.admin-theme { ... }
+   
+   Same pattern farmer और buyer के लिए भी है।
+   
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🎯 PRE-DESIGNED PROFESSIONAL THEMES
+   
+   नीचे दिए गए themes corporate/professional applications के लिए हैं।
+   ये सब ready-to-use हैं!
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 
+💼 CORPORATE BLUE (Admin के लिए सबसे अच्छा)
+--primary-color: #003d82;               /* previously --admin-primary */
+--primary-light: #1565c0;               /* previously --admin-primary-light */
+--primary-dark: #001f4d;                /* previously --admin-primary-dark */
+--body-gradient-start: #003d82;         /* previously --admin-gradient-start */
+--body-gradient-end: #001f4d;           /* previously --admin-gradient-end */
+*/
+
+/*
+🌾 ORGANIC GREEN (Farmer के लिए सबसे अच्छा)
+--primary-color: #0d6e2f;               /* previously --farmer-primary */
+--primary-light: #229954;               /* previously --farmer-primary-light */
+--primary-dark: #051d1f;                /* previously --farmer-primary-dark */
+--body-gradient-start: #0d6e2f;         /* previously --farmer-gradient-start */
+--body-gradient-end: #051d1f;           /* previously --farmer-gradient-end */
+*/
+
+/*
+💎 LUXURY PURPLE (Buyer के लिए सबसे अच्छा)
+--primary-color: #6a0dad;               /* previously --buyer-primary */
+--primary-light: #9c27b0;               /* previously --buyer-primary-light */
+--primary-dark: #380063;                /* previously --buyer-primary-dark */
+--body-gradient-start: #6a0dad;         /* previously --buyer-gradient-start */
+--body-gradient-end: #380063;           /* previously --buyer-gradient-end */
+*/
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🚀 FINAL CHECKLIST
+   ═══════════════════════════════════════════════════════════════════════════
+
+   ☐ Color picker website खोला
+   ☐ अपना color चुना (hex code)
+   ☐ dashboardTheme.css खोला
+   ☐ सही theme section ढूंढा
+   ☐ values replace कीं
+   ☐ Browser refresh किया
+   ☐ तीनों dashboards में test किया (Admin, Farmer, Buyer)
+   ☐ Dark mode भी check किया
+   ☐ Team के साथ share किया
+
+   ═══════════════════════════════════════════════════════════════════════════ */

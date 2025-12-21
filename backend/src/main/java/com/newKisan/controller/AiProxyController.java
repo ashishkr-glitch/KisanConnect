@@ -1,5 +1,6 @@
 package com.newKisan.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,15 +21,25 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 public class AiProxyController {
 
+    @Value("${gemini.api.key:}")
+    private String geminiApiKey;
+
     @PostMapping("/generate")
     public ResponseEntity<String> generate(@RequestBody Map<String, Object> body) {
         System.out.println("[AiProxy] Incoming request body: " + body);
         String geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-        // Hardcoded API key for local development
-        String apiKey = "AIzaSyBNJ68Z8Dq1zd2iIrPR97Tm_SBobwnngyw";
+        
+        // Get API key from environment variable (GEMINI_API_KEY or application.properties: gemini.api.key)
+        String apiKey = geminiApiKey;
         if (apiKey == null || apiKey.isEmpty()) {
+            apiKey = System.getenv("GEMINI_API_KEY");
+        }
+        
+        if (apiKey == null || apiKey.isEmpty()) {
+            System.err.println("[AiProxy] ERROR: GEMINI_API_KEY not configured!");
+            System.err.println("[AiProxy] Please set GEMINI_API_KEY environment variable or gemini.api.key in application.properties");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Server error: GEMINI_API_KEY not configured");
+                .body("{\"error\": \"Server error: GEMINI_API_KEY not configured. Set GEMINI_API_KEY environment variable or add 'gemini.api.key' to application.properties\"}");
         }
 
         HttpHeaders headers = new HttpHeaders();
