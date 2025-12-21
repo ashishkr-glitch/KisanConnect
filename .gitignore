@@ -1,6 +1,9 @@
 # React node modules
 frontend/node_modules/
 frontend/.env
+# backend local environment files (do not commit API keys)
+backend/.env
+backend/.env.local
 
 # Spring Boot build files
 backend/target/

@@ -1,10 +1,14 @@
+
 package com.newKisan.service;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.newKisan.entity.User;
-import com.newKisan.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,37 +16,53 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepo;
+    @PersistenceContext
+    private EntityManager em;
 
     public List<User> getAllUsers() {
-        return userRepo.findAll();
+        TypedQuery<User> q = em.createQuery("select u from User u", User.class);
+        return q.getResultList();
     }
 
+    @Transactional
     public User createUser(User user) {
-        return userRepo.save(user);
+        em.persist(user);
+        return user;
     }
 
     public void deleteUser(String uid) {
-        // Delete from local database
-        userRepo.deleteById(uid);
-        
-        // Delete from Firebase Authentication (optional, best effort)
+        User u = em.find(User.class, uid);
+        if (u != null) {
+            em.remove(u);
+        }
+
         try {
-            // Only attempt Firebase deletion if SDK is properly initialized
-            com.google.firebase.auth.FirebaseAuth auth = FirebaseAuth.getInstance();
+            FirebaseAuth auth = FirebaseAuth.getInstance();
             if (auth != null) {
                 auth.deleteUser(uid);
             }
         } catch (IllegalStateException e) {
-            // Firebase SDK not initialized - this is fine for development
             System.err.println("Firebase SDK not initialized - user deleted from local database only");
         } catch (FirebaseAuthException e) {
-            // Log the error but don't fail the entire deletion
             System.err.println("Warning: Could not delete user from Firebase: " + e.getMessage());
         } catch (Exception e) {
-            // Catch any other exceptions
             System.err.println("Warning: Error during Firebase deletion: " + e.getMessage());
         }
+    }
+
+    public User findByEmail(String email) {
+        if (email == null) return null;
+        TypedQuery<User> q = em.createQuery("select u from User u where u.email = :email", User.class);
+        q.setParameter("email", email);
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public User findById(String uid) {
+        if (uid == null) return null;
+        return em.find(User.class, uid);
     }
 }

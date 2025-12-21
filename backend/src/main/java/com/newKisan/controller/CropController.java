@@ -20,6 +20,11 @@ public class CropController {
         return cropService.getAllCrops();
     }
 
+    @GetMapping("/stats")
+    public java.util.Map<String, Object> getCropStats() {
+        return cropService.getStats();
+    }
+
     @GetMapping("/farmer/{farmerId}")
     public List<Crop> getCropsByFarmer(@PathVariable String farmerId) {
         return cropService.getCropsByFarmer(farmerId);
