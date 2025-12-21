@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/buyers")
+@RequestMapping("/api/buyers")
 @CrossOrigin(origins = "*")
 public class BuyerController {
 
