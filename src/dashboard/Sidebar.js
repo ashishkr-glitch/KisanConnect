@@ -53,10 +53,17 @@ function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, contain
       <div id="kc_sidebar" className={`sidebar ${isOpen ? "" : "hidden"}`} ref={containerRef} role="navigation" aria-label="Main navigation" aria-hidden={!isOpen}>
       {showBrand && (
         <div className="brand-wrap">
-          <img src="/Logo420.png" alt="Kissan Connect logo" className="app-logo" />
-          <h2 className="brand">Kissan Connect</h2>
+          <img src="/Logo420.png" alt="Kissan Connect logo" className="app-logo" style={{scale:"1.8",}}/>
+          <h2 className="brand">
+            <span className="brand-anim" aria-label="Kissan Connect">
+              {Array.from('Kissan Connect').map((ch, i) => (
+                <span key={i} className="char" style={{ ['--i']: i }}>{ch === ' ' ? '\u00A0' : ch}</span>
+              ))}
+            </span>
+          </h2>
         </div>
-      )}      <nav>
+      )}
+      <nav>
         {role === "admin" && (
           <>
             <Link className={isActive("/dashboard") ? "active" : ""} to="/dashboard"><FaTachometerAlt /> <span className="label">Dashboard</span></Link>

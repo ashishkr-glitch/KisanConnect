@@ -84,9 +84,19 @@ function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
             <FaBars />
           </button>
 
-          <img src="/Logo420.png" alt="Kissan Connect logo" style={{ height: "40px", width: "40px" }} />
-          <h2 style={{margin: 0, fontSize: "16px", fontWeight: 600}}>Kissan Connect</h2>
+          <div style={{margin:0, padding:0, display: "flex", flexDirection: "row", width: "200px",}}>
+
+
+          <img src="/Logo420.png" alt="Kissan Connect logo" style={{ height: "40px", width: "40px", flex:1,}} />
+          <h2 style={{margin: "auto",flex:3,  display: "flex", flexDirection: "row",}}>
+            <span className="brand-anim" aria-label="Kissan Connect">
+              {Array.from('Kissan Connect').map((ch, i) => (
+                <span key={i} className="char" style={{ ['--i']: i }}>{ch === ' ' ? '\u00A0' : ch}</span>
+              ))}
+            </span>
+          </h2>
         </div>
+              </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}>
           <ThemeToggle />

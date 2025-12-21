@@ -1,8 +1,7 @@
 import React from "react";
-import useUserProfile from "../hooks/useUserProfile";
 import "./Header.css";
 
-// ✅ Header with user info + patriotic greeting
+// Header with user info + patriotic greeting
 function Header() {
   // Get user details from localStorage
   const profile = {

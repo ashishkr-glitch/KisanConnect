@@ -54,6 +54,9 @@
   --border-color: #d0e8ed;
   --hover-bg: #e8f7eb;
   --button-text: #ffffff;
+  /* Table header text defaults (can be theme-overridden) */
+  --table-header-text: #ffffff;
+  --table-header-text-hover: #ffffff;
   
   /* 🔧 SIDEBAR GLASS EFFECT */
   --sidebar-glass-opacity: 0.12;
@@ -97,6 +100,10 @@ body.light {
   --border-color: #d0e8ed;           /* Light teal border */
   --hover-bg: #e8f4f7;               /* Very light teal hover */
   --button-text: #ffffff;
+  /* Table header text in light mode (header uses gradient so text stays white)
+     but when header background becomes light on hover we want dark text for contrast */
+  --table-header-text: #ffffff;
+  --table-header-text-hover: #003d4d; /* dark teal on hover for readability */
 }
 
 body.dark {
@@ -137,6 +144,8 @@ body.dark {
   --border-color: #333333;           /* Dark gray border */
   --hover-bg: #252525;               /* Slightly lighter gray hover */
   --button-text: #0a0a0a;            /* Black text on white buttons */
+  --table-header-text: #f0f0f0;
+  --table-header-text-hover: #f0f0f0;
 }
 
 /* Ensure danger / red buttons use readable text color in dark mode */
@@ -512,6 +521,14 @@ table th {
   backdrop-filter: blur(10px);
 }
 
+/* Ensure header text remains readable on hover or if parent background changes
+   Set hover color using theme-aware variable. Use !important to override any
+   accidental inline or third-party rules that set color to white on hover. */
+table thead th:hover,
+table thead:hover th {
+  color: var(--table-header-text-hover) !important;
+}
+
 table tbody {
   background: transparent;
 }
@@ -826,6 +843,33 @@ label {
   100% {
     transform: translateY(-2px);
   }
+}
+
+/* Brand animated chars - staggered rotate on hover (Lando-style inspired) */
+.brand-anim {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  perspective: 700px;
+  -webkit-font-smoothing: antialiased;
+}
+.brand-anim .char {
+  display: inline-block;
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 420ms cubic-bezier(.2,.9,.2,1), color 220ms ease;
+  transition-delay: calc(var(--i, 0) * 0.03s);
+  will-change: transform;
+}
+.brand-anim:hover .char { transform: rotateX(18deg) translateY(-2px); color: var(--primary-color); }
+.brand-anim:hover .char:nth-child(even) { transform: rotateX(-18deg) translateY(-2px); }
+
+/* small visual polish: reduce motion if user prefers */
+@media (prefers-reduced-motion: reduce) {
+  .brand-anim .char { transition: none !important; }
+  .brand-anim:hover .char { transform: none !important; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
