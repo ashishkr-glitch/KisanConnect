@@ -1,0 +1,142 @@
+.my-orders .panel{
+  background: #fff;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.my-orders h3{
+  margin: 0 0 12px 0;
+}
+
+.my-orders .empty{
+  padding: 18px 0;
+}
+
+.my-orders .empty button{
+  padding: 8px 12px;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.back-button{
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background: var(--secondary-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.review-cell{ padding:8px; }
+
+.orders-table{
+  width: 100%;
+  border-collapse: collapse;
+}
+.orders-table th, .orders-table td{
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+/* Modern table look */
+.orders-table thead th{
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-size: 12px;
+  background: var(--secondary-color);
+  color: var(--text-color);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.orders-table tbody tr{
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.orders-table tbody tr:hover{
+  transform: translateY(-2px);
+  background: rgba(0,0,0,0.03);
+}
+
+.orders-table tbody tr:nth-child(even){
+  background: rgba(0,0,0,0.02);
+}
+
+/* Action buttons */
+.orders-actions{ display:flex; gap:8px; }
+.btn{ padding:6px 10px; border-radius:4px; border:none; cursor:pointer; font-size:12px; font-weight:600; }
+.btn-view{ background: linear-gradient(180deg,#1976d2,#135aa8); color:#fff; }
+.btn-delete{ background: linear-gradient(180deg,#e74c3c,#c62828); color:#fff; }
+.btn:disabled{ opacity:0.6; cursor:not-allowed; }
+
+/* Review / status badges */
+.badge-reviewed{ color: #2e7d32; font-size:12px; font-weight:700; }
+.badge-none{ color: #999; font-size:12px; }
+
+/* Dark mode tweaks */
+body.dark .orders-table thead th{
+  background: rgba(255,255,255,0.03);
+  color: #f0f0f0;
+}
+
+body.dark .orders-table tbody tr:hover{
+  background: rgba(0,166,153,0.04);
+}
+
+body.dark .orders-table tbody tr:nth-child(even){
+  background: rgba(255,255,255,0.02);
+}
+
+body.dark .btn-view{ box-shadow: 0 6px 18px rgba(0,123,255,0.08); }
+body.dark .btn-delete{ box-shadow: 0 6px 18px rgba(231,76,60,0.06); }
+
+body.dark .back-button{
+  background: linear-gradient(135deg,#1f8a56,#27ae60);
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+body.dark .badge-reviewed{ color: #7be3b9; }
+
+.note{
+  color: #666;
+  margin-bottom: 12px;
+}
+
+/* Dark mode overrides: make the My Orders panel dark with white text
+   Use a subtle gradient + glassy feel so it's "thoda different" than plain black */
+body.dark .my-orders .panel {
+  background: linear-gradient(180deg, rgba(10,10,10,0.95), rgba(18,18,18,0.98));
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #f0f0f0;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+body.dark .my-orders h3 {
+  color: #ffffff;
+}
+
+body.dark .my-orders .empty p,
+body.dark .my-orders .note {
+  color: #cfcfcf;
+}
+
+body.dark .orders-table th,
+body.dark .orders-table td {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: #eaeaea;
+}
+
+/* Make the empty state button pop on dark background */
+body.dark .my-orders .empty button {
+  background: linear-gradient(135deg,#1f8a56,#27ae60);
+  color: #ffffff;
+}

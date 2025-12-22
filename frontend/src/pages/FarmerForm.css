@@ -1,0 +1,22 @@
+.farmer-form-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  background: var(--modal-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.farmer-form input {
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+.farmer-form button {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

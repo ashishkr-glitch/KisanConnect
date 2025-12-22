@@ -1,0 +1,34 @@
+import axios from "axios";
+
+// Shared axios instance with baseURL and interceptors
+// Use relative /api path so dev-server proxy (package.json "proxy") can forward to backend
+const api = axios.create({
+  baseURL: "/api",
+  timeout: 15000,
+  headers: { "Content-Type": "application/json" },
+});
+
+// Request interceptor: add auth token if available
+api.interceptors.request.use((config) => {
+  const uid = localStorage.getItem("uid");
+  // Don't attach Authorization header to auth routes (login/signup)
+  const url = config.url || "";
+  // If url contains '/auth' segment (e.g. '/auth/login-offline'), skip header
+  const isAuthRoute = /(^|\/)auth(\/|$)/.test(url);
+  if (uid && !isAuthRoute) {
+    config.headers.Authorization = `Bearer ${uid}`;
+  }
+  return config;
+});
+
+// Response interceptor: log errors (can add redirect to login on 401 if needed)
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    // Optional: log errors or redirect to login on 401
+    // if (err.response?.status === 401) window.location.href = "/login";
+    return Promise.reject(err);
+  }
+);
+
+export default api;

@@ -1,0 +1,119 @@
+/* Shared crop list styles for admin view */
+.crop-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+}
+
+.crop-list th,
+.crop-list td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  font-size: 13px;
+}
+
+.crop-list th {
+  background-color: var(--secondary-color);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.crop-list tr:hover {
+  background-color: var(--hover-bg);
+  transition: background-color 0.2s ease;
+}
+
+.crop-list .btn-danger {
+  padding: 8px 12px;
+  background-color: var(--danger-color);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.crop-list .btn-danger:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📱 RESPONSIVE TABLE STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .crop-list table {
+    font-size: 11px;
+    margin-top: 8px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  .crop-list th,
+  .crop-list td {
+    padding: 6px 8px;
+    word-break: break-word;
+  }
+
+  .crop-list .btn-danger {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
+
+/* Tablet (481px - 768px) */
+@media (481px <= width <= 768px) {
+  .crop-list table {
+    font-size: 12px;
+  }
+
+  .crop-list th,
+  .crop-list td {
+    padding: 8px 10px;
+  }
+
+  .crop-list .btn-danger {
+    padding: 7px 11px;
+    font-size: 12px;
+  }
+}
+
+/* Large Tablet (769px - 1024px) */
+@media (769px <= width <= 1024px) {
+  .crop-list table {
+    font-size: 13px;
+  }
+
+  .crop-list th,
+  .crop-list td {
+    padding: 9px 11px;
+  }
+
+  .crop-list .btn-danger {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  .crop-list table {
+    font-size: 13px;
+  }
+
+  .crop-list th,
+  .crop-list td {
+    padding: 10px 12px;
+  }
+
+  .crop-list .btn-danger {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}

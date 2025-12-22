@@ -1,0 +1,25 @@
+.not-found {
+  text-align: center;
+  margin-top: 100px;
+  font-family: "Inter", sans-serif;
+}
+
+.not-found h2 {
+  font-size: 28px;
+  color: #e74c3c;
+  margin-bottom: 12px;
+}
+
+.not-found p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.not-found button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

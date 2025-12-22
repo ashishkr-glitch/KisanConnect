@@ -1,0 +1,13 @@
+import React from "react";
+import "./Toast.css";
+
+// ✅ Toast Component
+function Toast({ message, type }) {
+  return (
+    <div className={`toast ${type}`}>
+      {message}
+    </div>
+  );
+}
+
+export default Toast;

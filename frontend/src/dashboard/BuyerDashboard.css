@@ -1,0 +1,572 @@
+/* ╔═══════════════════════════════════════════════════════════════════════════════╗
+   ║                  🛍️ BUYER DASHBOARD - MODERN & BEAUTIFUL UI                  ║
+   ║                    Premium Design with Perfect Organization                    ║
+   ╚═══════════════════════════════════════════════════════════════════════════════╝ */
+
+/* Import Premium Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   🎯 MAIN CONTAINER & LAYOUT
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.buyer-dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: auto;
+  height: calc(100vh - 65px - 2vh);
+  width: 100%;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+  background: linear-gradient(135deg, var(--body-gradient-start) 0%, var(--body-gradient-end) 100%);
+}
+
+.buyer-main {
+  flex: 1;
+  padding: 0;
+  background-color: transparent;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar Styling */
+.buyer-main::-webkit-scrollbar {
+  width: 8px;
+}
+
+.buyer-main::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.buyer-main::-webkit-scrollbar-thumb {
+  background: rgba(0, 166, 153, 0.4);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.buyer-main::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 166, 153, 0.7);
+}
+
+/* Dark Mode Scrollbar */
+body.dark .buyer-main::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+body.dark .buyer-main::-webkit-scrollbar-thumb {
+  background: rgba(0, 166, 153, 0.6);
+}
+
+body.dark .buyer-main::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 166, 153, 0.9);
+}
+
+/* Dark Mode */
+body.dark .buyer-dashboard {
+  background: linear-gradient(135deg, var(--body-gradient-start) 0%, var(--body-gradient-end) 100%);
+}
+
+body.dark .buyer-main {
+  background-color: transparent;
+  color: #f0f0f0;
+}
+
+body.dark .buyer-main h2,
+body.dark .buyer-main h3,
+body.dark .buyer-main h4,
+body.dark .buyer-main h5 {
+  color: #f0f0f0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   👋 GREETING SECTION - Professional Welcome
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.dashboard-greeting {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #004d66;
+  margin: 0 0 8px 0;
+  padding: 8px 0;
+  letter-spacing: -0.5px;
+  animation: slideInDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  line-height: 1.2;
+}
+
+.greeting-welcome {
+  color: #006676;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.greeting-name {
+  color: #00a699;
+  font-weight: 800;
+  margin-left: 0;
+}
+
+body.dark .dashboard-greeting {
+  color: #f0f0f0;
+}
+
+body.dark .greeting-welcome {
+  color: #e0e0e0;
+}
+
+body.dark .greeting-name {
+  color: #00d4aa;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   🎯 TAB NAVIGATION - Modern Pill-Style Tabs
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.buyer-tab-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  border-bottom: none;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+  flex-shrink: 0;
+  margin-bottom: 12px;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.buyer-tab-buttons button {
+  padding: 10px 24px;
+  background-color: transparent;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.buyer-tab-buttons button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 166, 153, 0.1) 0%, rgba(0, 204, 102, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.buyer-tab-buttons button:hover {
+  color: #000000;
+  background: rgba(0, 166, 153, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 166, 153, 0.15);
+}
+
+.buyer-tab-buttons button.active {
+  background: linear-gradient(135deg, #00a699 0%, #008b7a 100%);
+  box-shadow: 0 8px 24px rgba(0, 166, 153, 0.4);
+  transform: translateY(-2px);
+}
+
+.buyer-tab-buttons button.active::before {
+  opacity: 1;
+}
+
+/* Active button text color should follow the theme's button color; avoid forcing white here */
+
+/* Dark Mode Tab Buttons */
+body.dark .buyer-tab-buttons {
+  background: rgba(26, 26, 26, 0.7);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(240, 240, 240, 0.05);
+}
+
+body.dark .buyer-tab-buttons button {
+  color: #b8b8b8;
+}
+
+body.dark .buyer-tab-buttons button:hover {
+  color: #f0f0f0;
+  background: rgba(240, 240, 240, 0.08);
+}
+
+body.dark .buyer-tab-buttons button.active {
+  background: linear-gradient(135deg, #00a699 0%, #008b7a 100%);
+  /* Match non-active dark button text so active looks consistent */
+  color: #b8b8b8;
+}
+
+/* Higher-specificity rule to override global theme's dark active color */
+body.dark .buyer-dashboard .buyer-tab-buttons button.active {
+  color: #b8b8b8 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   📄 TAB CONTENT - Smooth Transitions
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.buyer-tab-content {
+  animation: fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  padding-right: 8px;
+}
+
+.buyer-tab-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.buyer-tab-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.buyer-tab-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 166, 153, 0.4);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.buyer-tab-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 166, 153, 0.7);
+}
+
+body.dark .buyer-tab-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+body.dark .buyer-tab-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 166, 153, 0.6);
+}
+
+body.dark .buyer-tab-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 166, 153, 0.9);
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   🔳 SECTION CONTAINERS - Modern Card Layout
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.buyer-main section {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(208, 232, 237, 0.5);
+  animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+  margin-bottom: 24px;
+}
+
+.buyer-main section:last-child {
+  margin-bottom: 0;
+}
+
+.buyer-main section:hover {
+  box-shadow: 0 20px 60px rgba(0, 77, 102, 0.12);
+  border-color: rgba(208, 232, 237, 0.8);
+}
+
+/* Dark Mode Section */
+body.dark .buyer-main section {
+  background: rgba(26, 26, 26, 0.85);
+  border-color: rgba(80, 80, 80, 0.6);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(240, 240, 240, 0.05);
+  color: #f0f0f0;
+}
+
+body.dark .buyer-main section:hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(240, 240, 240, 0.08);
+  border-color: rgba(80, 80, 80, 0.8);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   📋 SECTION HEADERS - Beautiful Titles with Icons
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.buyer-main h3 {
+  margin: 0 0 24px 0;
+  color: #004d66;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(0, 166, 153, 0.2);
+  transition: all 0.3s ease;
+}
+
+.buyer-main h3::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(180deg, #00a699 0%, #006676 100%);
+  border-radius: 2px;
+}
+
+body.dark .buyer-main h3 {
+  color: #f0f0f0;
+  border-bottom-color: rgba(0, 166, 153, 0.3);
+}
+
+body.dark .buyer-main h3::before {
+  background: linear-gradient(180deg, #00a699 0%, #008b7a 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   📱 RESPONSIVE LAYOUT - Mobile to Desktop
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .buyer-dashboard {
+    height: calc(100vh - 60px);
+  }
+
+  .buyer-main {
+    padding: 16px 12px;
+    gap: 0;
+  }
+
+  .dashboard-greeting {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .buyer-tab-buttons {
+    padding: 12px 8px;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+  }
+
+  .buyer-tab-buttons button {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
+  .buyer-main section {
+    padding: 20px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
+
+  .buyer-main section:last-child {
+    margin-bottom: 0;
+  }
+
+  .buyer-main h3 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .buyer-main section:hover {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Tablet (481px - 768px) */
+@media (481px <= width <= 768px) {
+  .buyer-main {
+    padding: 24px 20px;
+    gap: 0;
+  }
+
+  .dashboard-greeting {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .buyer-tab-buttons {
+    padding: 14px 12px;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .buyer-tab-buttons button {
+    padding: 9px 18px;
+    font-size: 13px;
+  }
+
+  .buyer-main section {
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+  }
+
+  .buyer-main section:last-child {
+    margin-bottom: 0;
+  }
+
+  .buyer-main h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+}
+
+/* Large Tablet (769px - 1024px) */
+@media (769px <= width <= 1024px) {
+  .buyer-main {
+    padding: 28px 28px;
+    gap: 0;
+  }
+
+  .dashboard-greeting {
+    font-size: 26px;
+    margin-bottom: 18px;
+  }
+
+  .buyer-tab-buttons {
+    padding: 16px 16px;
+    gap: 11px;
+    margin-bottom: 24px;
+  }
+
+  .buyer-tab-buttons button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .buyer-main section {
+    padding: 28px;
+    border-radius: 18px;
+    margin-bottom: 24px;
+  }
+
+  .buyer-main section:last-child {
+    margin-bottom: 0;
+  }
+
+  .buyer-main h3 {
+    font-size: 20px;
+    margin-bottom: 22px;
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  .buyer-main {
+    padding: 32px 36px;
+    gap: 0;
+  }
+
+  .dashboard-greeting {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .buyer-tab-buttons {
+    padding: 16px 20px;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .buyer-tab-buttons button {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+
+  .buyer-main section {
+    padding: 32px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  .buyer-main section:last-child {
+    margin-bottom: 0;
+  }
+
+  .buyer-main h3 {
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ✨ ANIMATION & TRANSITION EFFECTS
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Global smooth transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Prevent transition on transform for performance */
+button, .buyer-tab-buttons button {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   🎨 ADDITIONAL STYLING FOR CONSISTENCY
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Ensure proper stacking and overflow */
+.buyer-dashboard > * {
+  flex-shrink: 0;
+}
+
+.buyer-dashboard > .buyer-main {
+  flex-shrink: 1;
+  min-height: 0;
+}
+

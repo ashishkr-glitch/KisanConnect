@@ -1,0 +1,10 @@
+0000000000000000000000000000000000000000 a5a494c0a0810d73eab0ccf8977a9ebad57e868c ashishkr-glitch <samjauritu@gmail.com> 1764063174 +0530	branch: Created from origin/fix/role-dashboard-manifest-icons
+a5a494c0a0810d73eab0ccf8977a9ebad57e868c bac792ccff520e86fdfaccbdfdbbde661e958748 ashishkr-glitch <samjauritu@gmail.com> 1764063704 +0530	commit: fix(eslint): remove unused vars and add missing hook deps
+bac792ccff520e86fdfaccbdfdbbde661e958748 fd4bc193d0b4fd3682964f245d99a4e87d64f7af ashishkr-glitch <samjauritu@gmail.com> 1764065239 +0530	commit: fix(api/login): skip auth routes in auth header and improve axios error logging
+fd4bc193d0b4fd3682964f245d99a4e87d64f7af 4f6548617cae6f47ec5f23add5066646d9b6558c ashishkr-glitch <samjauritu@gmail.com> 1764065633 +0530	commit: fix(ui): show placeholders for quick stats while crops load to prevent flicker
+4f6548617cae6f47ec5f23add5066646d9b6558c 8dee7eacbfde702ac56e06c6761e6532869144f8 ashishkr-glitch <samjauritu@gmail.com> 1764065765 +0530	commit: chore(ui): add Skeleton component and use it in FarmerDashboard
+8dee7eacbfde702ac56e06c6761e6532869144f8 477260a5c4dfa9b51eed7ecc73b3e0cb40edd501 ashishkr-glitch <samjauritu@gmail.com> 1764163379 +0530	commit: yaha par ab sab mast hai. bus signup page thik karna hai. wo bhi thoda sa theme me.
+477260a5c4dfa9b51eed7ecc73b3e0cb40edd501 362e8e8f0bab978fb85a5b976c66d539d3437d7b ashishkr-glitch <samjauritu@gmail.com> 1764166252 +0530	commit: the best
+362e8e8f0bab978fb85a5b976c66d539d3437d7b 6821458e84da47c50af1a329a247089d0192c4a0 ashishkr-glitch <samjauritu@gmail.com> 1764914601 +0530	commit: ab sab final hai. done
+6821458e84da47c50af1a329a247089d0192c4a0 88099c79341d17442f53cde785501424d9b70ebb ashishkr-glitch <samjauritu@gmail.com> 1765976570 +0530	commit: final
+88099c79341d17442f53cde785501424d9b70ebb d30879ef2cd696134c4cf46da6ab9cd7102a9148 ashishkr-glitch <samjauritu@gmail.com> 1766312112 +0530	commit: git fix kar raha hu, frontend ka.

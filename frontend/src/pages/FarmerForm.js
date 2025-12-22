@@ -1,0 +1,80 @@
+import React, { useState } from "react";
+import api from "../api";
+import useToast from "../hooks/useToast";
+import useRole from "../hooks/useRole";
+import "./FarmerForm.css";
+
+function FarmerForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    location: "",
+    cropType: "",
+    harvestDate: "",
+  });
+
+  const { showToast } = useToast();
+  const { role, loading } = useRole();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post(`/farmers`, formData);
+      showToast("Farmer added successfully!", "success");
+      setFormData({
+        name: "",
+        location: "",
+        cropType: "",
+        harvestDate: "",
+      });
+    } catch (error) {
+      console.error("Error adding farmer:", error);
+      showToast("Error adding farmer. Please try again.", "error");
+    }
+  };
+
+  if (loading) return <p>Checking access...</p>;
+  if (role !== "farmer" && role !== "admin") return <p>Unauthorized access</p>;
+
+  return (
+    <div className="farmer-form-container">
+      <h2>Add Farmer Details</h2>
+      <form onSubmit={handleSubmit} className="farmer-form">
+        <input
+          name="name"
+          placeholder="👤 Farmer Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="location"
+          placeholder="📍 Location"
+          value={formData.location}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="cropType"
+          placeholder="🌱 Crop Type"
+          value={formData.cropType}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="harvestDate"
+          type="date"
+          value={formData.harvestDate}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">Submit Farmer</button>
+      </form>
+    </div>
+  );
+}
+
+export default FarmerForm;

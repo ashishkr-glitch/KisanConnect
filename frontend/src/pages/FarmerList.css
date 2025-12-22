@@ -1,0 +1,49 @@
+.farmer-list {
+  /* Minimal container rules — let global `buyer-list` / dashboardTheme.css provide visual styling */
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 0; /* avoid double-padding; theme applies padding */
+  font-family: "Inter", sans-serif;
+  color: var(--text-color);
+}
+
+.farmer-list h2 {
+  text-align: center;
+  margin: 8px 0 16px 0;
+  color: var(--text-color);
+}
+
+.farmer-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.farmer-list th,
+.farmer-list td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  font-size: 14px;
+}
+
+.farmer-list tr:hover {
+  background-color: var(--hover-bg);
+}
+
+.farmer-list button.danger,
+.farmer-list .danger {
+  padding: 8px 12px !important;
+  background: linear-gradient(135deg, var(--danger-color, #d32f2f) 0%, #e74c3c 100%) !important;
+  color: var(--button-text) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  box-shadow: 0 8px 20px rgba(211, 47, 47, 0.35) !important;
+}
+
+.farmer-list button.danger:hover,
+.farmer-list .danger:hover {
+  box-shadow: 0 12px 30px rgba(211, 47, 47, 0.45) !important;
+  transform: translateY(-2px) !important;
+}

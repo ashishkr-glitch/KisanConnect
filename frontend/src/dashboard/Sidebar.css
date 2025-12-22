@@ -1,0 +1,327 @@
+.sidebar {
+  width: 250px;
+  background-color: var(--bg-color);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  flex: 0 0 250px;
+  height: 80vh;
+  max-height: 80vh;
+  transition: flex-basis 300ms ease, width 300ms ease, padding 300ms ease, box-shadow 300ms ease;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+  margin-top: 0;
+  font-size: 18px;
+  color: var(--text-color);
+}
+
+/* Brand animation for KisanConnect heading - subtle pulse + shimmer */
+.brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 0; */
+  margin: 0;
+  animation: brandPulse 6s ease-in-out infinite;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.2;
+  height: 60px;
+}
+
+/* Logo image wrapper - logo and brand text side by side */
+.brand-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  /* margin-top: 0; */
+  padding: 0;
+  width: 100%;
+  height: auto;
+}
+
+.app-logo {
+  width: 60px;
+  height: 60px;
+  display: block;
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.brand::after {
+  content: '';
+  position: absolute;
+  /* top: 0; */
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0) 100%);
+  transform: skewX(-20deg);
+  animation: brandShimmer 3.2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes brandPulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes brandShimmer {
+  0% { left: -120%; }
+  100% { left: 220%; }
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .brand, .brand::after { animation: none !important; }
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.sidebar nav a {
+  text-decoration: none;
+  color: #34495e;
+  font-weight: 500;
+}
+
+.sidebar nav a:hover {
+  color: #3498db;
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.sidebar-footer button {
+  padding: 10px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 200ms ease;
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: var(--text-color);
+  border-radius: 6px;
+  margin-bottom: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar a.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Collapsed sidebar styles */
+.sidebar.collapsed {
+  width: 70px;
+  padding: 12px 8px;
+}
+
+.sidebar.collapsed h2,
+.sidebar.collapsed .brand {
+  display: none;
+}
+
+.sidebar.collapsed .app-logo {
+  display: none;
+}
+
+.sidebar .label {
+  display: inline-block;
+  transition: opacity 200ms ease;
+}
+
+.sidebar.collapsed .label {
+  display: none;
+}
+
+.sidebar.collapsed a {
+  padding: 10px 8px;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Animated hide: collapse width to zero so main content expands */
+.sidebar.hidden {
+  flex: 0 0 0;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.sidebar.hidden .brand,
+.sidebar.hidden .label,
+.sidebar.hidden nav,
+.sidebar.hidden .sidebar-footer {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📱 RESPONSIVE SIDEBAR - Mobile to Desktop
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    flex: 0 0 100%;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-height: auto;
+    min-height: auto;
+  }
+
+  .sidebar h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar nav {
+    gap: 4px;
+  }
+
+  .sidebar a {
+    padding: 8px 10px;
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .sidebar-footer button {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .sidebar.collapsed {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .sidebar.collapsed h2,
+  .sidebar.collapsed .brand {
+    display: none;
+  }
+
+  .sidebar.collapsed a {
+    padding: 8px 10px;
+  }
+}
+
+/* Tablet (481px - 768px) */
+@media (481px <= width <= 768px) {
+  .sidebar {
+    width: 200px;
+    flex: 0 0 200px;
+    padding: 14px;
+  }
+
+  .sidebar h2 {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .sidebar a {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .sidebar-footer button {
+    padding: 9px;
+    font-size: 13px;
+  }
+
+  .sidebar.collapsed {
+    width: 65px;
+    padding: 10px 6px;
+  }
+}
+
+/* Large Tablet (769px - 1024px) */
+@media (769px <= width <= 1024px) {
+  .sidebar {
+    width: 220px;
+    flex: 0 0 220px;
+    padding: 16px;
+  }
+
+  .sidebar h2 {
+    font-size: 17px;
+  }
+
+  .sidebar a {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .sidebar-footer button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .sidebar.collapsed {
+    width: 70px;
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  .sidebar {
+    width: 250px;
+    flex: 0 0 250px;
+    padding: 16px;
+  }
+
+  .sidebar h2 {
+    font-size: 18px;
+  }
+
+  .sidebar a {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .sidebar-footer button {
+    padding: 10px;
+    font-size: 14px;
+  }
+}

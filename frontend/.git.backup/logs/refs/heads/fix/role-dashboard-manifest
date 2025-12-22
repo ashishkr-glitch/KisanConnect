@@ -1,0 +1,5 @@
+0000000000000000000000000000000000000000 51db6cc6bcaf198e1a27f7c892b226bb20666381 ashishkr-glitch <samjauritu@gmail.com> 1764060648 +0530	branch: Created from HEAD
+51db6cc6bcaf198e1a27f7c892b226bb20666381 99dc205bb5ea9cb7ee1c4e981a259ea692da8ee2 ashishkr-glitch <samjauritu@gmail.com> 1764060649 +0530	commit: chore(frontend): add PWA icons and update manifest; role/login fixes
+99dc205bb5ea9cb7ee1c4e981a259ea692da8ee2 a5a494c0a0810d73eab0ccf8977a9ebad57e868c ashishkr-glitch <samjauritu@gmail.com> 1764060783 +0530	commit: chore(frontend): miscellaneous updates and icon generation
+a5a494c0a0810d73eab0ccf8977a9ebad57e868c e845ab0c07dd53934509c572b6bdd92aa0b5fabb ashishkr-glitch <samjauritu@gmail.com> 1764061935 +0530	commit: fix(eslint): remove unused variables and add missing hook dependencies
+e845ab0c07dd53934509c572b6bdd92aa0b5fabb a899007e6503beec678ce603aa6aa9e98827b84d ashishkr-glitch <samjauritu@gmail.com> 1764061998 +0530	reset: moving to origin/fix/role-dashboard-manifest

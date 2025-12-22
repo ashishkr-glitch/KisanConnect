@@ -1,0 +1,1190 @@
+/* ╔════════════════════════════════════════════════════════════════════════════╗
+  ║         🎨 DASHBOARD THEME CUSTOMIZATION - Universal Theme                 ║
+  ║                                                                            ║
+  ║  Single unified theme for body and all pages (light & dark variants)      ║
+  ║                                                                            ║
+  ║  Light gradient: #97dbe6 → #006676                                         ║
+  ║  Dark: Grayscale / Black & White                                           ║
+  ╚════════════════════════════════════════════════════════════════════════════╝ */
+
+/* Per-dashboard visual blocks removed — using a single universal theme now. */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🎯 GLOBAL THEME VARIABLES - सभी के लिए Base Colors
+   
+   ⚠️ NOTE: यह Global Default Theme है (जब कोई Dashboard Active नहीं है)
+   जब Admin/Farmer/Buyer Dashboard activate हो, तो उनके variables काम करते हैं
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* 🔹 DEFAULT TEXT & BACKGROUND COLORS */
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --text-secondary: #555555;
+  
+  /* 📄 DEFAULT BODY GRADIENT - Light theme gradient */
+  --body-gradient-start: #97dbe6;    /* Light cyan */
+  --body-gradient-end: #006676;      /* Dark teal */
+  
+  /* 🎨 DEFAULT PRIMARY COLORS */
+  --primary-color: #004d66;
+  --primary-light: #00a699;
+  --primary-dark: #003d4d;
+  --secondary-color: #f5f5f5;
+  --accent-color: #0088aa;
+  
+  /* 🎨 DEFAULT STATUS COLORS */
+  --danger-color: #d32f2f;
+  --success-color: #388e3c;
+  --warning-color: #f57c00;
+  
+  /* 🟦 DEFAULT HEADER */
+  --header-gradient-start: #ffffff;
+  --header-gradient-end: #f5f7fa;
+  
+  /* 🟢 DEFAULT SIDEBAR */
+  --sidebar-gradient-start: rgba(0, 166, 153, 0.08);
+  --sidebar-gradient-end: rgba(0, 70, 102, 0.08);
+  --sidebar-text: #1a1a1a;
+  
+  /* 🖼️ DEFAULT CONTAINER COLORS */
+  --modal-bg: #ffffff;
+  --card-bg: #ffffff;
+  --table-bg: #f9f9f9;
+  --border-color: #d0e8ed;
+  --hover-bg: #e8f7eb;
+  --button-text: #ffffff;
+  /* Table header text defaults (can be theme-overridden) */
+  --table-header-text: #ffffff;
+  --table-header-text-hover: #ffffff;
+  
+  /* 🔧 SIDEBAR GLASS EFFECT */
+  --sidebar-glass-opacity: 0.12;
+  --sidebar-glass-blur: 8px;
+}
+
+body.light {
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --text-secondary: #555555;
+  
+  /* 📄 UNIVERSAL LIGHT THEME GRADIENT - सभी pages के लिए */
+  --body-gradient-start: #97dbe6;    /* Light cyan/turquoise */
+  --body-gradient-end: #006676;      /* Dark teal */
+  
+  /* 🎨 PRIMARY & ACCENT COLORS - Light mode के लिए best colors */
+  --primary-color: #004d66;          /* Dark teal for buttons/accents */
+  --primary-light: #00a699;          /* Medium teal for hover states */
+  --primary-dark: #003d4d;           /* Very dark teal for active states */
+  --secondary-color: #f5f5f5;        /* Light gray for secondary elements */
+  --accent-color: #0088aa;           /* Bright teal for highlights */
+  
+  /* 🎨 STATUS COLORS - Light mode safe palette */
+  --danger-color: #d32f2f;           /* Bright red for errors */
+  --success-color: #388e3c;          /* Green for success */
+  --warning-color: #f57c00;          /* Orange for warnings */
+  
+  /* 🟦 LIGHT THEME: HEADER - सफेद background के साथ */
+  --header-gradient-start: #ffffff;
+  --header-gradient-end: #f5f7fa;
+  
+  /* 🟢 LIGHT THEME: SIDEBAR - थोड़ा पारदर्शी gradient के साथ */
+  --sidebar-gradient-start: rgba(0, 166, 153, 0.08);
+  --sidebar-gradient-end: rgba(0, 70, 102, 0.08);
+  --sidebar-text: #004d66;                /* Dark teal text for light theme */
+  
+  /* 🖼️ CONTAINER COLORS */
+  --modal-bg: #ffffff;
+  --card-bg: #ffffff;
+  --table-bg: #f9f9f9;
+  --border-color: #d0e8ed;           /* Light teal border */
+  --hover-bg: #e8f4f7;               /* Very light teal hover */
+  --button-text: #ffffff;
+  /* Table header text in light mode (header uses gradient so text stays white)
+     but when header background becomes light on hover we want dark text for contrast */
+  --table-header-text: #ffffff;
+  --table-header-text-hover: #003d4d; /* dark teal on hover for readability */
+}
+
+body.dark {
+  /* 🌙 GRAYSCALE / BLACK & WHITE DARK THEME */
+  --bg-color: #0a0a0a;
+  --text-color: #f0f0f0;             /* Bright white text - high contrast */
+  --text-secondary: #b8b8b8;         /* Bright gray secondary text */
+  
+  /* 🎨 PRIMARY & ACCENT COLORS - Dark mode grayscale palette */
+  --primary-color: #f0f0f0;          /* Bright white for accents/buttons */
+  --primary-light: #ffffff;          /* Pure white for hover states */
+  --primary-dark: #c0c0c0;           /* Medium gray for active states */
+  --secondary-color: #1a1a1a;        /* Very dark gray for secondary */
+  --accent-color: #e0e0e0;           /* Brighter gray for highlights */
+  
+  /* 🎨 STATUS COLORS - Dark mode safe (high contrast) */
+  --danger-color: #ff6b6b;           /* Bright red for visibility */
+  --success-color: #7ddb5f;          /* Bright green for visibility */
+  --warning-color: #ffb84d;          /* Bright orange for visibility */
+  
+  /* 🌙 DARK THEME: HEADER - गहरा background */
+  --header-gradient-start: #0f0f0f;
+  --header-gradient-end: #1a1a1a;
+  
+  /* 🌙 DARK THEME: SIDEBAR - गहरा grayscale gradient */
+  --sidebar-gradient-start: #0a0a0a;
+  --sidebar-gradient-end: #1f1f1f;
+  --sidebar-text: #f0f0f0;                /* Light text for dark sidebar */
+  
+  /* 📄 DARK THEME: BODY GRADIENT - Pure black to dark gray */
+  --body-gradient-start: #0a0a0a;    /* Near black */
+  --body-gradient-end: #141414;      /* Very dark gray */
+  
+  /* 🖼️ CONTAINER COLORS - Dark mode */
+  --modal-bg: #0f0f0f;
+  --card-bg: #1a1a1a;
+  --table-bg: #0f0f0f;
+  --border-color: #333333;           /* Dark gray border */
+  --hover-bg: #252525;               /* Slightly lighter gray hover */
+  --button-text: #0a0a0a;            /* Black text on white buttons */
+  --table-header-text: #f0f0f0;
+  --table-header-text-hover: #f0f0f0;
+}
+
+/* Ensure danger / red buttons use readable text color in dark mode */
+body.dark .btn-danger,
+body.dark .button-danger,
+body.dark button.danger {
+  color: var(--button-text) !important;
+  background: var(--danger-color) !important;
+}
+
+/* Dark-mode button visuals - apply to dashboard, sidebar and UI buttons */
+body.dark button,
+body.dark .btn,
+body.dark .button,
+body.dark .buyer-tab-buttons button,
+body.dark .sidebar-footer button,
+body.dark .sidebar a {
+  background: #000000;           /* solid black background */
+  color: #ffffff !important;     /* white text */
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 6px 30px rgba(0, 150, 255, 0.07), inset 0 0 8px rgba(255,255,255,0.02);
+  border-radius: 10px;
+  transition: transform 200ms ease, box-shadow 220ms ease, border-color 180ms ease;
+}
+
+/* Strong glowing border for focus and hover to make buttons stand out */
+body.dark button:focus,
+body.dark .btn:focus,
+body.dark .buyer-tab-buttons button:focus,
+body.dark .sidebar-footer button:focus,
+body.dark .sidebar a:focus {
+  outline: none;
+  border-color: rgba(178, 236, 70, 0.6);
+  box-shadow: 0 8px 32px rgba(0,200,255,0.18), 0 0 12px rgba(0,200,255,0.18);
+  transform: translateY(-2px);
+}
+
+/* Unique hover effect: subtle lift + animated glow */
+body.dark button:hover,
+body.dark .btn:hover,
+body.dark .buyer-tab-buttons button:hover,
+body.dark .sidebar-footer button:hover,
+body.dark .sidebar a:hover {
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(0,200,255,0.28);
+  box-shadow: 0 12px 36px rgba(0,150,255,0.12), 0 0 18px rgba(0,200,255,0.06);
+  color: #000000 !important;
+}
+
+/* Make pill/tab active state more visible in dark mode */
+body.dark .buyer-tab-buttons button.active {
+  background: linear-gradient(180deg,#111111,#0a0a0a);
+  color: #000000 !important;
+  border-color: rgba(0,200,255,0.18);
+  box-shadow: 0 8px 28px rgba(0,200,255,0.08);
+}
+
+/* 📄 BODY - पूरे पेज पर ऊपर से नीचे GRADIENT */
+body {
+  background: linear-gradient(180deg, var(--body-gradient-start), var(--body-gradient-end));
+  color: var(--text-color, #1a1a1a);
+  transition: background 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+/* 🟦 HEADER - ऊपर से नीचे GRADIENT */
+.header {
+  background: linear-gradient(180deg, var(--header-gradient-start), var(--header-gradient-end));
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 🟢 SIDEBAR - Glassy + Gradient (glass overlay keeps content readable)
+   - Uses a ::before overlay with the dashboard gradient and controlled opacity
+   - Backdrop blur provides the glass effect without forcing children opacity
+*/
+.sidebar {
+  position: relative;
+  overflow: hidden;
+  width: 240px;
+  min-height: 100vh;
+  padding: 20px;
+  /* subtle base color (helps when backdrop-filter unsupported) */
+  background-color: rgba(255,255,255,0.03);
+  border-right: 1px solid rgba(0,0,0,0.06);
+  --primary-dark: #0b7a53;
+  z-index: 10;
+}
+
+.sidebar::before {
+  content: "";
+  --primary-dark: #0b7a53;
+  position: absolute;
+  inset: 0;
+  /* Use the dashboard gradient but make it translucent for glass effect */
+  background: linear-gradient(90deg, var(--sidebar-gradient-start), var(--sidebar-gradient-end));
+  opacity: var(--sidebar-glass-opacity, 0.12);
+  pointer-events: none;
+  /* blur the backdrop (works when element is semi-transparent) */
+  -webkit-backdrop-filter: blur(var(--sidebar-glass-blur, 8px));
+  backdrop-filter: blur(var(--sidebar-glass-blur, 8px));
+  --primary-dark: #6e5a39;
+}
+
+.sidebar nav a {
+  position: relative; /* keep above overlay */
+  color: var(--sidebar-text);
+  display: block;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  transition: all 0.3s ease;
+}
+
+.sidebar nav a:hover {
+  background-color: rgba(255,255,255,0.08);
+  color: var(--primary-color);
+}
+
+.sidebar nav a.active {
+  background-color: var(--primary-light);
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+body.dark .sidebar nav a {
+  color: #1a1a1a;                         /* Dark text in dark sidebar */
+}
+
+body.dark .sidebar nav a:hover {
+  background-color: rgba(200, 200, 200, 0.15);
+  color: #0f0f0f;
+}
+
+body.dark .sidebar nav a.active {
+  background-color: #b8b8b8;
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+/* Ensure active sidebar option text (and any child icons) is pure black in dark mode
+   so the creamy active background reads correctly. Higher specificity + !important
+   avoids theme-level overrides. */
+body.dark .sidebar nav a.active,
+body.dark .sidebar nav a.active * {
+  color: #000000 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🎨 BUTTONS - Modern glassmorphic buttons with smooth animations
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+button {
+  background: linear-gradient(135deg, var(--primary-color, #004d66) 0%, var(--primary-light, #00a699) 100%);
+  color: var(--button-text, #ffffff);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 28px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-weight: 600;
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 77, 102, 0.25);
+  backdrop-filter: blur(10px);
+  letter-spacing: 0.5px;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+button:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 166, 153, 0.4);
+}
+
+button:active {
+  transform: translateY(-1px) scale(0.97);
+  box-shadow: 0 4px 12px rgba(0, 77, 102, 0.2);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button.primary, button[type="submit"] {
+  background: linear-gradient(135deg, var(--primary-color, #004d66) 0%, var(--primary-light, #00a699) 100%);
+}
+
+button.danger {
+  background: linear-gradient(135deg, var(--danger-color, #d32f2f) 0%, #e74c3c 100%);
+  box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3);
+}
+
+button.danger:hover {
+  box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+}
+
+/* ===== Legacy/Delete button aliases =====
+   Unify different class names used across the app so all
+   delete/danger buttons look identical (gradient + shadow).
+   Using !important to ensure inline/legacy CSS doesn't win. */
+.btn-danger, .btn-delete, .danger, button.danger {
+  background: linear-gradient(135deg, var(--danger-color, #d32f2f) 0%, #e74c3c 100%) !important;
+  box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3) !important;
+  color: var(--button-text, #ffffff) !important;
+  border: none !important;
+}
+
+.btn-danger:hover, .btn-delete:hover, .danger:hover, button.danger:hover {
+  box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4) !important;
+}
+
+/* Dark mode aliases */
+body.dark .btn-danger,
+body.dark .btn-delete,
+body.dark .danger,
+body.dark button.danger {
+  color: var(--button-text) !important;
+  background: var(--danger-color) !important;
+}
+
+button.secondary {
+  background-color: transparent;
+  color: var(--primary-color, #004d66);
+  border: 2px solid var(--primary-color, #004d66);
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 77, 102, 0.1);
+}
+
+button.secondary:hover {
+  background-color: rgba(0, 77, 102, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 77, 102, 0.2);
+}
+
+button.success {
+  background: linear-gradient(135deg, var(--success-color, #388e3c) 0%, #4caf50 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📦 CARDS & CONTAINERS - Modern glassmorphism design
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(208, 232, 237, 0.5);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  box-shadow: 0 16px 48px rgba(0, 77, 102, 0.15);
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.97);
+  border-color: rgba(208, 232, 237, 0.8);
+}
+
+body.dark .card {
+  background: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(80, 80, 80, 0.6);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(240, 240, 240, 0.05);
+  color: #f0f0f0;
+}
+
+body.dark .card:hover {
+  background: rgba(26, 26, 26, 0.9);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 30px rgba(240, 240, 240, 0.08);
+  border-color: rgba(80, 80, 80, 0.8);
+  color: #f0f0f0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📋 FORMS & INPUTS - Modern glassmorphic forms
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+input, textarea, select {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-color, #1a1a1a);
+  border: 2px solid var(--border-color, #d0e8ed);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+input:hover, textarea:hover, select:hover {
+  border-color: var(--primary-light, #00a699);
+  box-shadow: 0 6px 20px rgba(0, 166, 153, 0.15);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color, #004d66);
+  box-shadow: 0 0 0 4px rgba(0, 166, 153, 0.15), 0 8px 25px rgba(0, 77, 102, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+body.dark input, body.dark textarea, body.dark select {
+  background: rgba(15, 15, 15, 0.8);
+  border-color: rgba(80, 80, 80, 0.6);
+  color: #f0f0f0;
+}
+
+body.dark input:focus, body.dark textarea:focus, body.dark select:focus {
+  background: rgba(15, 15, 15, 0.9);
+  border-color: #b8b8b8;
+  box-shadow: 0 0 0 4px rgba(240, 240, 240, 0.12), 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(240, 240, 240, 0.1);
+  color: #f0f0f0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📊 TABLES - Modern table styling with smooth interactions
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+table {
+  background: transparent;
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+table thead {
+  background: linear-gradient(135deg, var(--primary-color, #004d66) 0%, var(--primary-light, #00a699) 100%);
+  box-shadow: 0 4px 15px rgba(0, 77, 102, 0.2);
+}
+
+body.dark table thead {
+  background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 20px rgba(240, 240, 240, 0.1);
+}
+
+body.dark table th {
+  color: #f0f0f0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+table th {
+  color: white;
+  padding: 16px;
+  text-align: left;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-size: 13px;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+
+/* Ensure header text remains readable on hover or if parent background changes
+   Set hover color using theme-aware variable. Use !important to override any
+   accidental inline or third-party rules that set color to white on hover. */
+table thead th:hover,
+table thead:hover th {
+  color: var(--table-header-text-hover) !important;
+}
+
+table tbody {
+  background: transparent;
+}
+
+table tbody tr {
+  border-bottom: 1px solid var(--border-color, #d0e8ed);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #f5f0eb;              /* Warm beige/cream color */
+  backdrop-filter: blur(10px);
+  color: #1a1a1a;
+}
+
+table tbody tr:hover {
+  background: #ede5dc;              /* Slightly darker warm tone */
+  transform: scale(1.01);
+  box-shadow: inset 0 0 20px rgba(0, 166, 153, 0.08);
+}
+
+table tbody td {
+  padding: 14px 16px;
+  color: var(--text-color, #1a1a1a);
+  font-weight: 500;
+}
+
+/* Match buyer list rows to farmer list: slightly tighter rows for compact tables */
+.buyer-list th,
+.buyer-list td,
+.buyer-list table th,
+.buyer-list table td {
+  padding: 12px !important;
+  font-size: 14px !important;
+}
+
+.buyer-list tr:hover,
+.buyer-list table tr:hover {
+  background-color: var(--hover-bg) !important;
+}
+
+body.dark table tbody {
+  background: transparent;
+}
+
+body.dark table tbody tr {
+  background: #1f1f1f;              /* Comfortable dark gray - not pure black */
+  border-bottom-color: rgba(80, 80, 80, 0.6);
+  color: #f0f0f0;
+}
+
+body.dark table tbody tr:hover {
+  background: #2a2a2a;              /* Slightly lighter gray on hover */
+  box-shadow: inset 0 0 20px rgba(240, 240, 240, 0.05);
+  color: #f0f0f0;
+}
+
+body.dark table tbody td {
+  color: #f0f0f0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🔔 NOTIFICATIONS & ALERTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.notification, .alert {
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 8px 0;
+}
+
+.notification.success, .alert.success {
+  background: var(--success-color, #388e3c);
+  color: white;
+}
+
+.notification.warning, .alert.warning {
+  background: var(--warning-color, #f57c00);
+  color: white;
+}
+
+.notification.error, .alert.error {
+  background: var(--danger-color, #d32f2f);
+  color: white;
+}
+
+.notification.info, .alert.info {
+  background: var(--primary-color, #1976d2);
+  color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🖼️ MODALS - Glassmorphic modal dialogs with animations
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-box, .modal {
+  position: relative;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text-color, #1a1a1a);
+  border: 1px solid rgba(208, 232, 237, 0.5);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 0;
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, rgba(0, 77, 102, 0.05) 0%, rgba(0, 166, 153, 0.05) 100%);
+  padding: 24px;
+  border-bottom: 1px solid rgba(208, 232, 237, 0.3);
+  border-radius: 20px 20px 0 0;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-footer {
+  padding: 20px 24px;
+  border-top: 1px solid rgba(208, 232, 237, 0.3);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+body.dark .modal-box, body.dark .modal {
+  background: rgba(26, 26, 26, 0.95);
+  border-color: rgba(80, 80, 80, 0.7);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(240, 240, 240, 0.08);
+  color: #f0f0f0;
+}
+
+body.dark .modal-header {
+  background: rgba(26, 26, 26, 0.6);
+  border-bottom-color: rgba(80, 80, 80, 0.5);
+  color: #f0f0f0;
+}
+
+body.dark .modal-footer {
+  background: rgba(26, 26, 26, 0.6);
+  border-top-color: rgba(80, 80, 80, 0.5);
+  color: #f0f0f0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📝 TOAST MESSAGES - Modern glassmorphic notifications
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.toast {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text-color, #1a1a1a);
+  border: 1px solid rgba(208, 232, 237, 0.5);
+  border-left: 4px solid var(--primary-color, #004d66);
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 450px;
+}
+
+.toast.success {
+  border-left-color: var(--success-color, #388e3c);
+  background: rgba(56, 142, 60, 0.1);
+  border-color: rgba(56, 142, 60, 0.3);
+}
+
+.toast.error {
+  border-left-color: var(--danger-color, #d32f2f);
+  background: rgba(211, 47, 47, 0.1);
+  border-color: rgba(211, 47, 47, 0.3);
+}
+
+.toast.warning {
+  border-left-color: var(--warning-color, #f57c00);
+  background: rgba(245, 124, 0, 0.1);
+  border-color: rgba(245, 124, 0, 0.3);
+}
+
+body.dark .toast {
+  background: rgba(26, 26, 26, 0.95);
+  border-color: rgba(80, 80, 80, 0.6);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(240, 240, 240, 0.08);
+  color: #f0f0f0;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ✅ GLOBAL ELEMENT STYLING - सभी Global Elements
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+* {
+  color: var(--text-color);
+}
+
+/* ✅ Links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+/* ✅ Text Variants */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+/* ✅ Form Labels */
+label {
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+/* ✅ Stats Cards */
+.stat-card {
+  background-color: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #d0e8ed);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Cards and Containers */
+.card, section, .crop-list, .farmer-list, .buyer-list, .dashboard {
+  background-color: var(--card-bg, #ffffff);
+  color: var(--text-color);
+  border: 1px solid var(--border-color, #d0e8ed);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ⚡ SMOOTH ANIMATION KEYFRAMES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes buttonPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(46, 204, 113, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+  }
+}
+
+@keyframes buttonSlide {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Brand animated chars - staggered rotate on hover (Lando-style inspired) */
+.brand-anim {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  perspective: 700px;
+  -webkit-font-smoothing: antialiased;
+}
+.brand-anim .char {
+  display: inline-block;
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 420ms cubic-bezier(.2,.9,.2,1), color 220ms ease;
+  transition-delay: calc(var(--i, 0) * 0.03s);
+  will-change: transform;
+}
+.brand-anim:hover .char { transform: rotateX(18deg) translateY(-2px); color: var(--primary-color); }
+.brand-anim:hover .char:nth-child(even) { transform: rotateX(-18deg) translateY(-2px); }
+
+/* small visual polish: reduce motion if user prefers */
+@media (prefers-reduced-motion: reduce) {
+  .brand-anim .char { transition: none !important; }
+  .brand-anim:hover .char { transform: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   📱 COMPREHENSIVE RESPONSIVE MEDIA QUERIES - Mobile First
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ┌─ MOBILE PHONES (320px - 480px) ─────────────────────────────────────────┐ */
+@media (max-width: 480px) {
+  :root {
+    font-size: 14px;
+  }
+
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 12px 0 8px 0;
+  }
+
+  h1 { font-size: 20px; }
+  h2 { font-size: 18px; }
+  h3 { font-size: 16px; }
+  h4 { font-size: 15px; }
+
+  /* Cards and containers */
+  .card, section, .crop-list, .farmer-list, .buyer-list, .dashboard {
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+  }
+
+  /* Stat cards */
+  .stat-card {
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+
+  /* Forms */
+  input, select, textarea {
+    padding: 8px;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  /* Buttons */
+  button {
+    padding: 8px 12px;
+    font-size: 12px;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  /* Tables - Horizontal scroll for mobile */
+  table {
+    font-size: 11px;
+    margin-top: 8px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  thead {
+    display: block;
+  }
+
+  tbody {
+    display: block;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  th, td {
+    padding: 6px 8px;
+    border: 1px solid var(--border-color);
+  }
+
+  tr {
+    display: block;
+    margin-bottom: 8px;
+    border: 1px solid var(--border-color);
+  }
+
+  /* Forms and inputs stack vertically */
+  .form-group, .input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+
+  label {
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+}
+/* └────────────────────────────────────────────────────────────────────────────┘ */
+
+/* ┌─ SMALL TABLETS (481px - 768px) ────────────────────────────────────────┐ */
+@media (481px <= width <= 768px) {
+  :root {
+    font-size: 15px;
+  }
+
+  body {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  h1 { font-size: 22px; }
+  h2 { font-size: 20px; }
+  h3 { font-size: 17px; }
+  h4 { font-size: 16px; }
+
+  /* Cards and containers */
+  .card, section, .crop-list, .farmer-list, .buyer-list, .dashboard {
+    padding: 14px;
+    margin-bottom: 14px;
+    border-radius: 7px;
+  }
+
+  /* Stat cards */
+  .stat-card {
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  /* Forms */
+  input, select, textarea {
+    padding: 9px;
+    font-size: 14px;
+    margin-bottom: 11px;
+  }
+
+  /* Buttons */
+  button {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+
+  /* Tables */
+  table {
+    font-size: 12px;
+    margin-top: 12px;
+  }
+
+  th, td {
+    padding: 8px 10px;
+  }
+
+  /* Flex layouts */
+  .flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+/* └────────────────────────────────────────────────────────────────────────────┘ */
+
+/* ┌─ LARGE TABLETS & SMALL DESKTOPS (769px - 1024px) ───────────────────────┐ */
+@media (769px <= width <= 1024px) {
+  :root {
+    font-size: 15px;
+  }
+
+  body {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  h1 { font-size: 24px; }
+  h2 { font-size: 21px; }
+  h3 { font-size: 18px; }
+  h4 { font-size: 17px; }
+
+  /* Cards and containers */
+  .card, section, .crop-list, .farmer-list, .buyer-list, .dashboard {
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+  }
+
+  /* Stat cards */
+  .stat-card {
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  /* Forms */
+  input, select, textarea {
+    padding: 10px;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  /* Buttons */
+  button {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  /* Tables */
+  table {
+    font-size: 13px;
+    margin-top: 15px;
+  }
+
+  th, td {
+    padding: 10px 12px;
+  }
+
+  /* Flex layouts */
+  .flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+/* └────────────────────────────────────────────────────────────────────────────┘ */
+
+/* ┌─ LARGE DESKTOPS (1025px+) ───────────────────────────────────────────────┐ */
+@media (min-width: 1025px) {
+  :root {
+    font-size: 16px;
+  }
+
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  h1 { font-size: 28px; }
+  h2 { font-size: 24px; }
+  h3 { font-size: 20px; }
+  h4 { font-size: 18px; }
+
+  /* Cards and containers */
+  .card, section, .crop-list, .farmer-list, .buyer-list, .dashboard {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+
+  /* Stat cards */
+  .stat-card {
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  /* Forms */
+  input, select, textarea {
+    padding: 10px;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  /* Buttons */
+  button {
+    padding: 10px 16px;
+    font-size: 15px;
+  }
+
+  /* Tables */
+  table {
+    font-size: 14px;
+    margin-top: 20px;
+  }
+
+  th, td {
+    padding: 12px;
+  }
+
+  /* Flex layouts */
+  .flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+/* └────────────────────────────────────────────────────────────────────────────┘ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   🎯 FINAL NOTE - सभी कुछ यहीं है!
+   ═══════════════════════════════════════════════════════════════════════════
+   
+   यह एक COMPREHENSIVE & UNIFIED THEME FILE है। यहाँ से customize कर सकते हो:
+   
+   ✅ Admin, Farmer, Buyer dashboards - TEENO के अलग अलग रंग
+   ✅ Header, Sidebar, Body gradients - Global layouts
+   ✅ Buttons, Cards, Forms, Tables - सभी components
+   ✅ Notifications, Modals, Toasts - Popups & alerts
+   ✅ Animations, Hover effects - User interactions
+   ✅ Light & Dark modes - Theme variants
+   ✅ 📱 RESPONSIVE - Mobile, Tablet, Desktop - सभी screens पर perfect!
+   
+   🎯 SINGLE FILE से EVERYTHING CUSTOMIZE होता है!
+   बस COLOR CODES बदलो और सब कुछ काम कर जाएगा!
+   
+   ═══════════════════════════════════════════════════════════════════════════ */
+

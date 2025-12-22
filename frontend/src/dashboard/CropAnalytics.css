@@ -1,0 +1,179 @@
+.crop-analytics {
+  padding: 40px;
+  font-family: "Inter", sans-serif;
+  color: var(--text-color);
+}
+
+.crop-analytics h2 {
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.crop-analytics h4 {
+  color: var(--text-color);
+  margin-bottom: 12px;
+}
+
+.crop-analytics p {
+  color: var(--text-color);
+}
+
+.charts {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.chart-box {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* KPI boxes styling */
+.kpi-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.kpi-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .kpi-box {
+  background: #1a1a1a;
+  border-color: rgba(80, 80, 80, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.kpi-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+}
+
+body.dark .kpi-value {
+  color: #97dbe6;
+}
+
+.kpi-label {
+  font-size: 12px;
+  color: var(--text-secondary, #666666);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+body.dark .kpi-label {
+  color: #b8b8b8;
+}
+
+/* Progress bar styling */
+.progress {
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+body.dark .progress {
+  background: rgba(80, 80, 80, 0.5);
+}
+
+.progress .fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  transition: width 0.3s ease;
+}
+
+/* Farm table styling */
+.farm-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+body.dark .farm-table {
+  background: #1a1a1a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.farm-table thead {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+}
+
+body.dark .farm-table thead {
+  background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+  color: #f0f0f0;
+}
+
+.farm-table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.farm-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+body.dark .farm-table td {
+  border-bottom-color: rgba(80, 80, 80, 0.6);
+}
+
+.farm-table tbody tr:hover {
+  background: var(--hover-bg);
+}
+
+body.dark .farm-table tbody tr:hover {
+  background: rgba(240, 240, 240, 0.05);
+}
+
+/* Chart.js dark mode styling */
+body.dark .crop-analytics canvas {
+  filter: brightness(0.95);
+}
+
+/* Chart legend and tooltip text color override for dark mode */
+body.dark .chartjs-legend {
+  color: #f0f0f0 !important;
+}
+
+body.dark .chartjs-legend li {
+  color: #f0f0f0 !important;
+}
+
+body.dark .chartjs-tooltip {
+  color: #f0f0f0 !important;
+}
+
+/* Ensure all text in chart containers is visible */
+body.dark .crop-analytics .chart-box canvas {
+  filter: invert(0.15);
+}
+
+/* Remove underline from button links */
+.crop-analytics .btn {
+  text-decoration: none !important;
+}
+
+.crop-analytics .btn:hover {
+  text-decoration: none !important;
+}
