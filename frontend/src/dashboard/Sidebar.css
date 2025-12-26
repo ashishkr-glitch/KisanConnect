@@ -108,10 +108,67 @@
   text-decoration: none;
   color: #34495e;
   font-weight: 500;
+  position: relative;
+  padding-left: 12px;
 }
 
+.sidebar nav a {
+  overflow: visible;
+  transition: transform 180ms ease, box-shadow 200ms ease, background-color 180ms ease, border-color 180ms ease, color 160ms ease;
+}
+
+/* Variant 5: sliding color bar + soft inner shadow */
+.sidebar nav a {
+  overflow: hidden;
+  transition: transform 200ms ease, box-shadow 200ms ease, background-color 180ms ease, color 160ms ease;
+}
+.sidebar nav a::before {
+  /* sliding vertical color bar that enters from left */
+  content: '';
+  position: absolute;
+  left: -14px;
+  top: 8px;
+  bottom: 8px;
+  width: 8px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, var(--primary-light, #00a699), var(--primary-color, #004d66));
+  transform: translateX(-110%);
+  transition: transform 260ms cubic-bezier(.2,.8,.2,1), opacity 200ms ease;
+  box-shadow: 0 6px 18px rgba(0,166,153,0.06);
+  opacity: 0.95;
+}
+.sidebar nav a:hover::before {
+  transform: translateX(6px);
+}
+
+.sidebar nav a::after {
+  /* subtle inner shadow/highlight to give depth */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  pointer-events: none;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.04);
+  opacity: 0;
+  transition: opacity 220ms ease, box-shadow 220ms ease;
+}
+.sidebar nav a:hover::after {
+  opacity: 1;
+  box-shadow: inset 0 4px 18px rgba(0,0,0,0.06);
+}
+
+/* Slight lift and tint on hover */
 .sidebar nav a:hover {
-  color: #3498db;
+  transform: translateY(-2px);
+  background: rgba(0,166,153,0.03);
+}
+
+/* Icon coloring on hover */
+.sidebar nav a:hover svg,
+.sidebar nav a:hover .icon {
+  color: var(--primary-color) !important;
+  fill: var(--primary-color) !important;
+  stroke: var(--primary-color) !important;
 }
 
 .sidebar-footer {
@@ -121,15 +178,108 @@
   margin-top: 16px;
 }
 
-.sidebar-footer button {
+
+/* Footer buttons (Logout, Let it snow) - unified styling */
+.sidebar-footer .footer-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 10px;
   border: none;
   background-color: var(--primary-color);
-  color: white;
-  border-radius: 6px;
+  color: var(--button-text, #ffffff);
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 200ms ease;
+  transition: background-color 160ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+.sidebar-footer .footer-btn:hover {
+  background-color: var(--primary-dark, #003d4d);
+  transform: translateY(-2px);
+}
+.sidebar-footer .footer-btn:focus { outline: none; }
+.sidebar-footer .footer-btn .label {
+  display: inline-block;
+}
+
+/* Snow toggle styling: placed above logout and matches sidebar buttons */
+.sidebar-footer .snow-toggle { }
+.sidebar-footer .snow-toggle svg { font-size: 16px; }
+
+/* Active/enabled visual state */
+.sidebar-footer .snow-toggle.enabled {
+  background: linear-gradient(90deg, var(--primary-light, #00a699), var(--primary-color, #004d66));
+  color: var(--button-text, #ffffff);
+  box-shadow: 0 8px 28px rgba(0,77,102,0.18);
+}
+.sidebar-footer .snow-toggle.enabled svg { color: var(--button-text, #ffffff); }
+
+/* Light theme: ensure footer buttons have black text and a subtle glow on hover */
+body.light .sidebar .footer-btn {
+  color: #000000;
+  background-color: var(--primary-light, #00a699);
+}
+body.light .sidebar .footer-btn:hover {
+  box-shadow: 0 8px 30px rgba(0,166,153,0.18);
+  background-color: var(--primary-color, #004d66);
+  color: #ffffff;
+}
+
+/* Light theme: keep hover subtle for Variant 4 */
+body.light .sidebar nav a:hover {
+  color: var(--text-color);
+  background: rgba(0,166,153,0.06);
+}
+
+/* Snow button hover specifics: ensure readable text colors per theme */
+body.light .sidebar .snow-toggle:hover,
+body.light .sidebar .footer-btn.snow-toggle:hover {
+  color: #ffffff; /* white text on hover in light theme */
+}
+
+/* Force SVG/icon color to white on hover in light theme */
+body.light .sidebar .footer-btn.snow-toggle:hover svg,
+body.light .sidebar .footer-btn.snow-toggle:hover svg * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+body.dark .sidebar .snow-toggle:hover,
+body.dark .sidebar .footer-btn.snow-toggle:hover {
+  color: #000000; /* black text on hover in dark theme */
+}
+
+/* Stronger specificity to override other theme hover rules */
+body.light .sidebar .footer-btn.snow-toggle:hover,
+body.light .sidebar .footer-btn.snow-toggle:hover .label,
+body.light .sidebar .footer-btn.snow-toggle:hover svg {
+  color: #ffffff !important;
+}
+
+body.dark .sidebar .footer-btn.snow-toggle:hover,
+body.dark .sidebar .footer-btn.snow-toggle:hover .label,
+body.dark .sidebar .footer-btn.snow-toggle:hover,
+body.dark .sidebar .footer-btn.snow-toggle:hover .label,
+body.dark .sidebar .footer-btn.snow-toggle:hover svg,
+body.dark .sidebar .footer-btn.snow-toggle:hover svg * {
+  color: #000000 !important;
+  fill: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Dark theme: keep both buttons visually identical and readable (avoid white-on-white mix) */
+body.dark .sidebar .footer-btn,
+body.dark .sidebar .snow-toggle.enabled {
+  background: rgba(255,255,255,0.06);
+  color: #ffffff;
+  box-shadow: none;
+}
+body.dark .sidebar .footer-btn:hover,
+body.dark .sidebar .snow-toggle.enabled:hover {
+  box-shadow: 0 8px 30px rgba(255,255,255,0.06);
+  transform: translateY(-2px);
 }
 
 .sidebar a {

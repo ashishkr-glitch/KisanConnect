@@ -15,6 +15,7 @@ import Margdarshak from "./pages/Margdarshak";
 import CompleteProfile from "./pages/CompleteProfile";
 import Documentation from "./pages/Documentation";
 import UIShowcase from "./pages/UIShowcase";
+import SnowControl from "./pages/SnowControl";
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
 import Layout from "./layout/Layout";
@@ -92,6 +93,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/documentation" element={<Documentation />} />
+      <Route path="/snow-control" element={<SnowControl />} />
       <Route path="/ui-showcase" element={<UIShowcase />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/complete-profile" element={<CompleteProfile />} />

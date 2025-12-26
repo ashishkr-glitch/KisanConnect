@@ -202,9 +202,15 @@ body.dark .login-container::before {
   padding: 12px;
   margin-bottom: 16px;
   border: 1px solid var(--border-color, #ddd);
-  border-radius: 8px;
+  border-radius: 20px;
   font-size: 15px;
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Ensure specific email/password inputs also have 20px radius */
+.login-container input[type="email"],
+.login-container input[type="password"] {
+  border-radius: 20px;
 }
 
 .login-container input:focus {
@@ -218,12 +224,16 @@ body.dark .login-container::before {
   background: linear-gradient(135deg, var(--primary-color, #2980b9) 0%, var(--primary-light, #00a699) 100%);
   color: var(--button-text, #ffffff);
   border: none;
-  border-radius: 8px;
+  border-radius: 20px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
+
+/* Logo above form */
+/* auth-logo removed from markup; keep class available if used elsewhere */
+.auth-logo { display: none; }
 
 .login-container button:hover:not(:disabled) {
   background-color: #2471a3;

@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import "./Login.css";
 import ThemeToggle from "../components/ThemeToggle";
+import SnowToggle from "../components/SnowToggle";
 
 function Login() {
   const navigate = useNavigate();
@@ -64,6 +65,7 @@ function Login() {
       {/* Right: Login Form */}
       <div className="login-form-wrapper">
         <div className="login-header-actions">
+          <SnowToggle />
           <ThemeToggle />
         </div>
         <div className="login-container">

@@ -3,6 +3,7 @@ import { FaUserCircle } from "react-icons/fa";
 import UserProfileModal from "./UserProfileModal";
 import ThemeToggle from "./ThemeToggle";
 import { FaBars, FaBook } from "react-icons/fa";
+import SnowToggle from "./SnowToggle";
 import useAuth from "../hooks/useAuth";
 import NotificationBell from "./NotificationBell";
 
@@ -99,6 +100,7 @@ function Header({ onToggleSidebar, toggleButtonRef, isSidebarOpen = false }) {
               </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}>
+          <SnowToggle />
           <ThemeToggle />
           <Link 
             to="/documentation" 

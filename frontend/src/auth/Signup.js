@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
 import ThemeToggle from "../components/ThemeToggle";
+import SnowToggle from "../components/SnowToggle";
 import "./Signup.css";
 
 function Signup() {
@@ -121,6 +122,7 @@ function Signup() {
       </div>
       <div className="signup-image-section">
         <div className="signup-header-actions-image">
+          <SnowToggle />
           <ThemeToggle />
         </div>
         <div className="signup-image-wrapper">

@@ -183,6 +183,87 @@ body.dark .sidebar a:focus {
   transform: translateY(-2px);
 }
 
+/* Header snow toggle active state */
+.snow-toggle-header.enabled {
+  background: linear-gradient(90deg, var(--primary-light, #00a699), var(--primary-color, #004d66));
+  color: var(--button-text, #ffffff) !important;
+  box-shadow: 0 6px 18px rgba(0,77,102,0.14);
+  transform: translateY(-2px);
+}
+
+/* Header snow toggle hover color per theme */
+body.light .snow-toggle-header:hover {
+  color: #ffffff !important;
+}
+
+body.dark .snow-toggle-header:hover {
+  color: #000000 !important;
+}
+
+/* Ensure header snow toggle inner svg/text also inherits the forced color */
+body.light .snow-toggle-header:hover svg,
+body.light .snow-toggle-header:hover * { color: #ffffff !important; }
+body.dark .snow-toggle-header:hover svg,
+body.dark .snow-toggle-header:hover * { color: #000000 !important; }
+
+/* Also force svg fill/stroke to black on hover to cover icon paths */
+body.dark .snow-toggle-header:hover svg,
+body.dark .snow-toggle-header:hover svg * {
+  fill: #000000 !important;
+  stroke: #000000 !important;
+  color: #000000 !important;
+}
+
+/* NAVBAR SNOW ICON HOVER BEHAVIOR: rotate + theme-specific color
+   - Light theme: icon turns BLACK on hover
+   - Dark theme: icon turns WHITE on hover
+   Also apply a slight rotate animation for a playful effect
+*/
+body.light .snow-toggle-header:hover svg,
+body.light .snow-toggle-header:hover svg * {
+  fill: #000000 !important;
+  stroke: #000000 !important;
+  color: #000000 !important;
+}
+
+/* Stronger, header-scoped selectors for light theme to override competing rules */
+body.light header .snow-toggle-header:hover,
+body.light .header .snow-toggle-header:hover {
+  color: #000000 !important;
+}
+body.light header .snow-toggle-header:hover svg,
+body.light .header .snow-toggle-header:hover svg,
+body.light header .snow-toggle-header:hover svg *,
+body.light .header .snow-toggle-header:hover svg * {
+  fill: #000000 !important;
+  stroke: #000000 !important;
+  color: #000000 !important;
+}
+
+body.dark .snow-toggle-header:hover svg,
+body.dark .snow-toggle-header:hover svg * {
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}
+
+/* Rotation effect applied to the svg only (keeps button stable) */
+.snow-toggle-header svg {
+  transition: transform 260ms cubic-bezier(0.2,0.8,0.2,1), color 160ms ease, fill 160ms ease, stroke 160ms ease;
+  transform-origin: 50% 50%;
+}
+.snow-toggle-header:hover svg {
+  transform: rotate(18deg);
+}
+
+/* Also force header snow icon to white on hover in light theme */
+body.light .snow-toggle-header:hover svg,
+body.light .snow-toggle-header:hover svg * {
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}
+
 /* Unique hover effect: subtle lift + animated glow */
 body.dark button:hover,
 body.dark .btn:hover,
@@ -193,6 +274,17 @@ body.dark .sidebar a:hover {
   border-color: rgba(0,200,255,0.28);
   box-shadow: 0 12px 36px rgba(0,150,255,0.12), 0 0 18px rgba(0,200,255,0.06);
   color: #000000 !important;
+}
+
+/* Fix: Ensure logout button in sidebar footer remains readable in dark theme on hover
+   The global hover made text black while background stayed black; explicitly set
+   a light hover background and dark text for high contrast. */
+body.dark .sidebar-footer button:hover {
+  background: var(--primary-light, #ffffff) !important;
+  color: #000000 !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.25), 0 0 8px rgba(0,200,255,0.04) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* Make pill/tab active state more visible in dark mode */

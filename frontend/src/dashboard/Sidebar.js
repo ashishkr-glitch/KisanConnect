@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useRole from "../hooks/useRole";
 import "./Sidebar.css";
-import { FaTachometerAlt, FaUsers, FaLeaf, FaChartPie, FaShoppingCart, FaList, FaPlus, FaHome } from "react-icons/fa";
+import { FaTachometerAlt, FaUsers, FaLeaf, FaChartPie, FaShoppingCart, FaList, FaPlus, FaHome, FaSnowflake } from "react-icons/fa";
 import { FaRobot } from "react-icons/fa";
 
 function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, containerRef: outerRef = null, showBrand = true }) {
@@ -104,9 +104,47 @@ function Sidebar({ onToggleTheme, isOpen = true, toggleButtonRef = null, contain
       </nav>
 
       <div className="sidebar-footer">
-        <button onClick={handleLogout}>Logout</button>
+        <SnowToggleButton />
+        <button className="footer-btn" onClick={handleLogout}>Logout</button>
       </div>
     </div>
+  );
+}
+
+function SnowToggleButton() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    try {
+      setEnabled(localStorage.getItem('letItSnow') === 'true');
+    } catch (e) {}
+
+    const onSnow = () => {
+      try { setEnabled(localStorage.getItem('letItSnow') === 'true'); } catch (e) {}
+    };
+    window.addEventListener('kc-snow-change', onSnow);
+    window.addEventListener('storage', onSnow);
+    return () => {
+      window.removeEventListener('kc-snow-change', onSnow);
+      window.removeEventListener('storage', onSnow);
+    };
+  }, []);
+
+  const toggle = () => {
+    try {
+      const next = !enabled;
+      try { localStorage.setItem('letItSnow', next ? 'true' : 'false'); } catch (e) {}
+      if (next && window.startSnowfall) window.startSnowfall();
+      if (!next && window.stopSnowfall) window.stopSnowfall();
+      setEnabled(next);
+      try { window.dispatchEvent(new Event('kc-snow-change')); } catch (e) {}
+    } catch (e) { console.error(e); }
+  };
+
+  return (
+    <button className={`footer-btn snow-toggle ${enabled ? 'enabled' : ''}`} onClick={toggle} title="Let it snow">
+      <FaSnowflake /> <span className="label">Let it snow</span>
+    </button>
   );
 }
 
