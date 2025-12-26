@@ -1,6 +1,7 @@
 package com.newKisan.controller;
 
 import org.springframework.beans.factory.annotation.Value;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,10 +25,23 @@ public class AiProxyController {
     @Value("${gemini.api.key:}")
     private String geminiApiKey;
 
+    @Value("${gemini.api.url:}")
+    private String geminiApiUrlProp;
+
     @PostMapping("/generate")
     public ResponseEntity<String> generate(@RequestBody Map<String, Object> body) {
         System.out.println("[AiProxy] Incoming request body: " + body);
-        String geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+        // Determine the Gemini URL in this order:
+        // 1. application property `gemini.api.url`
+        // 2. environment variable `GEMINI_API_URL`
+        // 3. fallback recommended model (flash-lite latest)
+        String geminiUrl = geminiApiUrlProp;
+        if (geminiUrl == null || geminiUrl.isEmpty()) {
+            geminiUrl = System.getenv("GEMINI_API_URL");
+        }
+        if (geminiUrl == null || geminiUrl.isEmpty()) {
+            geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent";
+        }
         
         // Get API key from environment variable (GEMINI_API_KEY or application.properties: gemini.api.key)
         String apiKey = geminiApiKey;
@@ -61,8 +75,46 @@ public class AiProxyController {
             ResponseEntity<String> resp = restTemplate.postForEntity(geminiUrl, request, String.class);
             return ResponseEntity.status(resp.getStatusCode()).body(resp.getBody());
         } catch (HttpStatusCodeException ex) {
-            System.err.println("[AiProxy] Provider returned status " + ex.getStatusCode() + ": " + ex.getResponseBodyAsString());
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.getResponseBodyAsString());
+            String respBody = ex.getResponseBodyAsString();
+            System.err.println("[AiProxy] Provider returned status " + ex.getStatusCode() + ": " + respBody);
+
+            // Try to parse retry delay from provider response and return friendly JSON
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<?,?> parsed = mapper.readValue(respBody, Map.class);
+                Object errorObj = parsed.get("error");
+                if (errorObj instanceof Map) {
+                    Map<?,?> errorMap = (Map<?,?>) errorObj;
+                    Object details = errorMap.get("details");
+                    if (details instanceof Iterable) {
+                        for (Object d : (Iterable<?>) details) {
+                            if (d instanceof Map) {
+                                Map<?,?> dm = (Map<?,?>) d;
+                                Object retry = dm.get("retryDelay");
+                                if (retry instanceof String) {
+                                    String retryStr = (String) retry;
+                                    // parse number of seconds (e.g. "43s")
+                                    Integer seconds = null;
+                                    try {
+                                        String digits = retryStr.replaceAll("[^0-9]", "");
+                                        if (!digits.isEmpty()) seconds = Integer.parseInt(digits);
+                                    } catch (Exception e) { /* ignore parse errors */ }
+                                    if (seconds != null) {
+                                        HttpHeaders out = new HttpHeaders();
+                                        out.set("Retry-After", seconds.toString());
+                                        String bodyOut = String.format("{\"error\":\"quota_exceeded\",\"retryAfterSeconds\":%d}", seconds);
+                                        return new ResponseEntity<>(bodyOut, out, ex.getStatusCode());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception parseEx) {
+                // ignore parsing errors and fall through to returning original response
+            }
+
+            return ResponseEntity.status(ex.getStatusCode()).body(respBody);
         } catch (Exception ex) {
             ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
